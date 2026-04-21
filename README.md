@@ -1,106 +1,71 @@
 <div align="center">
   <img src="https://gw.alipayobjects.com/zos/k/vl/logo.svg" width="120" />
   <h1>Kami</h1>
-  <p><b>An AI skill for beautiful document typesetting.</b></p>
-  <a href="https://github.com/tw93/kami/stargazers"><img src="https://img.shields.io/github/stars/tw93/kami?style=flat-square" alt="Stars"></a>
-  <a href="https://github.com/tw93/kami/releases"><img src="https://img.shields.io/github/v/tag/tw93/kami?label=version&style=flat-square" alt="Version"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="License"></a>
-  <a href="https://twitter.com/HiTw93"><img src="https://img.shields.io/badge/follow-Tw93-red?style=flat-square&logo=Twitter" alt="Twitter"></a>
+  <p><b>A Republican-era manuscript skin for AI document typesetting.</b></p>
 </div>
 
 <br/>
 
 ## Why
 
-Kami (紙, かみ) is the Japanese word for paper: the quiet surface on which a finished idea finally lands.
+这个 fork 保留了原版 kami 的生成原理：`SKILL` 路由文档类型，模板负责版式骨架，design token 负责视觉语言，`scripts/build.py` 负责页数、字体和 CSS 约束校验。
 
-Most document design drifts into two failure modes: generic corporate gray, or SaaS hype gradients. Neither reads like something a person actually made with care.
+变化集中在视觉层：从暖米纸 + 油墨蓝，转向 **深蓝外框 + 旧纸内页 + 档案蓝题签**。目标不是做报纸或海报复刻，而是把输出变成像一份整理过的民国文稿或馆藏档案。
 
-Kami holds one design idea across every format: warm parchment canvas, a single ink-blue accent, serif for authority, sans for utility, editorial whitespace tuned for print.
+## V1 Scope
 
-It is part of the `Kaku · Waza · Kami` trilogy: Kaku (書く) is how you write code, Waza (技) is the habits you practice, Kami (紙) is the paper your work ships on.
+- 正式支持：中文 `One-Pager`、`Long Doc`、`Letter`，其中 `Letter` 覆盖正式信件、推荐信、推荐函
+- 视觉原则：深蓝外框 `#243851`、旧纸底 `#EBE5DD`、明显 padding、蓝色题签、档案式边框
+- 暂不主推：英文模板、简历、作品集、slides
+
+## Use Naturally
+
+Just tell Claude what you need: "帮我生成一份白皮书", "生成一份项目方案", "帮我写一份推荐信", "写一封推荐函", "帮我把这些内容排版成好看的 PDF".
+
+The skill auto-triggers from the request, no slash command needed. Chinese v1 routes to the framed Republican-era manuscript templates.
+
+## Preview
+
+<div align="center">
+  <a href="assets/demos/demo-tesla.pdf">
+    <img src="assets/demos/demo-tesla.png" alt="Republican-era blue one-pager preview" width="520" />
+  </a>
+</div>
+
+<p align="center"><sub>Chinese One-Pager demo · 民国文稿蓝主题 · <a href="assets/demos/demo-tesla.pdf">PDF</a></sub></p>
 
 ## Install
 
-**Claude Code**
+当前仓库是 fork 版主题改造，发布前请替换成你自己的 skill 源路径。若只是本地使用，可直接上传 ZIP 或把当前目录作为本地 skill 使用。
+
+## Design Summary
+
+八条核心约束：
+
+1. 页面用深蓝外框包住旧纸内页，不再是普通白底文档
+2. 强调色只有档案蓝 `#243851`
+3. 中性灰偏纸本暖灰，不用冷蓝灰
+4. 不新增字体依赖，继续使用仓耳今楷 / Newsreader / Source Han
+5. Serif 字重固定 500，不用粗黑体
+6. 行距延续原版：标题 1.1-1.3，正文 1.4-1.55
+7. Tag 背景必须实色 hex，禁 `rgba()`
+8. 装饰只做蓝色题签、双线内框和档案边框，不做纹理图片
+
+完整规范见 [references/design.md](references/design.md)，速查见 [CHEATSHEET.md](CHEATSHEET.md)。
+
+## Build
 
 ```bash
-npx skills add tw93/kami -a claude-code -g -y
+python3 scripts/build.py --verify one-pager
+python3 scripts/build.py --verify long-doc
+python3 scripts/build.py --verify letter
+python3 scripts/build.py --check
 ```
 
-**Codex**
+`--verify` 会优先校验无占位符的 demo 样例，适合做视觉与页数回归；`--check` 继续扫描 CSS 约束与已迁移模板的 token 漂移。
 
-```bash
-npx skills add tw93/kami -a codex -g -y
-```
+## Notes
 
-**Claude Desktop**
-
-[Download ZIP](https://github.com/tw93/kami/archive/refs/heads/main.zip), open Customize > Skills > "+" > Create skill, upload the ZIP.
-
-## See it
-
-Just tell Claude what you need: "帮我生成一份白皮书", "生成一份项目方案", "build me a resume", "写一份推荐信", "make a slide deck for my talk", "帮我做一份作品集". The skill auto-triggers, no slash command needed.
-
-<table>
-<tr>
-  <td align="center" width="25%">
-    <a href="assets/demos/demo-tesla.pdf"><img src="assets/demos/demo-tesla.png" alt="Tesla company one-pager"></a>
-    <br><b>One-Pager</b> · 中文
-    <br><sub>Tesla 公司介绍 · 单页 · <a href="assets/demos/demo-tesla.pdf">PDF</a></sub>
-  </td>
-  <td align="center" width="25%">
-    <a href="assets/demos/demo-agent-slides.pdf"><img src="assets/demos/demo-agent-slides-1.png" alt="Agent keynote cover" /></a>
-    <a href="assets/demos/demo-agent-slides.pdf"><img src="assets/demos/demo-agent-slides-3.png" alt="Agent keynote content slide" /></a>
-    <br><b>Slides</b> · English
-    <br><sub>Agent keynote, 6 slides · <a href="assets/demos/demo-agent-slides.pdf">PDF</a></sub>
-  </td>
-  <td align="center" width="25%">
-    <a href="assets/demos/demo-musk-resume.pdf"><img src="assets/demos/demo-musk-resume.png" alt="Elon Musk resume"></a>
-    <br><b>Resume</b> · English
-    <br><sub>Founder CV, 2 pages strict · <a href="assets/demos/demo-musk-resume.pdf">PDF</a></sub>
-  </td>
-  <td align="center" width="25%">
-    <a href="assets/demos/demo-kaku.pdf"><img src="assets/demos/demo-kaku.png" alt="Kaku portfolio"></a>
-    <br><b>Portfolio</b> · 中文
-    <br><sub>Kaku 项目作品集 · 6 页 · <a href="assets/demos/demo-kaku.pdf">PDF</a></sub>
-  </td>
-</tr>
-</table>
-
-## Design
-
-Six document types, each with Chinese and English variants: One-Pager, Long Doc, Letter, Portfolio, Resume, and Slides. Three inline SVG diagram primitives also ship. Kami picks the right variant based on the language you write in.
-
-Eight invariants hold across every document:
-
-1. Page background `#f5f4ed` parchment, not pure white
-2. Single accent color: ink-blue `#1B365D`
-3. All neutrals warm-toned. No `#6b7280`, no `#888`
-4. English: serif for headlines and body. Chinese: serif headlines, sans body. Sans for UI elements only
-5. Serif weight locked at 500. No bold headlines
-6. Line-heights: tight headlines 1.1 to 1.3, dense body 1.4 to 1.45, reading body 1.5 to 1.55. Never 1.6+
-7. Tag backgrounds must be solid hex. `rgba()` triggers a WeasyPrint double-rectangle bug
-8. Depth via ring shadow or whisper shadow. No hard drop shadows
-
-**Chinese fonts**: TsangerJinKai02 serif + Source Han Sans. TsangerJinKai is a commercial font, for commercial use please obtain a license from [tsanger.cn](https://tsanger.cn). Fallback: Noto Serif CJK SC, Songti SC, Georgia.
-
-**English fonts**: Newsreader serif for headlines and body + Inter sans for UI elements only, both OFL open source. Fallback: Charter/Georgia, Helvetica Neue/Arial.
-
-Full spec: [references/design.md](references/design.md), [references/design.en.md](references/design.en.md). Cheatsheet: [CHEATSHEET.md](CHEATSHEET.md), [CHEATSHEET.en.md](CHEATSHEET.en.md).
-
-## Background
-
-I invest in US equities and regularly ask AI to generate analysis reports. The output always looked like a default Google Doc: bland, inconsistent, forgettable. I can't stand ugly documents, especially when every report comes out looking different from the last one. So I kept tweaking the typography, colors, and spacing until I had something I actually wanted to read.
-
-Then I was invited to present a talk based on my article "The Agent You Don't Know: Principles, Architecture, and Engineering Practice" and needed a slide deck that matched the same standard. That round pushed the system further, adding inline SVG diagrams, a consistent warm palette, and tighter editorial rhythm. Eventually it was doing enough that I pulled it into its own package. That became kami: one visual language I like, applied to everything I ship.
-
-## Support
-
-- If kami helped you, [share it](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.) with friends or give it a star.
-- Got ideas or bugs? Open an issue or PR.
-- I have two cats, TangYuan and Coke. If you think kami delights your life, you can feed them <a href="https://miaoyan.app/cats.html?name=Kami" target="_blank">canned food 🥩</a>.
-
-## License
-
-MIT License. Feel free to use kami and contribute.
+- 这不是运行时主题切换版，而是直接把当前 fork 改造成“民国文稿版”
+- v1 不做竖排正文、纹理贴图、印章贴图和高拟物海报化
+- 第二阶段若方向成立，再扩展到 `resume / portfolio / slides` 或英文主题

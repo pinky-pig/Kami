@@ -2,464 +2,332 @@
 
 ## 设计宣言
 
-kami 的审美可以浓缩成一句话：**暖米纸底，油墨蓝点缀，serif 承担权威，拒绝冷蓝灰与硬阴影**。
+这一版 kami 的目标，不再是“现代 editorial 的暖米纸”，而是**民国文稿感**：
 
-这不是一套 UI 框架，是一套印刷品的审美约束。它相信：高质量的文档读起来像文学，不像仪表盘。每条铁律的 trade-off 都是"与其多一个选择，不如少一个诱惑"。
+**深蓝外框、旧纸内页、明显 padding、档案蓝题签、克制留白。**
 
-**八条铁律**（违反之前先想清楚是否真的要违反）：
+它仍然继承原版 kami 的优势：固定模板、清晰层级、稳定页数和 WeasyPrint 友好的实现方式。变化只发生在视觉语言层，不改变“模板驱动 + token 驱动 + 构建校验”的核心方法。
 
-1. 页面背景 parchment `#f5f4ed`，不用纯白
-2. 强调色只有油墨蓝 `#1B365D`，不引入第二种彩色
-3. 所有灰色暖调（yellow-brown undertone），禁止冷蓝灰
-4. 英文模板: serif 通吃标题和正文。中文模板: 标题 serif，正文 sans。UI 元素 (label, eyebrow, meta) 都用 sans
-5. Serif 字重固定 500，不用 bold
-6. 行距三档：紧凑标题 1.1-1.3 / 密排正文 1.4-1.45 / 阅读型 1.5-1.55。禁用 1.6+
-7. Tag 背景必须实色 hex，禁止 rgba 半透明（WeasyPrint 会渲染出双层矩形）
-8. 阴影用 ring 或 whisper shadow，不用硬 drop shadow
-9. **禁止 italic**。所有模板和 demo 中不使用 `font-style: italic`，不需要 italic 字体文件
+这不是报纸复刻，也不是海报拟物。它更像一份经过整理的馆藏文稿或机构档案：安静、节制、可靠。
 
-所有文档类型（One-Pager / Long Doc / Letter / Portfolio / Resume / Slides）都依据这份规范。这套系统来自 Anthropic 视觉语言 + 中文简历设计迭代，是两个来源的融合。
+## V1 范围
+
+- 正式迁移：中文 `one-pager`、`long-doc`、`letter`
+- 沿用：现有字体策略、模板骨架、页数校验
+- 暂缓：英文主题化、竖排正文、印章贴图、纹理图片、重装饰元素
+
+---
+
+## 八条铁律
+
+1. 页面使用深蓝外框 `#243851` 包住旧纸内页 `#EBE5DD`，不用纯白
+2. 全文唯一主强调色是档案蓝 `#243851`
+3. 中性灰保持纸本暖灰倾向，拒绝现代冷蓝灰
+4. 仍保留 serif 主导的标题秩序，不新增字体依赖
+5. Serif 字重固定 500，不用粗黑体
+6. 行距延续原版：标题 1.1-1.3，正文 1.4-1.55
+7. Tag 和边框使用实色，不用 `rgba()`
+8. 装饰仅限蓝色题签、双线内框、档案边框，不做大面积拟物
 
 ---
 
 ## 1. 色彩系统
 
-**唯一强调色 + 纯暖调中性灰 + 零冷色**是这套设计的核心。
-
-### 主调 · 品牌色
+### 主调 · Brand
 
 ```css
---brand:        #1B365D;   /* Ink Blue Brand - 唯一的彩色，用于 CTA、强调、section-title 下划线 */
---brand-light:  #2D5A8A;   /* Coral Accent - 更亮的变体，偶尔用于深色底上的链接 */
+--brand:       #243851;  /* 档案蓝 */
+--brand-light: #4D5B6D;  /* 细双线 / 次强调 */
+--seal-red:    #B6675E;  /* 预留色，v1 默认不用 */
 ```
 
-**使用规则**：油墨蓝 `#1B365D` 全文档不超过 **5% 的面积**。超过就是堆砌，不是克制。
+**使用规则**：
 
-### 画布 · 背景色
+- `--brand` 是全文唯一高彩色，也是外框和题签主色
+- Style 1 允许页外框和题签使用大面积蓝色，但正文区仍保持克制
+- `--brand-light` 只用于第二道细线、题签边、次级分隔
+- `--seal-red` 仅作为未来扩展位，不放进默认模板正文
+
+### 画布 · Paper
 
 ```css
---parchment:    #f5f4ed;   /* 主页面背景 - 温暖米色，整个设计的情感基础 */
---ivory:        #faf9f5;   /* 卡片/浮起容器 - 比 parchment 更亮的暖白 */
---warm-sand:    #e8e6dc;   /* 按钮默认背景 / 明显的交互表面 */
---dark-surface: #30302e;   /* 深色主题容器 - 暖炭灰 */
---deep-dark:    #141413;   /* 深色主题页面底色 - 不是纯黑，有橄榄绿底色 */
+--parchment:   #EBE5DD;  /* 旧纸底 */
+--ivory:       #F3EFEB;  /* 浅纸浮层 */
+--border:      #D0C7BB;  /* 主边框 */
+--border-soft: #DDD5CB;  /* 次边框 */
 ```
 
-**绝对禁止**：`#ffffff` 纯白作页面底 · 任何 `#f8f9fa` / `#f3f4f6` 这类冷灰底。
+设计重点不是把纸做旧，而是把底色调到“像保存良好的旧纸”。因此：
 
-### 中性文字色
+- 不用纹理图片
+- 不用噪点遮罩
+- 不做发黄过重的拟物脏污
+- 只靠底色、细线和留白制造时代感
+
+### 文字色
 
 ```css
---near-black:   #141413;   /* 主文本 - 最深但不是纯黑，有暖橄榄底色 */
---dark-warm:    #3d3d3a;   /* 次级深色文字 / 深色链接 */
---charcoal:     #4d4c48;   /* 按钮文字 / 高密度正文 */
---olive:        #5e5d59;   /* 副文本 - 描述、caption 等 */
---stone:        #87867f;   /* 三级文字 - 日期、元信息 */
---warm-silver:  #b0aea5;   /* 深色底上的浅色文字 */
+--near-black: #232222;  /* 主文字 */
+--dark-warm:  #4A4947;  /* 次级正文 */
+--charcoal:   #5A5856;  /* 表格、密集正文 */
+--olive:      #666361;  /* 导语、说明 */
+--stone:      #8B8782;  /* 日期、元信息 */
 ```
 
-**记忆法**：每个灰都有 **yellow-brown undertone**。如果你在 `rgb()` 里看到 R ≈ G > B（或 R > G > B 且差距很小），基本就是暖灰。冷灰是 R < G < B（偏蓝）或 R = G = B（中性）。
+规则只有一条：**像纸上的墨，不像屏幕上的灰。**
 
-### 边框与分隔
+### Tag 实色
 
-```css
---border-cream: #f0eee6;   /* 最柔的边框 - 卡片默认 */
---border-warm:  #e8e6dc;   /* 明显的边框 - section 分隔 */
---border-soft:  #efede4;   /* 更淡的虚线分隔 - 列表项之间 */
---border-dark:  #30302e;   /* 深色主题下的边框 */
-```
+Tag 继续沿用“实色替代半透明”原则。v1 推荐：
 
-### Ring 阴影（不用传统 box-shadow）
-
-```css
---ring-warm:    #d1cfc5;   /* 按钮 hover/focus 环 */
---ring-deep:    #c2c0b6;   /* 按下状态 */
-```
-
-### 功能色（尽量少用）
-
-```css
---error:     #b53333;   /* 错误 - 深暖红，不刺眼 */
---focus:     #3898ec;   /* 聚焦蓝 - 唯一的冷色，只用于 input focus ring，无障碍必要 */
-```
-
-### 半透明对应实色对照表（TAG / 标签必须实色）
-
-**原因**：WeasyPrint 渲染 rgba 半透明时 padding 区域和字形区域透明度叠加不一致，放大后产生双层矩形。详见 `production.md Part 4`。
-
-油墨蓝 `#1B365D` 叠加在 parchment `#f5f4ed` 上的等效实色：
-
-| 想要的 rgba 透明度 | 等效实色 hex |
+| 档位 | Hex |
 |---|---|
-| 0.08 | `#EEF2F7` |
-| 0.14 | `#E4ECF5` |
-| **0.18** | **`#E4ECF5`** ← tag 推荐默认 |
-| 0.22 | `#ead3c7` |
-| 0.30 | `#D6E1EE` |
+| 淡 | `#E4E9EE` |
+| 中 | `#DCE3EA` |
+| 默认 | `#D5DEE7` |
+| 强 | `#CFD8E2` |
+| 深 | `#C3CDD8` |
+
+禁止：
+
+```css
+background: rgba(36, 56, 81, 0.18);
+```
 
 ---
 
 ## 2. 字体系统
 
-### 字体栈（按优先级 fallback）
+### 字体栈
+
+v1 不增加任何字体依赖，继续使用原 repo 字体：
 
 ```css
-/* Serif 标题（中英文） */
-font-family: "TsangerJinKai02",       /* 仓耳今楷，需自备 .ttf */
-             "Source Han Serif SC",    /* 思源宋体（免费，Adobe/Google 联合出品）*/
-             "Noto Serif CJK SC",      /* 思源宋体的 Google 命名 */
-             "Songti SC",              /* macOS 系统宋体 */
-             "STSong",                 /* Windows 中文宋体 */
-             Georgia, serif;
+/* 中文 serif */
+"TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
 
-/* Sans 正文/UI（中英文） */
-font-family: "Inter", "TsangerJinKai02",
-             -apple-system, BlinkMacSystemFont,
-             "Source Han Sans SC", "Noto Sans CJK SC",
-             "PingFang SC", "Microsoft YaHei",
-             Arial, sans-serif;
+/* 中文 sans / UI */
+"Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
 
-/* Mono 代码 */
-font-family: "JetBrains Mono", "Fira Code",
-             "SF Mono", Consolas, Monaco,
-             "Source Han Mono", monospace;
+/* 英文 serif / mono */
+"Newsreader", Georgia, serif;
+"JetBrains Mono", Consolas, monospace;
 ```
 
-### 字号层级（pt 用于 PDF，px 用于屏幕）
+### 字重与层级
 
-**印刷品（A4 PDF）用 pt**：
+| 角色 | 字号 | 字重 | line-height |
+|---|---|---|---|
+| Display | 34-40 pt | 500 | 1.10 |
+| H1 | 20-24 pt | 500 | 1.20 |
+| H2 | 14-16 pt | 500 | 1.25 |
+| H3 | 12-13 pt | 500 | 1.30 |
+| Body Lead | 11-12 pt | 400 | 1.55 |
+| Body | 9.5-10.5 pt | 400 | 1.55 |
+| Body Dense | 9-9.2 pt | 400 | 1.40 |
+| Caption | 8.5-9 pt | 400 | 1.45 |
+| Label | 7.5-8 pt | 600 | 1.35 |
 
-| 角色 | 字号 | 字重 | line-height | 用途 |
-|---|---|---|---|---|
-| Display | 36-48 pt | 500 | 1.10 | 封面大标题、one-pager 主标题 |
-| H1 Section | 18-22 pt | 500 | 1.20 | 章节大标题 |
-| H2 | 14-16 pt | 500 | 1.25 | 子章节 |
-| H3 | 12-13 pt | 500 | 1.30 | 条目标题 |
-| Body Lead | 11 pt | 400 | 1.55 | 导语、intro |
-| Body | 9.5-10 pt | 400 | 1.55 | 正文 |
-| Body Dense | 9-9.2 pt | 400 | 1.40 | 密集排版（简历、one-pager 等） |
-| Caption | 8.5-9 pt | 400 | 1.45 | 说明文字、图注 |
-| Label | 7.5-8 pt | 600 | 1.35 | 小标签、角标 |
-| Tiny | 7 pt | 400 | 1.40 | 页脚、minor metadata |
+原则不变：
 
-**屏幕（网页/PPT）用 px**：乘以约 1.33 得到等效 px（9 pt ≈ 12 px，18 pt ≈ 24 px）。
-
-### 字重规则
-
-- **Serif**：固定 500（不用 400、不用 700）。**单一字重是设计语言的一部分**。
-- **Sans 正文**：400 默认
-- **Sans 标签/标题**：500 或 600
-- **禁止 900 black 或 100 thin**
-
-### 行距（line-height）三档
-
-中文印刷品比英文网页**更紧凑**。英文网页常见的 1.6-1.75 是针对英文字母和非 fixed-width 的 body 优化的，放在中文 pt 字号的印刷品里会显得松散。
-
-| 档位 | 值 | 用于 |
-|---|---|---|
-| 紧凑标题 | 1.10-1.30 | 大标题、Display、H1、H2 |
-| 密排正文 | 1.40-1.45 | Body Dense（简历、one-pager、名片、索引卡） |
-| 阅读型正文 | 1.50-1.55 | Body（long-doc 章节正文、letter 正文） |
-| 标签 / caption | 1.30-1.40 | 小字标签、多行 metadata |
-
-**禁用**：
-- 1.60+ - 英文网页的节奏，中文印刷会显得松散
-- 1.00-1.05 - 除非极致紧凑标题，否则上下文字会粘连
-
-### 字距（letter-spacing）
-
-- body 默认 **0** 或极轻 +0.1 pt
-- 中文标题超过 20 pt 的，加 0.5-1 pt 字距
-- 小字 label (<10 pt) 可以加 0.15-0.3 pt 提高可读性
-- 全大写 overline 加 0.5 px（ALL CAPS 必须加字距）
+- 靠字号制造存在感，不靠 bold
+- 目录、眉题、时间标签可以更疏朗
+- 正文不要过度模拟旧报刊字距
 
 ---
 
-## 3. 间距系统
+## 3. 间距与版式
 
-### 基础单位：4 pt（或 4 px 屏幕）
+### 基础单位
+
+依然以 `4pt` 为基础节奏：
 
 | 尺度 | 值 | 用途 |
 |---|---|---|
-| xs | 2-3 pt | 同行内元素间距 |
-| sm | 4-5 pt | tag padding、紧凑布局 |
+| xs | 2-3 pt | 行内微调 |
+| sm | 4-5 pt | tag、注记 |
 | md | 8-10 pt | 组件内部 |
-| lg | 16-20 pt | 组件之间、卡片 padding |
-| xl | 24-32 pt | section 标题 margin |
+| lg | 16-20 pt | 组件之间 |
+| xl | 24-32 pt | section 标题前后 |
 | 2xl | 40-60 pt | 大 section 之间 |
-| 3xl | 80-120 pt | 章节之间（长文档）|
 
-### 页面 margin（A4）
+### Style 1 页面框架
 
-| 文档类型 | 上 | 右 | 下 | 左 |
-|---|---|---|---|---|
-| Resume（紧凑）| 9 mm | 13 mm | 9 mm | 13 mm |
-| One-Pager | 15 mm | 18 mm | 15 mm | 18 mm |
-| Long Doc | 20 mm | 22 mm | 22 mm | 22 mm |
-| Letter | 25 mm | 25 mm | 25 mm | 25 mm |
-| Portfolio | 12 mm | 15 mm | 12 mm | 15 mm |
+Style 1 不再依赖 `@page margin` 营造边距，而是用深蓝画布承载纸张：
 
-**规律**：密度越高 margin 越小，越正式（letter）margin 越大。
+| 文档类型 | 外框 | 内页 |
+|---|---|---|
+| One-Pager | `@page margin: 0`，body padding 约 `10.5mm` | `.folio` padding 约 `13mm`，内容必须 1 页 |
+| Long Doc | 每页一个 `.folio`，body/folio 外框约 `10.5mm` | `.sheet` padding 约 `13-14mm`，每页都有内双线 |
+| Letter | `@page margin: 0`，body padding 约 `11mm` | `.folio` padding 约 `15mm`，正文装入档案框 |
 
----
+### 版式原则
 
-## 4. 组件样式
-
-### Cards / Containers
-
-```css
-.card {
-  background: var(--ivory);                /* 比 parchment 略浮起 */
-  border: 0.5pt solid var(--border-cream);
-  border-radius: 8pt;                       /* 舒适圆角 */
-  padding: 16pt 20pt;
-}
-
-/* 特色卡片 */
-.card-featured {
-  border-radius: 16pt;                      /* 更大圆角 */
-  box-shadow: 0 4pt 24pt rgba(0,0,0,0.05); /* whisper shadow */
-}
-```
-
-圆角尺度：4 pt -> 6 pt -> 8 pt（默认）-> 12 pt -> 16 pt -> 24 pt -> 32 pt（hero 容器）。
-
-### Buttons (在 PPT / 作品集 / 图表里用)
-
-```css
-/* Primary（品牌色） */
-.btn-primary {
-  background: var(--brand);
-  color: var(--ivory);
-  padding: 8pt 16pt;
-  border-radius: 8pt;
-  box-shadow: 0 0 0 1pt var(--brand);    /* ring shadow，不是外阴影 */
-}
-
-/* Secondary（warm sand） */
-.btn-secondary {
-  background: var(--warm-sand);
-  color: var(--charcoal);
-  padding: 8pt 16pt;
-  border-radius: 8pt;
-  box-shadow: 0 0 0 1pt var(--ring-warm);
-}
-```
-
-### Tags / Badges
-
-三个档位的 tag 样式，按视觉冲击力从弱到强选：
-
-**极淡实色**（最克制、最灵动、推荐默认）：
-```css
-.tag {
-  background: #EEF2F7;           /* rgba(201,100,66, 0.08) 等效色 */
-  color: var(--brand);
-  font-size: 8pt;
-  font-weight: 500;
-  padding: 1pt 5pt;
-  border-radius: 2pt;
-  letter-spacing: 0.05pt;
-}
-```
-
-**标准实色**（需要稍强区分度，如多种 tag 混排时）：
-```css
-.tag {
-  background: #E4ECF5;           /* rgba(201,100,66, 0.18) 等效色 */
-  color: var(--brand);
-  padding: 1pt 6pt;
-  border-radius: 4pt;
-}
-```
-
-**笔刷渐变**（仅在需要强化"手感"时用，慎用）：
-```css
-.tag {
-  background: linear-gradient(to right, #D6E1EE, #E4ECF5 70%, #EEF2F7);
-  color: var(--brand);
-  padding: 1pt 5pt;
-  border-radius: 2pt;
-}
-```
-
-**设计哲学**：tint 浓度要比装饰性需求**低一档**。宁可清淡不可浓艳。实战发现"笔刷渐变"虽然技术上酷，但会抢焦点（见 production.md Part 4 #1 的实战经验）。
-
-**绝对不用**：`background: rgba(201, 100, 66, 0.18)` -- 会触发 WeasyPrint 双层 bug。用等效实色替代。
-
-### 列表
-
-```css
-ul, ol {
-  padding-left: 16pt;
-  line-height: 1.55;
-}
-ul li::marker {
-  color: var(--brand);   /* bullet 点用品牌色 */
-}
-```
-
-或者更有书卷气的**短横线代替圆点**：
-
-```css
-ul.dash { list-style: none; padding-left: 0; }
-ul.dash li::before {
-  content: "-  ";
-  color: var(--brand);
-}
-```
-
-### 引用块
-
-```css
-.quote {
-  border-left: 2pt solid var(--brand);
-  padding: 4pt 0 4pt 14pt;
-  color: var(--olive);
-  line-height: 1.55;
-}
-```
-
-### 代码块
-
-```css
-.code-block {
-  background: var(--ivory);
-  border: 0.5pt solid var(--border-cream);
-  border-radius: 6pt;
-  padding: 10pt 14pt;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 8.5pt;
-  line-height: 1.5;
-  color: var(--near-black);
-}
-```
-
-### Section Title
-
-```css
-.section-title {
-  font-family: serif;           /* 用 serif 承担所有标题 */
-  font-size: 14pt;
-  font-weight: 500;
-  color: var(--near-black);
-  margin: 24pt 0 10pt 0;
-}
-```
-
-### Metric Card（数据卡）
-
-关键指标并排显示（用于 one-pager 顶部、简历顶部、portfolio 封面）：
-
-```css
-.metrics {
-  display: flex;
-  gap: 24pt;
-}
-.metric {
-  flex: 1;
-  display: flex;
-  align-items: baseline;
-  gap: 6pt;
-}
-.metric-value {
-  font-family: serif;
-  font-size: 16pt;
-  font-weight: 500;
-  color: var(--brand);
-  font-variant-numeric: tabular-nums;   /* 数字等宽对齐 */
-}
-.metric-label {
-  font-size: 9pt;
-  color: var(--olive);
-}
-```
+- 保留 kami 原有骨架，不重写信息结构
+- 民国感来自细节，不来自大幅改版
+- 每页允许一套统一框页装饰：深蓝外框、内双线、蓝色题签
+- 段落、表格、指标卡仍以现代清晰性为先
 
 ---
 
-## 5. 阴影与深度
+## 4. 组件语言
 
-**核心原则**：Claude 设计系统**不用传统硬阴影**。深度通过三种方式创造：
+### 框页系统
 
-### 1. Ring Shadow（边框式阴影）
-
-```css
-/* 1pt 环，像 border 但更柔 */
-box-shadow: 0 0 0 1pt var(--ring-warm);
-
-/* hover 时加深 */
-box-shadow: 0 0 0 1pt var(--ring-deep);
-```
-
-### 2. Whisper Shadow（极软投影）
-
-```css
-/* 几乎看不见的轻微浮起 */
-box-shadow: 0 4pt 24pt rgba(0, 0, 0, 0.05);
-```
-
-### 3. 明暗交替（section 级别）
-
-长文档里 parchment `#f5f4ed` 底 section 和 `#141413` 深色 section 交替，比任何阴影都戏剧化。
-
-**禁止**：`box-shadow: 0 2px 8px rgba(0,0,0,0.3)` 这类传统硬阴影。
-
----
-
-## 6. 打印与分页
-
-### break-inside 保护
-
-以下元素不允许跨页断开：
-
-```css
-.card,
-.metric,
-.project-item,
-.quote,
-.code-block,
-figure,
-.callout {
-  break-inside: avoid;
-}
-```
-
-### 强制分页
-
-```css
-.page-break { break-before: page; }
-```
-
-用于封面与正文之间、章节之间。
-
-### 页边背景
+最重要的新视觉信号。适用于所有已迁移中文模板：
 
 ```css
 @page {
   size: A4;
-  margin: 20mm 22mm;
-  background: #f5f4ed;   /* 背景延伸到 margin 外，避免打印时留白边 */
+  margin: 0;
+  background: var(--brand);
+}
+
+body {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 10.5mm;
+  background: var(--brand);
+}
+
+.folio {
+  position: relative;
+  min-height: 276mm;
+  padding: 13mm;
+  background: linear-gradient(135deg, #F6F1E8 0%, var(--parchment) 48%, #EFE5D8 100%);
+}
+```
+
+### 蓝色题签
+
+适用于：
+
+- 页首 header
+- 章节标题
+- 信件主题栏
+
+```css
+.title-plaque {
+  position: relative;
+  background: var(--brand);
+  color: var(--ivory);
+  padding: 12pt 14pt;
+}
+
+.title-plaque::after {
+  content: "";
+  position: absolute;
+  inset: 8pt;
+  border: 0.45pt solid #D5DEE7;
+}
+```
+
+### 引文 / 旁注
+
+保留左侧竖线结构，但改为双线：
+
+```css
+.quote {
+  position: relative;
+  border-left: 1.2pt solid var(--brand);
+  padding-left: 16pt;
+  color: var(--olive);
+}
+
+.quote::before {
+  content: "";
+  position: absolute;
+  left: 4pt;
+  top: 0;
+  bottom: 0;
+  width: 0.35pt;
+  background: var(--brand-light);
+}
+```
+
+### 信息块
+
+```css
+.panel {
+  background: var(--ivory);
+  border: 1pt solid var(--brand);
+  padding: 10pt 14pt;
+}
+```
+
+不使用：
+
+- 大圆角卡片
+- 厚重阴影
+- 与档案蓝无关的彩色填充
+
+### 表格
+
+- 表头可使用档案蓝反白，正文行保持浅纸底
+- 主分隔线用 `--brand`
+- 行间线用 `--border-soft` 或暖纸灰
+- 不要引入第二套高饱和色
+
+### Tag
+
+继续小而克制，不要变成 UI badge：
+
+```css
+.tag {
+  background: #D5DEE7;
+  color: var(--brand);
+  font-size: 8pt;
+  font-weight: 500;
+  padding: 1pt 6pt;
+  border-radius: 3pt;
 }
 ```
 
 ---
 
-## 7. 决策速查
+## 5. 文档类型建议
 
-遇到 "该用什么" 的时候查这张表：
+### One-Pager
 
-| 要做什么 | 怎么做 |
-|---|---|
-| 大标题 | serif 500，字号根据层级，line-height 1.10-1.30 |
-| 正文阅读 | sans 400，9.5-10 pt，line-height 1.55 |
-| 强调一个数字 | `color: var(--brand)`，不要粗体 |
-| 分隔两段内容 | 1pt 品牌色 border-bottom，或 0.5pt 暖灰虚线 |
-| 引用某人的话 | 左 2pt 品牌色实线 + olive 色 |
-| 展示代码 | ivory 底 + 0.5pt border + 6pt 圆角 + mono 字体 |
-| 区分主次按钮 | Primary 用品牌色填充 + 白字，Secondary 用 warm-sand + charcoal |
-| 在卡片列表里区分某张特殊的 | `border: 0.5pt solid var(--brand)` 或 `border-left: 3pt solid var(--brand)` |
-| 章节开始 | serif 标题 + 下面一条 1pt 品牌色实线 |
-| 文档封面 | 单页 Display 字号标题 + 作者/日期 right align，中间大量留白 |
-| 一张数据卡 | ivory 底 + 8 pt 圆角 + serif 大数字 + sans 小标签 |
+- 最适合体现“深蓝外框 + 蓝色题签”
+- 指标卡改为清晰边框卡，但仍保持单页密度
+- 时间线和引语区使用档案框，不做贴图装饰
 
-不在这张表里的情况 -> 回到原则：**serif 承担权威，sans 承担功能，暖灰承担节奏，油墨蓝承担焦点**。
+### Long Doc
+
+- 封面使用深蓝标题牌 + 右侧档案卡
+- 目录和章节页每页都有统一框页系统
+- 摘要块、注释块用浅纸底 + 深蓝边框
+
+### Letter
+
+- 支持正式信件、推荐信、推荐函
+- 信头使用蓝色函件题签 + 右侧寄件人卡
+- 保持首行缩进与正文节奏
+- 推荐信用三格 evidence box 写具体事实，避免空泛称赞
+
+---
+
+## 6. 生产约束
+
+### 必须继续遵守
+
+- `@page background` 与页面背景同色
+- 不在 tag / border 上使用 `rgba()`
+- 不改变字体依赖与相对路径
+- 不打破 one-pager / letter 的页数约束
+
+### 不做的事
+
+- 不加入纹理图片
+- 不做竖排正文
+- 不做章印贴图
+- 不把每个组件都做成“复古道具”
+
+---
+
+## 7. 一句话判断标准
+
+如果一页看起来像“被认真整理过的机构文稿”，它就是对的。
+
+如果它更像海报、杂志封面、婚礼请柬或复古滤镜，它就偏了。

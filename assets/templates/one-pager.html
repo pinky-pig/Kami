@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!-- ==================================================================
-     ONE-PAGER TEMPLATE · parchment design system
-     单页 A4 方案/报告/执行摘要
-     改完跑：python3 -c "from weasyprint import HTML; HTML('one-pager.html').write_pdf('out.pdf')"
+     ONE-PAGER TEMPLATE · republican manuscript style 1
+     单页 A4 方案 / 项目提案 / 执行摘要
+     视觉：深蓝外框、米纸内页、明显 padding、蓝色题签与档案边框
      目标：页数必须 == 1
      ================================================================== -->
 <html lang="zh-CN">
@@ -19,341 +19,572 @@
 
   @page {
     size: A4;
-    margin: 15mm 18mm 15mm 18mm;
-    background: #f5f4ed;
+    margin: 0;
+    background: #243851;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --parchment: #f5f4ed;
-    --ivory:     #faf9f5;
-    --sand:      #e8e6dc;
-    --near-black:#141413;
-    --dark-warm: #3d3d3a;
-    --charcoal:  #4d4c48;
-    --olive:     #5e5d59;
-    --stone:     #87867f;
-    --brand:     #1B365D;
-    --border:    #e8e6dc;
-    --border-soft:#efede4;
-    --tag-bg:    #E4ECF5;
+    --parchment:  #EBE5DD;
+    --ivory:      #F3EFEB;
+    --brand:      #243851;
+    --near-black: #232222;
+    --dark-warm:  #4A4947;
+    --charcoal:   #5A5856;
+    --olive:      #666361;
+    --stone:      #8B8782;
+
+    --frame-blue: #243851;
+    --blue-soft:  #4D5B6D;
+    --paper-wash: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --rule:       #CABBA7;
+    --rule-solid: #CABBA7;
+    --panel-fill: #F7F2EA;
+    --tag-bg:     #D5DEE7;
   }
 
-  html, body { background: var(--parchment); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--frame-blue);
+    color: var(--near-black);
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
 
   body {
-    color: var(--near-black);
-    font-family: "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", Georgia, serif;
-    font-size: 10pt;
-    line-height: 1.45;
+    padding: 10.5mm;
+    margin: 0 auto;
   }
 
-  .serif {
-    font-family: "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  .folio {
+    position: relative;
+    min-height: 276mm;
+    padding: 13.5mm 13mm 10.5mm;
+    background:
+      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
+    overflow: hidden;
   }
 
-  /* ========== HEADER ========== */
+  .folio::before,
+  .folio::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .folio::before {
+    inset: 6mm;
+    border: 1pt solid var(--frame-blue);
+  }
+
+  .folio::after {
+    inset: 8.5mm;
+    border: 0.45pt solid var(--blue-soft);
+  }
+
+  .sheet-content {
+    position: relative;
+    z-index: 1;
+  }
+
   .header {
-    border-bottom: 1pt solid var(--brand);
-    padding-bottom: 8pt;
-    margin-bottom: 14pt;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 20pt;
-  }
-  .title-block {
-    flex: 1;
-  }
-  .eyebrow {
-    font-size: 8.5pt;
-    color: var(--brand);
-    letter-spacing: 0.5pt;
-    text-transform: uppercase;
-    margin-bottom: 4pt;
-  }
-  h1 {
-    font-family: "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", Georgia, serif;
-    font-size: 24pt;
-    font-weight: 500;
-    color: var(--near-black);
-    line-height: 1.15;
-    margin-bottom: 5pt;
-  }
-  .subtitle {
-    font-size: 11pt;
-    color: var(--olive);
-    line-height: 1.4;
-  }
-  .meta {
-    font-size: 8.5pt;
-    color: var(--stone);
-    text-align: right;
-    line-height: 1.45;
-    white-space: nowrap;
+    display: grid;
+    grid-template-columns: 1.5fr 0.92fr;
+    gap: 10pt;
+    margin-bottom: 9pt;
   }
 
-  /* ========== METRICS ========== */
-  /* 横向 baseline 布局 —— 和 resume.html 一致的 kami native 姿态。
-     背景透明、无边框，用 typography 本身承担层次，不加容器。 */
-  .metrics {
-    display: flex;
-    gap: 14pt;
-    margin-bottom: 18pt;
-    padding: 4pt 0 6pt 0;
-    border-bottom: 0.3pt dotted var(--border);
+  .title-plaque {
+    position: relative;
+    min-height: 84pt;
+    padding: 11pt 14pt 12pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
   }
+
+  .title-plaque::before,
+  .title-plaque::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .title-plaque::before {
+    inset: 6pt;
+    border: 0.85pt solid #F3EFEB;
+  }
+
+  .title-plaque::after {
+    inset: 9pt;
+    border: 0.4pt solid #D5DEE7;
+  }
+
+  .eyebrow,
+  .section-head .en,
+  .timeline .kicker,
+  .remark .label,
+  .footer {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .eyebrow {
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 1.8pt;
+    text-transform: uppercase;
+    margin-bottom: 7pt;
+    color: #E4E9EE;
+  }
+
+  h1 {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 23.5pt;
+    line-height: 1.14;
+    letter-spacing: 0.6pt;
+    font-weight: 500;
+    margin-bottom: 6pt;
+  }
+
+  .subtitle {
+    font-size: 9.4pt;
+    line-height: 1.4;
+    color: #F3EFEB;
+  }
+
+  .side-card {
+    border: 1pt solid var(--frame-blue);
+    padding: 9pt 10pt 8pt;
+    background: var(--panel-fill);
+  }
+
+  .side-label {
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    color: var(--frame-blue);
+    margin-bottom: 8pt;
+  }
+
+  .side-title {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 13pt;
+    line-height: 1.25;
+    font-weight: 500;
+    margin-bottom: 7pt;
+  }
+
+  .side-meta {
+    font-size: 8.1pt;
+    line-height: 1.55;
+    color: var(--stone);
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7pt;
+    margin-bottom: 9pt;
+  }
+
   .metric {
-    flex: 1;
-    background: transparent;
-    padding: 0;
-    display: flex;
-    align-items: baseline;
-    gap: 4pt;
+    min-height: 52pt;
+    border: 0.9pt solid var(--frame-blue);
+    padding: 8pt 7pt 7pt;
+    background: var(--panel-fill);
     break-inside: avoid;
   }
+
   .metric-value {
-    font-family: "TsangerJinKai02", "Source Han Serif SC", Georgia, serif;
-    font-size: 20pt;
-    font-weight: 500;
-    color: var(--brand);
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 18.5pt;
     line-height: 1;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.2pt;
-  }
-  .metric-label {
-    font-size: 8.5pt;
-    color: var(--olive);
-    line-height: 1.3;
-  }
-
-  /* ========== SECTIONS ========== */
-  section { margin-bottom: 18pt; break-inside: avoid; }
-  section:last-of-type { margin-bottom: 0; }
-
-  h2 {
-    font-family: "TsangerJinKai02", "Source Han Serif SC", Georgia, serif;
-    font-size: 13pt;
+    color: var(--frame-blue);
     font-weight: 500;
-    color: var(--near-black);
-    margin-bottom: 6pt;
-    padding-bottom: 3pt;
-    border-bottom: 0.5pt solid var(--brand);
-  }
-  h2 .sub {
-    font-size: 8.5pt;
-    color: var(--stone);
-    font-weight: 400;
-    margin-left: 6pt;
+    margin-bottom: 5pt;
   }
 
-  p { margin-bottom: 6pt; line-height: 1.45; }
-  p:last-child { margin-bottom: 0; }
-
-  .lead {
-    font-size: 12pt;
-    line-height: 1.5;
+  .metric-label {
+    font-size: 8pt;
+    line-height: 1.35;
     color: var(--dark-warm);
-    margin-bottom: 14pt;
   }
 
-  .hl { color: var(--brand); font-weight: 500; }
+  .lead-panel {
+    position: relative;
+    border: 1pt solid var(--frame-blue);
+    padding: 10pt 12pt 10pt 16pt;
+    margin-bottom: 8pt;
+    background: var(--ivory);
+  }
 
-  /* ========== 2-column grid ========== */
+  .lead-panel::before {
+    content: "";
+    position: absolute;
+    left: 7pt;
+    top: 11pt;
+    bottom: 11pt;
+    width: 3pt;
+    background: var(--frame-blue);
+  }
+
+  .lead-panel p {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 10.9pt;
+    line-height: 1.5;
+    color: var(--near-black);
+  }
+
+  .hl {
+    color: var(--frame-blue);
+    font-weight: 500;
+  }
+
   .two-col {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18pt;
+    gap: 8pt;
+    margin-bottom: 8pt;
   }
 
-  /* ========== 短横线 list（代替默认 bullet） ========== */
+  .section-card {
+    border: 0.95pt solid var(--frame-blue);
+    padding: 0 10pt 8pt;
+    background: var(--ivory);
+    break-inside: avoid;
+  }
+
+  .section-head {
+    margin: -1pt -10pt 7pt;
+    padding: 6pt 10pt 5pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
+  }
+
+  .section-head .cn {
+    display: block;
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 12pt;
+    line-height: 1.1;
+    font-weight: 500;
+    margin-bottom: 3pt;
+  }
+
+  .section-head .en {
+    display: block;
+    font-size: 7.4pt;
+    line-height: 1.35;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+  }
+
+  .section-card p,
+  .section-card li {
+    font-size: 8.55pt;
+    line-height: 1.46;
+    color: var(--dark-warm);
+  }
+
+  .section-card p {
+    margin-bottom: 6pt;
+  }
+
   ul.dash {
     list-style: none;
-    margin: 0;
-    padding: 0;
   }
+
   ul.dash li {
     position: relative;
-    padding-left: 12pt;
+    padding-left: 11pt;
     margin-bottom: 4pt;
-    line-height: 1.45;
   }
+
   ul.dash li::before {
     content: "-";
     position: absolute;
     left: 0;
-    color: var(--brand);
+    color: var(--frame-blue);
   }
 
-  /* ========== Timeline (横向进度点) ========== */
   .timeline {
-    display: flex;
-    gap: 12pt;
-    margin-top: 6pt;
+    border: 1pt solid var(--frame-blue);
+    margin-bottom: 8pt;
+    background: var(--ivory);
   }
+
+  .timeline-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 10pt 5pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
+  }
+
+  .timeline-title .cn {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 12pt;
+    line-height: 1.1;
+    font-weight: 500;
+  }
+
+  .timeline-title .en {
+    font-size: 7.4pt;
+    line-height: 1.35;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+  }
+
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8pt;
+    padding: 8pt 10pt 10pt;
+  }
+
   .tl-step {
-    flex: 1;
+    border: 0.45pt solid var(--rule-solid);
+    padding: 7pt 8pt;
     break-inside: avoid;
   }
+
   .tl-year {
-    font-family: "TsangerJinKai02", "Source Han Serif SC", Georgia, serif;
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 11pt;
+    line-height: 1.2;
+    color: var(--frame-blue);
     font-weight: 500;
-    color: var(--brand);
-    margin-bottom: 2pt;
-  }
-  .tl-head {
-    font-size: 10pt;
-    font-weight: 500;
-    color: var(--near-black);
-    margin-bottom: 2pt;
-  }
-  .tl-body {
-    font-size: 8.5pt;
-    color: var(--olive);
-    line-height: 1.4;
+    margin-bottom: 4pt;
   }
 
-  /* ========== Tag ========== */
+  .tl-head {
+    font-size: 8.7pt;
+    line-height: 1.35;
+    color: var(--near-black);
+    font-weight: 600;
+    margin-bottom: 3pt;
+  }
+
+  .tl-body {
+    font-size: 8pt;
+    line-height: 1.4;
+    color: var(--stone);
+  }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1.28fr 0.92fr;
+    gap: 8pt;
+    margin-bottom: 8pt;
+  }
+
+  .compact-list {
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+  }
+
+  .compact-list .head {
+    background: var(--frame-blue);
+    color: var(--ivory);
+    padding: 6pt 10pt 5pt;
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 12pt;
+    line-height: 1.1;
+    font-weight: 500;
+  }
+
+  .compact-list .rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 9pt;
+    row-gap: 4pt;
+    padding: 8pt 10pt 9pt;
+  }
+
+  .compact-list p {
+    font-size: 8.3pt;
+    line-height: 1.4;
+    color: var(--dark-warm);
+  }
+
+  .remark {
+    border: 1pt solid var(--frame-blue);
+    padding: 9pt 12pt;
+    background: var(--ivory);
+  }
+
+  .remark .label {
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    color: var(--frame-blue);
+    margin-bottom: 7pt;
+  }
+
+  .remark .quote {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 10.2pt;
+    line-height: 1.5;
+    color: var(--near-black);
+    margin-bottom: 8pt;
+  }
+
+  .remark .note {
+    border-top: 0.45pt solid var(--rule-solid);
+    padding-top: 7pt;
+    font-size: 8pt;
+    line-height: 1.4;
+    color: var(--stone);
+  }
+
   .tag {
     display: inline-block;
-    background: var(--tag-bg);    /* 实色！不要 rgba */
-    color: var(--brand);
+    background: var(--tag-bg);
+    color: var(--frame-blue);
     font-size: 7.5pt;
+    line-height: 1.35;
     font-weight: 500;
     padding: 1pt 5pt;
-    border-radius: 3pt;
-    letter-spacing: 0.1pt;
+    border-radius: 2pt;
     margin-right: 3pt;
   }
 
-  /* ========== Callout / 高亮块 ========== */
-  /* 参考 resume.html .team-culture：透明底 + 单左侧 brand 竖条。
-     不做容器也不做圆角，气质是"一条旁注"而不是"一个卡片"。 */
-  .callout {
-    background: transparent;
-    border-left: 1.8pt solid var(--brand);
-    padding: 4pt 0 4pt 14pt;
-    margin: 10pt 0;
-    font-size: 10pt;
-    line-height: 1.5;
-    color: var(--olive);
-    break-inside: avoid;
-  }
-  .callout .hl, .callout .em-brand { color: var(--brand); }
-
-  /* ========== FOOTER ========== */
   .footer {
-    margin-top: 18pt;
-    padding-top: 6pt;
-    border-top: 0.3pt dotted var(--border);
-    font-size: 8pt;
-    color: var(--stone);
     display: flex;
     justify-content: space-between;
-    letter-spacing: 0.3pt;
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 0.4pt;
+    color: var(--stone);
   }
 </style>
 </head>
 <body>
+<main class="folio">
+  <div class="sheet-content">
+    <header class="header">
+      <section class="title-plaque">
+        <div class="eyebrow">{{英文眉题 · 如 COMPANY BRIEF / PROJECT DOSSIER}}</div>
+        <h1>{{文档主标题，两行内，动词 + 名词结构最好}}</h1>
+        <div class="subtitle">{{一行副标题 / 一句核心论点}}</div>
+      </section>
 
-<!-- ========== HEADER ========== -->
-<div class="header">
-  <div class="title-block">
-    <div class="eyebrow">{{EYEBROW · 如 "产品方案" / "项目提案" / "执行摘要"}}</div>
-    <h1>{{文档主标题（serif，2 行内，动词+名词结构最好）}}</h1>
-    <div class="subtitle">{{一行副标题 / 一句核心论点}}</div>
+      <aside class="side-card">
+        <div class="side-label">{{档案标签 · 如 Archive Note}}</div>
+        <div class="side-title">{{项目 / 公司 / 主题名称}}</div>
+        <div class="side-meta">
+          版本：{{版本 / 状态}}<br>
+          日期：{{日期 YYYY.MM.DD}}<br>
+          分类：{{文档分类}}
+        </div>
+      </aside>
+    </header>
+
+    <section class="metrics" aria-label="关键指标">
+      <div class="metric">
+        <div class="metric-value">{{数字}}</div>
+        <div class="metric-label">{{指标说明}}</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">{{数字}}</div>
+        <div class="metric-label">{{指标说明}}</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">{{数字}}</div>
+        <div class="metric-label">{{指标说明}}</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">{{数字}}</div>
+        <div class="metric-label">{{指标说明}}</div>
+      </div>
+    </section>
+
+    <section class="lead-panel">
+      <p>{{40-70 字核心导语。用 <span class="hl">关键词</span> 点出判断，让读者立刻知道这份一页纸的主张。}}</p>
+    </section>
+
+    <section class="two-col">
+      <article class="section-card">
+        <div class="section-head">
+          <span class="cn">{{栏目标题 1}}</span>
+          <span class="en">{{英文小标题}}</span>
+        </div>
+        <p>{{1-2 句概括。}}</p>
+        <ul class="dash">
+          <li>{{短 bullet：事实 / 数据 / 判断}}</li>
+          <li>{{短 bullet：带 <span class="hl">关键数字</span> 的论据}}</li>
+          <li>{{短 bullet：下一步或风险}}</li>
+        </ul>
+      </article>
+
+      <article class="section-card">
+        <div class="section-head">
+          <span class="cn">{{栏目标题 2}}</span>
+          <span class="en">{{英文小标题}}</span>
+        </div>
+        <p>{{1-2 句概括。}}</p>
+        <ul class="dash">
+          <li>{{短 bullet}}</li>
+          <li>{{短 bullet}}</li>
+          <li>{{短 bullet}}</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="timeline">
+      <div class="timeline-title">
+        <span class="cn">主线演进</span>
+        <span class="en">{{Timeline / Roadmap}}</span>
+      </div>
+      <div class="timeline-grid">
+        <div class="tl-step">
+          <div class="tl-year">{{阶段 / 年份 1}}</div>
+          <div class="tl-head">{{阶段标题}}</div>
+          <div class="tl-body">{{一句解释}}</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-year">{{阶段 / 年份 2}}</div>
+          <div class="tl-head">{{阶段标题}}</div>
+          <div class="tl-body">{{一句解释}}</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-year">{{阶段 / 年份 3}}</div>
+          <div class="tl-head">{{阶段标题}}</div>
+          <div class="tl-body">{{一句解释}}</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-grid">
+      <div class="compact-list">
+        <div class="head">{{关键里程碑 / 核心事项}}</div>
+        <div class="rows">
+          <p>{{事项 1：一句话}}</p>
+          <p>{{事项 2：一句话}}</p>
+          <p>{{事项 3：一句话}}</p>
+          <p>{{事项 4：一句话}}</p>
+        </div>
+      </div>
+
+      <aside class="remark">
+        <div class="label">Filed Remark</div>
+        <div class="quote">{{关键引用 / 核心 takeaway / 重要提示。}}</div>
+        <div class="note">{{补充说明：为什么这句话重要。}}</div>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>{{公开 / 内部 / 机密级别}}</span>
+      <span>{{页码 / 联系方式}}</span>
+    </footer>
   </div>
-  <div class="meta">
-    {{作者名}}<br>
-    {{日期 YYYY.MM.DD}}<br>
-    {{版本号 / 状态}}
-  </div>
-</div>
-
-<!-- ========== METRICS（可选，3-4 卡最佳） ========== -->
-<div class="metrics">
-  <div class="metric">
-    <div class="metric-value">{{数字}}</div>
-    <div class="metric-label">{{标签描述}}</div>
-  </div>
-  <div class="metric">
-    <div class="metric-value">{{数字}}</div>
-    <div class="metric-label">{{标签描述}}</div>
-  </div>
-  <div class="metric">
-    <div class="metric-value">{{数字}}</div>
-    <div class="metric-label">{{标签描述}}</div>
-  </div>
-  <div class="metric">
-    <div class="metric-value">{{数字}}</div>
-    <div class="metric-label">{{标签描述}}</div>
-  </div>
-</div>
-
-<!-- ========== LEAD（导语，一段） ========== -->
-<p class="lead">
-  {{一段 40-60 字的核心论点导语。用「<span class="hl">关键词</span>」高亮重点。这段定调整个文档。}}
-</p>
-
-<!-- ========== 核心内容（两栏） ========== -->
-<div class="two-col">
-  <section>
-    <h2>{{section 标题 1}}</h2>
-    <p>{{这里写 1-2 句段落，展开论点。}}</p>
-    <ul class="dash">
-      <li>{{短 bullet：数据/观察/判断}}</li>
-      <li>{{短 bullet：带 <span class="hl">关键数字</span> 的论据}}</li>
-      <li>{{短 bullet}}</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>{{section 标题 2}}</h2>
-    <p>{{1-2 句段落。}}</p>
-    <ul class="dash">
-      <li>{{短 bullet}}</li>
-      <li>{{短 bullet}}</li>
-      <li>{{短 bullet}}</li>
-    </ul>
-  </section>
-</div>
-
-<!-- ========== Timeline / Roadmap（可选） ========== -->
-<section>
-  <h2>时间线 / 路线图<span class="sub">（适用于方案类文档）</span></h2>
-  <div class="timeline">
-    <div class="tl-step">
-      <div class="tl-year">阶段 1</div>
-      <div class="tl-head">{{阶段标题}}</div>
-      <div class="tl-body">{{一句解释}}</div>
-    </div>
-    <div class="tl-step">
-      <div class="tl-year">阶段 2</div>
-      <div class="tl-head">{{阶段标题}}</div>
-      <div class="tl-body">{{一句解释}}</div>
-    </div>
-    <div class="tl-step">
-      <div class="tl-year">阶段 3</div>
-      <div class="tl-head">{{阶段标题}}</div>
-      <div class="tl-body">{{一句解释}}</div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== CALLOUT（可选）========== -->
-<div class="callout">
-  {{关键引用 / 重要提示 / 核心 takeaway。比正文更需要引起注意的内容放这里。}}
-</div>
-
-<!-- ========== FOOTER ========== -->
-<div class="footer">
-  <span>{{机密级别 / 内部 / 公开 等}}</span>
-  <span>{{页码 / 联系方式}}</span>
-</div>
-
+</main>
 </body>
 </html>

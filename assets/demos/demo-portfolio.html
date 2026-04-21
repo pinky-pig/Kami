@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>林若川 · 产品设计作品集</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #243851;
+  }
+
+  :root {
+    --navy: #243851;
+    --navy-soft: #4D5B6D;
+    --paper: #EBE5DD;
+    --paper-light: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --ivory: #F3EFEB;
+    --ink: #232222;
+    --copy: #4A4947;
+    --muted: #8B8782;
+    --rule: #CABBA7;
+    --tag: #D5DEE7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0 auto;
+    background: var(--navy);
+    color: var(--ink);
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  body {
+    margin: 0 auto;
+  }
+
+  .folio {
+    min-height: 297mm;
+    padding: 10.5mm;
+    background: var(--navy);
+    break-after: page;
+  }
+
+  .folio:last-child { break-after: auto; }
+
+  .sheet {
+    position: relative;
+    min-height: 276mm;
+    padding: 14mm 13mm 12mm;
+    background: linear-gradient(135deg, var(--paper-light) 0%, var(--paper) 50%, var(--paper-deep) 100%);
+    overflow: hidden;
+  }
+
+  .sheet::before,
+  .sheet::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .sheet::before {
+    inset: 6mm;
+    border: 1pt solid var(--navy);
+  }
+
+  .sheet::after {
+    inset: 8.4mm;
+    border: 0.45pt solid var(--navy-soft);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .sans {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .plaque {
+    position: relative;
+    background: var(--navy);
+    color: var(--ivory);
+  }
+
+  .plaque::before,
+  .plaque::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .plaque::before {
+    inset: 7pt;
+    border: 0.85pt solid #F3EFEB;
+  }
+
+  .plaque::after {
+    inset: 10pt;
+    border: 0.45pt solid #D5DEE7;
+  }
+
+  .cover {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 8.5pt;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .cover-tag {
+    background: var(--navy);
+    color: var(--ivory);
+    padding: 7pt 10pt;
+    font-size: 7.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.7pt;
+    text-transform: uppercase;
+  }
+
+  .cover-main {
+    display: grid;
+    grid-template-columns: 1.22fr 0.62fr;
+    gap: 14pt;
+    align-items: stretch;
+    margin-top: 26mm;
+  }
+
+  .cover-title {
+    min-height: 172pt;
+    padding: 19pt 21pt;
+  }
+
+  .kicker,
+  .label,
+  .page-no,
+  .tags {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .kicker {
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 1.9pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+    margin-bottom: 12pt;
+  }
+
+  h1 {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 34pt;
+    line-height: 1.16;
+    letter-spacing: 0.8pt;
+    font-weight: 500;
+    margin-bottom: 11pt;
+  }
+
+  .cover-sub {
+    font-size: 10.7pt;
+    line-height: 1.55;
+    color: #F3EFEB;
+  }
+
+  .cover-card {
+    border: 1pt solid var(--navy);
+    padding: 12pt;
+    background: var(--ivory);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .label {
+    font-size: 7.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 7pt;
+  }
+
+  .cover-card .name {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", serif;
+    font-size: 17pt;
+    line-height: 1.25;
+    font-weight: 500;
+    margin-bottom: 8pt;
+  }
+
+  .cover-card p,
+  .cover-note {
+    font-size: 9.2pt;
+    line-height: 1.55;
+    color: var(--copy);
+  }
+
+  .cover-note {
+    border-top: 1pt solid var(--navy);
+    border-bottom: 0.45pt solid var(--navy-soft);
+    padding: 8pt 0 10pt;
+    max-width: 122mm;
+  }
+
+  .header-band {
+    position: relative;
+    border-bottom: 1pt solid var(--navy);
+    padding-bottom: 9pt;
+    margin-bottom: 12pt;
+  }
+
+  .header-band::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3pt;
+    border-bottom: 0.45pt solid var(--navy-soft);
+  }
+
+  .chapter {
+    font-size: 8pt;
+    line-height: 1.35;
+    color: var(--navy);
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+
+  h2 {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 24pt;
+    line-height: 1.18;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  h3 {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", serif;
+    font-size: 13pt;
+    line-height: 1.25;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 6pt;
+  }
+
+  p {
+    font-size: 9.6pt;
+    line-height: 1.55;
+    color: var(--copy);
+    margin-bottom: 8pt;
+  }
+
+  .lead {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", serif;
+    font-size: 13.5pt;
+    line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: 13pt;
+  }
+
+  .about-grid,
+  .project-grid {
+    display: grid;
+    grid-template-columns: 0.84fr 1.16fr;
+    gap: 10pt;
+  }
+
+  .panel {
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+    padding: 10pt 12pt;
+    break-inside: avoid;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7pt;
+    margin-top: 10pt;
+  }
+
+  .metric {
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+    padding: 8pt;
+  }
+
+  .metric .num {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", serif;
+    font-size: 18pt;
+    line-height: 1;
+    color: var(--navy);
+    margin-bottom: 5pt;
+  }
+
+  .metric .desc {
+    font-size: 8pt;
+    line-height: 1.35;
+    color: var(--copy);
+  }
+
+  .project-visual {
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+    padding: 10pt;
+    min-height: 92mm;
+  }
+
+  .wire {
+    height: 100%;
+    border: 0.45pt solid var(--rule);
+    padding: 9pt;
+    display: grid;
+    grid-template-rows: 30pt 1fr 28pt;
+    gap: 8pt;
+  }
+
+  .wire .bar {
+    background: var(--navy);
+  }
+
+  .wire .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8pt;
+  }
+
+  .wire .card {
+    border: 0.45pt solid var(--rule);
+    background: #F8F3EA;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4pt;
+    margin: 8pt 0 10pt;
+  }
+
+  .tag {
+    background: var(--tag);
+    color: var(--navy);
+    padding: 2pt 6pt;
+    font-size: 8pt;
+    line-height: 1.35;
+  }
+
+  .project-body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8pt;
+    margin-top: 10pt;
+  }
+
+  .project-body .panel {
+    padding: 9pt;
+  }
+
+  .quote {
+    position: relative;
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+    padding: 11pt 14pt 11pt 20pt;
+    margin-top: 10pt;
+  }
+
+  .quote::before {
+    content: "";
+    position: absolute;
+    left: 10pt;
+    top: 10pt;
+    bottom: 10pt;
+    width: 3pt;
+    background: var(--navy);
+  }
+
+  .page-no {
+    position: absolute;
+    right: 14mm;
+    bottom: 10mm;
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 0.8pt;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <section class="folio">
+    <div class="sheet cover">
+      <div class="content">
+        <div class="cover-top sans">
+          <div class="cover-tag">Portfolio · Filed Edition</div>
+          <div>产品设计作品集<br>2026 公开版</div>
+        </div>
+
+        <div class="cover-main">
+          <div class="cover-title plaque">
+            <div class="kicker">Selected Product Work</div>
+            <h1>林若川<br>产品设计作品集</h1>
+            <div class="cover-sub">把复杂业务流程整理成清晰、可交付、可持续迭代的产品体验。</div>
+          </div>
+
+          <aside class="cover-card">
+            <div>
+              <div class="label">Filed Under</div>
+              <div class="name">B2B SaaS<br>数据产品<br>设计系统</div>
+            </div>
+            <p>8 年产品设计经验，聚焦企业协作、数据可视化与复杂后台体验。</p>
+          </aside>
+        </div>
+      </div>
+
+      <p class="content cover-note">本作品集收录三类项目：从 0 到 1 的数据分析平台、跨团队设计系统、以及面向运营场景的 AI 辅助工作台。</p>
+    </div>
+  </section>
+
+  <section class="folio">
+    <div class="sheet">
+      <div class="content">
+        <div class="header-band">
+          <div class="chapter">01 · Profile</div>
+          <h2>我如何工作</h2>
+        </div>
+
+        <p class="lead">我擅长把散落在会议、表格和口头经验里的复杂流程，整理成稳定的界面系统与产品节奏。</p>
+
+        <div class="about-grid">
+          <aside class="panel">
+            <h3>设计原则</h3>
+            <p>先把业务对象定义清楚，再画界面；先验证任务流，再追求视觉完成度。</p>
+            <p>我会把模糊需求拆成字段、状态、权限、异常和交付节奏，让产品能被团队长期维护。</p>
+          </aside>
+
+          <article>
+            <h3>能力组合</h3>
+            <p>覆盖用户研究、信息架构、交互原型、视觉系统、设计评审与前端协作。过去三年主要负责复杂后台、数据看板和内部 AI 工具。</p>
+            <div class="metric-grid">
+              <div class="metric"><div class="num">8 年</div><div class="desc">产品设计经验</div></div>
+              <div class="metric"><div class="num">12+</div><div class="desc">中大型 B2B 项目</div></div>
+              <div class="metric"><div class="num">46%</div><div class="desc">核心流程耗时下降</div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="page-no">PORTFOLIO · 2</div>
+    </div>
+  </section>
+
+  <section class="folio">
+    <div class="sheet">
+      <div class="content">
+        <div class="header-band">
+          <div class="chapter">02 · Case Study</div>
+          <h2>企业数据分析工作台</h2>
+        </div>
+
+        <div class="tags">
+          <span class="tag">B2B SaaS</span>
+          <span class="tag">Information Architecture</span>
+          <span class="tag">Dashboard</span>
+          <span class="tag">Design System</span>
+        </div>
+
+        <div class="project-grid">
+          <div class="project-visual">
+            <div class="wire">
+              <div class="bar"></div>
+              <div class="cards">
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+                <div class="card"></div>
+              </div>
+              <div class="card"></div>
+            </div>
+          </div>
+
+          <article>
+            <p class="lead">这个项目把 17 张分散报表整合为一个可追溯的经营分析入口，让业务、财务和运营能在同一套口径里协作。</p>
+            <div class="project-body">
+              <div class="panel"><h3>问题</h3><p>指标定义散落，报表重复建设，跨部门复盘需要人工对齐口径。</p></div>
+              <div class="panel"><h3>方法</h3><p>重建指标树、状态流和权限矩阵，再用原型验证核心任务链路。</p></div>
+              <div class="panel"><h3>结果</h3><p>月度复盘准备时间从 3 天降至 1.5 天，常用指标查找更稳定。</p></div>
+            </div>
+            <div class="quote">“不是做一个更漂亮的看板，而是让团队终于可以围绕同一套事实讨论。”</div>
+          </article>
+        </div>
+      </div>
+      <div class="page-no">PORTFOLIO · 3</div>
+    </div>
+  </section>
+</body>
+</html>

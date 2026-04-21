@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <!-- ==================================================================
-     LETTER TEMPLATE · parchment design system
-     A4 正式信件 / 备忘录 / 推荐信 / 辞职信 / 个人声明
-     特点：极简，serif 主导，字号稍大，段距宽松
+     LETTER TEMPLATE · republican manuscript style 1
+     A4 正式信件 / 推荐信 / 推荐函 / 备忘录 / 说明函
+     视觉：深蓝外框、米纸内页、蓝色函件题签、正文档案框
+     目标：页数必须 == 1
      ================================================================== -->
 <html lang="zh-CN">
 <head>
@@ -18,240 +19,413 @@
 
   @page {
     size: A4;
-    margin: 25mm 25mm 25mm 25mm;
-    background: #f5f4ed;
+    margin: 0;
+    background: #243851;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --parchment: #f5f4ed;
-    --near-black:#141413;
-    --dark-warm: #3d3d3a;
-    --olive:     #5e5d59;
-    --stone:     #87867f;
-    --brand:     #1B365D;
-    --border:    #e8e6dc;
+    --parchment:  #EBE5DD;
+    --ivory:      #F3EFEB;
+    --brand:      #243851;
+    --near-black: #232222;
+    --dark-warm:  #4A4947;
+    --charcoal:   #5A5856;
+    --olive:      #666361;
+    --stone:      #8B8782;
+
+    --frame-blue: #243851;
+    --blue-soft:  #4D5B6D;
+    --paper-wash: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --rule:       #CABBA7;
+    --panel-fill: #F7F2EA;
+    --tag-bg:     #D5DEE7;
   }
 
-  html, body { background: var(--parchment); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--frame-blue);
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  }
 
   body {
-    color: var(--near-black);
-    font-family: "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", Georgia, serif;
-    font-size: 11.5pt;
-    line-height: 1.55;
-    letter-spacing: 0.2pt;
+    padding: 11mm;
+    margin: 0 auto;
   }
 
-  /* ========== LETTERHEAD 信头 ========== */
-  .letterhead {
-    text-align: right;
-    margin-bottom: 30pt;
-    font-size: 10pt;
-    line-height: 1.55;
-    color: var(--olive);
+  .folio {
+    position: relative;
+    min-height: 275mm;
+    padding: 15mm 15mm 12mm;
+    background: linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
+    overflow: hidden;
   }
-  .letterhead .sender-name {
-    font-size: 13pt;
+
+  .folio::before,
+  .folio::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .folio::before {
+    inset: 6mm;
+    border: 1pt solid var(--frame-blue);
+  }
+
+  .folio::after {
+    inset: 8.2mm;
+    border: 0.45pt solid var(--blue-soft);
+  }
+
+  .sheet-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .sans,
+  .label,
+  .sub,
+  .meta,
+  .subject-meta,
+  .note,
+  .attachments,
+  .footer {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .top {
+    display: grid;
+    grid-template-columns: 0.88fr 1.12fr;
+    gap: 10pt;
+    margin-bottom: 14pt;
+  }
+
+  .tag-plaque {
+    position: relative;
+    min-height: 82pt;
+    padding: 12pt 14pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
+  }
+
+  .tag-plaque::before,
+  .tag-plaque::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .tag-plaque::before {
+    inset: 6pt;
+    border: 0.85pt solid #F3EFEB;
+  }
+
+  .tag-plaque::after {
+    inset: 9pt;
+    border: 0.45pt solid #D5DEE7;
+  }
+
+  .tag-plaque .label {
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.8pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+    margin-bottom: 7pt;
+  }
+
+  .tag-plaque .value {
+    font-size: 17pt;
+    line-height: 1.3;
     font-weight: 500;
-    color: var(--near-black);
-    margin-bottom: 4pt;
   }
-  .letterhead a {
-    color: var(--dark-warm);
+
+  .sender {
+    border: 1pt solid var(--frame-blue);
+    padding: 12pt 12pt 10pt;
+    background: var(--panel-fill);
+    text-align: right;
+  }
+
+  .sender .org {
+    font-size: 15pt;
+    line-height: 1.2;
+    color: var(--near-black);
+    margin-bottom: 8pt;
+    font-weight: 500;
+  }
+
+  .sender .meta {
+    font-size: 8.9pt;
+    line-height: 1.55;
+    color: var(--stone);
+  }
+
+  .sender a {
+    color: var(--stone);
     text-decoration: none;
   }
 
-  /* ========== META ========== */
-  .date {
-    text-align: right;
-    font-size: 10.5pt;
-    color: var(--olive);
-    margin-bottom: 20pt;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .recipient {
-    margin-bottom: 24pt;
-    line-height: 1.5;
-  }
-  .recipient .to {
-    font-size: 10pt;
-    color: var(--stone);
-    letter-spacing: 0.5pt;
-    text-transform: uppercase;
-    margin-bottom: 3pt;
-  }
-  .recipient .name {
-    font-size: 12pt;
-    font-weight: 500;
-    color: var(--near-black);
-  }
-  .recipient .org {
-    font-size: 10.5pt;
-    color: var(--olive);
-  }
-
-  /* ========== SUBJECT ========== */
   .subject {
-    margin-bottom: 24pt;
-    padding-bottom: 8pt;
-    border-bottom: 0.5pt solid var(--brand);
+    border: 1pt solid var(--frame-blue);
+    margin-bottom: 13pt;
+    background: var(--ivory);
   }
-  .subject .label {
-    font-family: "Source Han Sans SC", sans-serif;
-    font-size: 9pt;
-    color: var(--brand);
-    letter-spacing: 0.8pt;
+
+  .subject-head {
+    padding: 8pt 14pt 7pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .subject-head .main {
+    font-size: 13pt;
+    line-height: 1.2;
+    font-weight: 500;
+  }
+
+  .subject-head .sub {
+    font-size: 7.2pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
     text-transform: uppercase;
-    margin-bottom: 3pt;
+    color: #D5DEE7;
   }
-  .subject .title {
-    font-size: 15pt;
+
+  .subject-body {
+    padding: 12pt 14pt 11pt;
+  }
+
+  .subject-title {
+    font-size: 22pt;
+    line-height: 1.25;
+    color: var(--near-black);
     font-weight: 500;
-    color: var(--near-black);
-    line-height: 1.3;
+    margin-bottom: 6pt;
   }
 
-  /* ========== SALUTATION ========== */
-  .salutation {
-    margin-bottom: 18pt;
-    font-size: 12pt;
-    color: var(--near-black);
-  }
-
-  /* ========== BODY ========== */
-  .body-content p {
-    margin-bottom: 14pt;
-    text-align: justify;
-    text-justify: inter-ideograph;
-    line-height: 1.55;
-    text-indent: 2em;    /* 中文段落首行缩进 */
-  }
-  .body-content p:first-child { text-indent: 2em; }
-  .body-content p.no-indent { text-indent: 0; }
-
-  .body-content .hl {
-    color: var(--brand);
-    font-weight: 500;
-  }
-
-  /* ========== CLOSING ========== */
-  .closing {
-    margin-top: 30pt;
-    line-height: 1.55;
-  }
-  .closing .regards {
-    margin-bottom: 30pt;
-    color: var(--near-black);
-  }
-  .closing .signature {
-    font-size: 14pt;
-    font-weight: 500;
-    color: var(--near-black);
-    margin-bottom: 3pt;
-  }
-  .closing .signoff-meta {
-    font-size: 10pt;
-    color: var(--olive);
-  }
-
-  /* ========== ATTACHMENT ========== */
-  .attachments {
-    margin-top: 36pt;
-    padding-top: 10pt;
-    border-top: 0.5pt dotted var(--border);
-    font-size: 9.5pt;
+  .subject-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12pt;
+    font-size: 9pt;
+    line-height: 1.45;
     color: var(--stone);
-    font-family: "Source Han Sans SC", sans-serif;
-    line-height: 1.55;
   }
-  .attachments .label {
-    color: var(--brand);
-    margin-right: 6pt;
+
+  .body-frame {
+    position: relative;
+    border: 1pt solid var(--frame-blue);
+    padding: 13pt 16pt 12pt;
+    background: var(--ivory);
+  }
+
+  .body-frame::before {
+    content: "";
+    position: absolute;
+    inset: 7pt;
+    border: 0.45pt solid var(--rule);
+    pointer-events: none;
+  }
+
+  .salutation {
+    position: relative;
+    z-index: 1;
+    font-size: 13pt;
+    line-height: 1.3;
+    color: var(--near-black);
+    margin-bottom: 10pt;
     font-weight: 500;
   }
 
-  /* ========== 一些特殊变体 ========== */
-  /* 如果是 memo（备忘录），用 sans 字体，去掉首行缩进 */
-  body.memo {
-    font-family: "Source Han Sans SC", -apple-system, sans-serif;
+  .body-frame p {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 10pt;
+    font-size: 11.1pt;
     line-height: 1.55;
+    color: var(--near-black);
+    text-indent: 2em;
   }
-  body.memo .body-content p { text-indent: 0; margin-bottom: 10pt; }
+
+  .body-frame p.no-indent {
+    text-indent: 0;
+  }
+
+  .hl {
+    color: var(--frame-blue);
+    font-weight: 500;
+  }
+
+  .evidence-list {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6pt;
+    margin: 4pt 0 10pt;
+  }
+
+  .evidence-list div {
+    border: 0.45pt solid var(--rule);
+    padding: 6pt 7pt;
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-size: 8.2pt;
+    line-height: 1.4;
+    color: var(--dark-warm);
+  }
+
+  .closing {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16pt;
+    align-items: end;
+    margin-top: 13pt;
+    padding-top: 12pt;
+    border-top: 1pt solid var(--frame-blue);
+  }
+
+  .closing .regards {
+    font-size: 13pt;
+    line-height: 1.35;
+    color: var(--near-black);
+    margin-bottom: 5pt;
+    font-weight: 500;
+  }
+
+  .closing .note {
+    font-size: 8.8pt;
+    line-height: 1.45;
+    color: var(--stone);
+  }
+
+  .signature {
+    text-align: right;
+  }
+
+  .signature .name {
+    font-size: 18pt;
+    line-height: 1.2;
+    color: var(--near-black);
+    font-weight: 500;
+    margin-bottom: 5pt;
+  }
+
+  .signature .meta {
+    font-size: 8.8pt;
+    line-height: 1.45;
+    color: var(--stone);
+  }
+
+  .attachments {
+    margin-top: 10pt;
+    padding-top: 8pt;
+    border-top: 0.45pt solid var(--rule);
+    font-size: 8.6pt;
+    line-height: 1.45;
+    color: var(--stone);
+  }
+
+  .attachments .label {
+    color: var(--frame-blue);
+    font-weight: 500;
+    margin-right: 6pt;
+  }
+
+  .footer {
+    margin-top: 9pt;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 0.6pt;
+    color: var(--stone);
+  }
 </style>
 </head>
 <body>
+<main class="folio">
+  <div class="sheet-content">
+    <header class="top">
+      <section class="tag-plaque">
+        <div class="label">{{Filed Letter / Recommendation Letter}}</div>
+        <div class="value">{{推荐信 / 正式函件<br>一句短标题}}</div>
+      </section>
 
-<!-- ========== LETTERHEAD（寄件人） ========== -->
-<div class="letterhead">
-  <div class="sender-name">{{寄件人姓名}}</div>
-  <div>{{寄件人地址 / 部门 / 机构}}</div>
-  <div>{{电话}}　·　<a href="mailto:{{EMAIL}}">{{EMAIL}}</a></div>
-</div>
+      <section class="sender">
+        <div class="org">{{寄件人姓名 / 机构}}</div>
+        <div class="meta">
+          {{寄件人身份 / 部门 / 城市}}<br>
+          {{电话}}　<a href="mailto:{{EMAIL}}">{{EMAIL}}</a><br>
+          日期：{{2026 年 4 月 21 日}}
+        </div>
+      </section>
+    </header>
 
-<!-- ========== 日期 ========== -->
-<div class="date">{{日期 如 2026 年 4 月 18 日}}</div>
+    <section class="subject">
+      <div class="subject-head">
+        <span class="main">函件主题</span>
+        <span class="sub">Formal Correspondence</span>
+      </div>
+      <div class="subject-body">
+        <div class="subject-title">{{关于推荐 / 说明 / 申请事项的一句话标题}}</div>
+        <div class="subject-meta">
+          <span>致：{{收件人 / 委员会 / 单位}}</span>
+          <span>分类：{{推荐信 / 内部说明函 / 正式信件}}</span>
+        </div>
+      </div>
+    </section>
 
-<!-- ========== 收件人 ========== -->
-<div class="recipient">
-  <div class="to">致</div>
-  <div class="name">{{收件人姓名 / 称谓}}</div>
-  <div class="org">{{收件人机构 / 部门}}</div>
-</div>
+    <section class="body-frame">
+      <div class="salutation">{{尊敬的 XX 委员会 / 负责人：}}</div>
 
-<!-- ========== 主题 ========== -->
-<div class="subject">
-  <div class="label">关于</div>
-  <div class="title">{{信件主题，一句话说清}}</div>
-</div>
+      <p>{{第一段：说明写信目的和与被推荐人的关系。例如“我谨以 XX 身份推荐 XX 申请 XX 项目”。}}</p>
 
-<!-- ========== 称呼 ========== -->
-<div class="salutation">{{称呼 如 "尊敬的 XX 先生：" / "Dear XX,"}}</div>
+      <p>{{第二段：写清推荐理由。用具体事实支撑，不只写“优秀”。可用 <span class="hl">关键能力 / 关键成果</span> 高亮。}}</p>
 
-<!-- ========== 正文 ========== -->
-<div class="body-content">
+      <div class="evidence-list">
+        <div>{{证据 1：项目 / 成果}}</div>
+        <div>{{证据 2：能力 / 品质}}</div>
+        <div>{{证据 3：影响 / 评价}}</div>
+      </div>
 
-<p>
-{{第一段：破题。说明写这封信的缘由和核心意图。
-不要绕弯，1-2 句话让读者知道你要说什么。}}
-</p>
+      <p>{{第三段：结合申请场景说明为什么匹配。把对方关心的标准和被推荐人的经历连接起来。}}</p>
 
-<p>
-{{第二段：展开。给出背景、理由、论据。
-如有 <span class="hl">关键信息</span> 可用高亮突出。}}
-</p>
+      <p>{{第四段：明确推荐结论，并提供后续联系出口。}}</p>
 
-<p>
-{{第三段：具体。说清楚你希望对方做什么、
-何时做、怎么联系。让行动有明确出口。}}
-</p>
+      <div class="closing">
+        <div>
+          <div class="regards">{{此致　敬礼 / 顺颂商祺}}</div>
+          <div class="note">{{附言：如需进一步了解，我愿意补充说明。}}</div>
+        </div>
+        <div class="signature">
+          <div class="name">{{签名}}</div>
+          <div class="meta">{{职位 · 单位}}<br>{{日期复写}}</div>
+        </div>
+      </div>
+    </section>
 
-<p>
-{{第四段（可选）：收尾。表达期待、致谢或礼貌性结束语。}}
-</p>
+    <div class="attachments">
+      <span class="label">附件</span>{{附件清单：① 简历 ② 成果材料 ③ 其他证明；无附件可删除本行}}
+    </div>
 
-</div>
-
-<!-- ========== 敬语 ========== -->
-<div class="closing">
-  <div class="regards">
-    {{敬语。中文常用 "此致 / 敬礼！"、"顺颂商祺"。英文 "Best regards," / "Sincerely,"}}
+    <footer class="footer">
+      <span>INTERNAL FILED LETTER</span>
+      <span>KAMI DEMO · 1 / 1</span>
+    </footer>
   </div>
-
-  <div class="signature">{{签名 / 亲笔姓名}}</div>
-  <div class="signoff-meta">
-    {{职位 · 部门}}<br>
-    {{日期复写 · 可选}}
-  </div>
-</div>
-
-<!-- ========== 附件（可选） ========== -->
-<div class="attachments">
-  <span class="label">附件</span>
-  {{附件清单：① 附件名 1 · ② 附件名 2}}
-</div>
-
+</main>
 </body>
 </html>

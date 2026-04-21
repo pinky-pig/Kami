@@ -51,6 +51,21 @@ DIAGRAM_TARGETS: dict[str, str] = {
     "diagram-quadrant":     "quadrant.html",
 }
 
+# Phase-1 migration scope: only these Chinese templates are expected to stay
+# token-perfect with references/tokens.json.
+SYNC_TARGETS: set[str] = {
+    "one-pager.html",
+    "long-doc.html",
+    "letter.html",
+}
+
+# Demo files have real content and are the right source for --verify.
+VERIFY_SOURCES: dict[str, tuple[str, Path]] = {
+    "one-pager": ("demo-tesla.html", ROOT / "assets" / "demos"),
+    "long-doc": ("demo-long-doc.html", ROOT / "assets" / "demos"),
+    "letter": ("demo-letter.html", ROOT / "assets" / "demos"),
+}
+
 
 # ------------------------- build -------------------------
 
@@ -173,9 +188,10 @@ def sync_check(verbose: bool = False) -> int:
 
     canonical: dict[str, str] = json.loads(TOKENS_FILE.read_text())
 
-    targets: list[Path] = list(TEMPLATES.glob("*.html"))
-    if DIAGRAMS.exists():
-        targets.extend(DIAGRAMS.glob("*.html"))
+    targets = [
+        path for path in sorted(TEMPLATES.glob("*.html"))
+        if path.name in SYNC_TARGETS
+    ]
 
     drift: list[tuple[str, str, str, str]] = []  # (file, token, expected, actual)
 
@@ -201,7 +217,7 @@ def sync_check(verbose: bool = False) -> int:
                 drift.append((str(rel), token, expected, actual))
 
     if not drift:
-        print(f"✓ tokens in sync across {len(targets)} template(s)")
+        print(f"✓ tokens in sync across {len(targets)} migrated template(s)")
         return 0
 
     print(f"\n[token-drift] {len(drift)}")
@@ -230,7 +246,7 @@ def _pdf_font_names(pdf_path: Path) -> set[str]:
             if resources is None:
                 continue
             font_dict = resources.get("/Font")
-            if not isinstance(font_dict, dict):
+            if font_dict is None:
                 continue
             for obj in font_dict.values():
                 try:
@@ -248,7 +264,8 @@ def _pdf_font_names(pdf_path: Path) -> set[str]:
 
 def verify_target(name: str, source: str, max_pages: int, src_dir: Path) -> list[str]:
     issues: list[str] = []
-    src = src_dir / source
+    verify_source, verify_dir = VERIFY_SOURCES.get(name, (source, src_dir))
+    src = verify_dir / verify_source
     if not src.exists():
         issues.append(f"source not found: {src}")
         return issues

@@ -1,65 +1,73 @@
-# kami · Cheatsheet
+# kami · 民国文稿风格速查
 
-一页纸速查。填模板 / 调细节前扫一眼。完整规范在 `references/design.md`。
+一页纸速查。填模板、调细节前先看这里。完整规范在 `references/design.md`。
+
+## V1 范围
+
+- 正式支持：中文 `one-pager`、`long-doc`、`letter`
+- 风格目标：深蓝外框、旧纸内页、明显 padding、蓝色题签、档案式边框
+- 暂不主推：英文模板、简历、作品集、slides
 
 ## 八条铁律
 
-1. 页面背景 `#f5f4ed`（parchment），不用纯白
-2. 强调色只有油墨蓝 `#1B365D`
-3. 所有灰**暖调**（yellow-brown undertone），禁冷蓝灰
-4. 英文: serif 通吃标题和正文。中文: 标题 serif，正文 sans。UI 元素都用 sans
+1. 页面是 `#243851` 深蓝外框 + `#EBE5DD` 旧纸内页，不用纯白
+2. 强调色只有档案蓝 `#243851`
+3. 中性灰偏纸本暖灰，不用现代 SaaS 冷灰
+4. 中文保持 serif 标题、sans 功能文字；不额外引入新字体
 5. Serif 字重固定 500，不用 bold
-6. 行距：标题 1.1-1.3 / 密排 1.4-1.45 / 阅读 1.5-1.55。禁 1.6+
-7. Tag 背景实色 hex，禁 rgba（WeasyPrint 双层矩形 bug）
-8. 阴影用 ring 或 whisper，不用硬 drop shadow
+6. 行距：标题 1.1-1.3 / 密排 1.4-1.45 / 阅读 1.5-1.55
+7. Tag 背景必须实色 hex，禁 `rgba()`
+8. 装饰只做蓝色题签、双线内框、档案边框，不做高拟物海报
+
+## 自然语言触发
+
+| 用户说 | 路由 |
+|---|---|
+| 帮我生成一份白皮书 | `long-doc.html` |
+| 生成一份项目方案 / 做一页项目方案 | `one-pager.html` |
+| 帮我写一份推荐信 / 写一封推荐函 | `letter.html` |
+| 帮我把这些内容排版成好看的 PDF | 先判断 `one-pager` / `long-doc` / `letter` |
 
 ## 色板
 
 | 角色 | Hex | 用途 |
 |---|---|---|
-| Parchment | `#f5f4ed` | 页面底 |
-| Ivory | `#faf9f5` | 卡片 / 浮起容器 |
-| Warm Sand | `#e8e6dc` | 按钮背景 / 交互面 |
-| Dark Surface | `#30302e` | 深色容器 |
-| Deep Dark | `#141413` | 深色页面底 |
-| **Brand** | **`#1B365D`** | **强调 · CTA · 标题下划线（全文 ≤ 5%）** |
-| Brand Coral | `#2D5A8A` | 深底上的链接 |
-| Near Black | `#141413` | 主文字 |
-| Dark Warm | `#3d3d3a` | 次级深色 / 链接 |
-| Charcoal | `#4d4c48` | 按钮文字 / 高密度正文 |
-| Olive | `#5e5d59` | 副文本 · 描述 |
-| Stone | `#87867f` | 三级文字 · 元信息 |
-| Warm Silver | `#b0aea5` | 深底上的浅色文字 |
-| Border Cream | `#f0eee6` | 卡片默认边 |
-| Border Warm | `#e8e6dc` | section 分隔 |
-| Ring Warm | `#d1cfc5` | 按钮 hover / focus 环 |
+| Parchment | `#EBE5DD` | 旧纸内页 |
+| Ivory | `#F3EFEB` | 浮层浅纸 |
+| Border | `#D0C7BB` | 分隔线 / 边框 |
+| Border Soft | `#DDD5CB` | 更淡的表格线 / 次分隔 |
+| **Brand** | **`#243851`** | **外框、标题牌、强调数字、题签** |
+| Brand Light | `#4D5B6D` | 双线细边 / 次强调 |
+| Near Black | `#232222` | 主文字 |
+| Dark Warm | `#4A4947` | 次级正文 |
+| Charcoal | `#5A5856` | 表格表头 / 较重正文 |
+| Olive | `#666361` | 说明、导语、副文本 |
+| Stone | `#8B8782` | 日期、元信息 |
+| Seal Red | `#B6675E` | 预留色，v1 默认不用 |
 
-**rgba -> 实色对照**（底 parchment + 前景油墨蓝）：
+## Tag 实色
 
-| 透明度 | 实色 |
-|---|---|
-| 0.08 | `#EEF2F7` |
-| 0.14 | `#E4ECF5` |
-| **0.18** | **`#E4ECF5`** ← 默认 tag |
-| 0.22 | `#ead3c7` |
-| 0.30 | `#D6E1EE` |
+| 档位 | Hex | 用途 |
+|---|---|---|
+| 淡 | `#E4E9EE` | 极弱标注 |
+| 中 | `#DCE3EA` | 轻标签 |
+| 默认 | `#D5DEE7` | 默认 tag |
+| 强 | `#CFD8E2` | 多标签并排时加区分 |
+| 深 | `#C3CDD8` | 需要更强反差时 |
 
 ## 字号（印刷品 pt）
 
 | 角色 | 字号 | 字重 | line-height |
 |---|---|---|---|
-| Display | 36-48 | 500 | 1.10 |
-| H1 | 18-22 | 500 | 1.20 |
+| Display | 34-40 | 500 | 1.10 |
+| H1 | 20-24 | 500 | 1.20 |
 | H2 | 14-16 | 500 | 1.25 |
 | H3 | 12-13 | 500 | 1.30 |
-| Body Lead | 11 | 400 | 1.55 |
-| Body | 9.5-10 | 400 | 1.55 |
+| Body Lead | 11-12 | 400 | 1.55 |
+| Body | 9.5-10.5 | 400 | 1.55 |
 | Body Dense | 9-9.2 | 400 | 1.40 |
 | Caption | 8.5-9 | 400 | 1.45 |
 | Label | 7.5-8 | 600 | 1.35 |
-| Tiny | 7 | 400 | 1.40 |
-
-屏幕（px）≈ pt × 1.33。
 
 ## 间距（4pt 基）
 
@@ -71,79 +79,99 @@
 | lg | 16-20 pt | 组件之间 |
 | xl | 24-32 pt | section 标题 margin |
 | 2xl | 40-60 pt | 大 section 之间 |
-| 3xl | 80-120 pt | 长文档章节之间 |
 
-**页面 margin（A4）**
+## 页面边距（A4）
 
 | 文档 | 上右下左 |
 |---|---|
-| Resume | 9 mm 13 mm 9 mm 13 mm |
-| One-Pager | 15 / 18 / 15 / 18 mm |
-| Long Doc | 20 / 22 / 22 / 22 mm |
-| Letter | 25 mm 全周 |
-| Portfolio | 12 / 15 / 12 / 15 mm |
-
-## 圆角尺度
-
-`4 pt -> 6 pt -> 8 pt（默认）-> 12 pt -> 16 pt -> 24 pt -> 32 pt（hero）`
+| One-Pager | `@page margin: 0`，深蓝外框；内页约 10.5mm 外 padding + 13mm 内容 padding |
+| Long Doc | `@page margin: 0`，每页深蓝外框；内页约 10.5mm 外 padding + 13mm 内容 padding |
+| Letter | `@page margin: 0`，深蓝外框；内页约 11mm 外 padding + 15mm 内容 padding |
 
 ## 常用 CSS 片段
 
-### Card
+### 风格 1 框页
 
 ```css
-.card {
-  background: var(--ivory);
-  border: 0.5pt solid var(--border-cream);
-  border-radius: 8pt;
-  padding: 16pt 20pt;
+@page {
+  size: A4;
+  margin: 0;
+  background: var(--brand);
+}
+
+body {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 10.5mm;
+  background: var(--brand);
+}
+
+.folio {
+  position: relative;
+  min-height: 276mm;
+  padding: 13mm;
+  background: linear-gradient(135deg, #F6F1E8 0%, var(--parchment) 48%, #EFE5D8 100%);
 }
 ```
 
-### Tag（默认极淡实色）
+### 蓝色题签
+
+```css
+.title-plaque {
+  position: relative;
+  background: var(--brand);
+  color: var(--ivory);
+  padding: 12pt 14pt;
+}
+.title-plaque::after {
+  content: "";
+  position: absolute;
+  inset: 8pt;
+  border: 0.45pt solid #D5DEE7;
+}
+```
+
+### Tag
 
 ```css
 .tag {
-  background: #EEF2F7;          /* 0.08 等效 */
+  background: #D5DEE7;
   color: var(--brand);
-  font-size: 8pt; font-weight: 500;
+  font-size: 8pt;
+  font-weight: 500;
   padding: 1pt 5pt;
-  border-radius: 2pt;
-  letter-spacing: 0.05pt;
+  border-radius: 3pt;
 }
 ```
 
-### Section Title（品牌色下划线是签名式样）
-
-```css
-.section-title {
-  font-family: serif;
-  font-size: 14pt; font-weight: 500;
-  color: var(--near-black);
-  margin: 24pt 0 10pt 0;
-}
-```
-
-### Metric（数据卡）
-
-```css
-.metric { display: flex; align-items: baseline; gap: 6pt; }
-.metric-value {
-  font-family: serif; font-size: 16pt; font-weight: 500;
-  color: var(--brand);
-  font-variant-numeric: tabular-nums;
-}
-.metric-label { font-size: 9pt; color: var(--olive); }
-```
-
-### Quote
+### 引文 / 旁注
 
 ```css
 .quote {
-  border-left: 2pt solid var(--brand);
-  padding: 4pt 0 4pt 14pt;
+  position: relative;
+  border-left: 1.2pt solid var(--brand);
+  padding: 4pt 0 4pt 16pt;
   color: var(--olive);
-  line-height: 1.55;
+}
+.quote::before {
+  content: "";
+  position: absolute;
+  left: 4pt;
+  top: 0;
+  bottom: 0;
+  width: 0.35pt;
+  background: var(--brand-light);
+}
+```
+
+### 框题 / 信息块
+
+```css
+.panel {
+  background: var(--ivory);
+  border: 0.4pt solid var(--border);
+  border-radius: 2pt;
+  padding: 10pt 14pt;
 }
 ```
 
@@ -151,16 +179,13 @@
 
 | 想做 | 怎么做 |
 |---|---|
-| 大标题 | serif 500，line-height 1.10-1.30 |
-| 正文阅读（英文） | serif 400，9.5-10pt，1.55 |
-| 正文阅读（中文） | sans 400，9.5-10pt，1.55 |
-| 强调数字 | `color: var(--brand)`，不加粗 |
-| 分两段 | 1pt 品牌色 border-bottom，或 0.5pt 暖灰虚线 |
-| 引用 | 左 2pt 品牌实线 + olive 色 |
-| 代码 | ivory 底 + 0.5pt border + 6pt 圆角 + mono |
-| 主按钮 | 品牌色填充 + ivory 字 |
-| 次按钮 | warm-sand 底 + charcoal 字 |
-| 章节开始 | serif 标题 + 下方 1pt 品牌色实线 |
-| 封面 | 单页 Display 标题 + 右对齐作者/日期 + 大量留白 |
+| 大标题 | serif 500，必要时两行，靠字号不靠粗体 |
+| 章节开始 | 蓝色题签 / 档案框 + 大留白 |
+| 强调数字 | `color: var(--brand)`，不要粗体 |
+| 分隔内容 | `0.45pt` 纸灰分隔线，别用粗黑线 |
+| 引用 / 旁注 | 左双线，不用大色块 |
+| 信息块 | 浅纸底 + 深蓝边框 |
+| 中文正文 | serif 或 sans 跟模板既有规则走，别混杂太多样式 |
+| 装饰 | 最多一处“题签感”，别扩散到整页 |
 
-不在表里 -> 回原则：**serif 承担权威，sans 承担功能，暖灰承担节奏，油墨蓝承担焦点**。
+不在表里，就回到一句话：**版式骨架沿用 kami，时代气质交给深蓝外框、旧纸内页和档案题签。**

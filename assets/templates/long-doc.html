@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!-- ==================================================================
-     LONG DOCUMENT TEMPLATE · parchment design system
-     多页 A4 白皮书/技术报告/年度总结
-     结构：封面 -> 目录 -> 执行摘要 -> 正文章节 -> 附录
+     LONG DOCUMENT TEMPLATE · republican manuscript style 1
+     多页 A4 白皮书 / 长文 / 年度总结
+     视觉：每页深蓝外框 + 米纸内页 + 档案题签
      ================================================================== -->
 <html lang="zh-CN">
 <head>
@@ -18,520 +18,750 @@
 
   @page {
     size: A4;
-    margin: 20mm 22mm 22mm 22mm;
-    background: #f5f4ed;
-
-    @bottom-center {
-      content: counter(page) "  ·  {{文档标题}}";
-      font-family: "Source Han Serif SC", Georgia, serif;
-      font-size: 8.5pt;
-      color: #87867f;
-    }
+    margin: 0;
+    background: #243851;
   }
 
-  @page:first {
-    @bottom-center { content: ""; }
+  :root {
+    --parchment:  #EBE5DD;
+    --ivory:      #F3EFEB;
+    --brand:      #243851;
+    --near-black: #232222;
+    --dark-warm:  #4A4947;
+    --charcoal:   #5A5856;
+    --olive:      #666361;
+    --stone:      #8B8782;
+
+    --frame-blue: #243851;
+    --blue-soft:  #4D5B6D;
+    --paper-wash: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --rule:       #CABBA7;
+    --panel-fill: #F7F2EA;
+    --tag-bg:     #D5DEE7;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --parchment: #f5f4ed;
-    --ivory:     #faf9f5;
-    --near-black:#141413;
-    --dark-warm: #3d3d3a;
-    --charcoal:  #4d4c48;
-    --olive:     #5e5d59;
-    --stone:     #87867f;
-    --brand:     #1B365D;
-    --border:    #e8e6dc;
-    --border-soft:#efede4;
-    --tag-bg:    #E4ECF5;
-  }
-
-  html, body { background: var(--parchment); }
-
+  html,
   body {
+    width: 210mm;
+    margin: 0 auto;
+    background: var(--frame-blue);
     color: var(--near-black);
-    font-family: "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", Georgia, serif;
-    font-size: 10.5pt;
-    line-height: 1.55;
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    font-size: 10.2pt;
+    line-height: 1.5;
   }
 
-  .sans {
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC",
-                 -apple-system, "PingFang SC", Arial, sans-serif;
+  .sans,
+  .topline,
+  .meta,
+  .label,
+  .chapter-num,
+  .toc-page,
+  .page-no,
+  table,
+  code,
+  pre {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
   }
 
-  /* ========== COVER ========== */
+  .folio {
+    min-height: 297mm;
+    padding: 10.5mm;
+    background: var(--frame-blue);
+    break-after: page;
+  }
+
+  .folio:last-child {
+    break-after: auto;
+  }
+
+  .sheet {
+    position: relative;
+    min-height: 276mm;
+    padding: 14mm 13mm 12mm;
+    background: linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
+    overflow: hidden;
+  }
+
+  .sheet::before,
+  .sheet::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .sheet::before {
+    inset: 6mm;
+    border: 1pt solid var(--frame-blue);
+  }
+
+  .sheet::after {
+    inset: 8.4mm;
+    border: 0.45pt solid var(--blue-soft);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-no {
+    position: absolute;
+    right: 14mm;
+    bottom: 10mm;
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 0.8pt;
+    color: var(--stone);
+  }
+
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 8.3pt;
+    line-height: 1.45;
+    color: var(--stone);
+    margin-bottom: 12mm;
+  }
+
+  .blue-tag {
+    position: relative;
+    display: inline-block;
+    background: var(--frame-blue);
+    color: var(--ivory);
+    padding: 7pt 10pt;
+    font-size: 7.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.7pt;
+    text-transform: uppercase;
+  }
+
+  .blue-tag::before {
+    content: "";
+    position: absolute;
+    inset: 5pt;
+    border: 0.55pt solid #F3EFEB;
+  }
+
   .cover {
-    min-height: 240mm;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 40mm 0 0 0;
-    break-after: page;
-  }
-  .cover-eyebrow {
-    font-family: "Source Han Sans SC", sans-serif;
-    font-size: 10pt;
-    color: var(--brand);
-    letter-spacing: 1pt;
-    text-transform: uppercase;
-    margin-bottom: 18pt;
-  }
-  .cover-title {
-    font-size: 36pt;
-    font-weight: 500;
-    color: var(--near-black);
-    line-height: 1.15;
-    letter-spacing: 0.5pt;
-    margin-bottom: 16pt;
-  }
-  .cover-sub {
-    font-family: "Source Han Sans SC", sans-serif;
-    font-size: 14pt;
-    color: var(--olive);
-    line-height: 1.5;
-    max-width: 85%;
-    margin-bottom: 30pt;
-  }
-  .cover-divider {
-    width: 60pt;
-    height: 1pt;
-    background: var(--brand);
-    margin: 20pt 0;
-  }
-  .cover-meta {
-    font-family: "Source Han Sans SC", sans-serif;
-    font-size: 10pt;
-    color: var(--stone);
-    line-height: 1.5;
-  }
-  .cover-meta strong {
-    color: var(--dark-warm);
-    font-weight: 500;
   }
 
-  /* ========== TOC（目录）========== */
-  .toc { break-after: page; }
-  .toc h2 {
-    font-size: 22pt;
-    font-weight: 500;
-    margin-bottom: 14pt;
-    padding-bottom: 6pt;
-    border-bottom: 1pt solid var(--brand);
+  .cover-main {
+    margin-top: 24mm;
+    display: grid;
+    grid-template-columns: 1.22fr 0.58fr;
+    gap: 14pt;
+    align-items: stretch;
   }
-  .toc-item {
+
+  .cover-plaque {
+    position: relative;
+    min-height: 160pt;
+    padding: 18pt 20pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
+  }
+
+  .cover-plaque::before,
+  .cover-plaque::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .cover-plaque::before {
+    inset: 7pt;
+    border: 0.9pt solid #F3EFEB;
+  }
+
+  .cover-plaque::after {
+    inset: 10pt;
+    border: 0.45pt solid #D5DEE7;
+  }
+
+  .kicker {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 1.9pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+    margin-bottom: 12pt;
+  }
+
+  .cover-title {
+    font-size: 31pt;
+    line-height: 1.18;
+    font-weight: 500;
+    letter-spacing: 0.8pt;
+    margin-bottom: 10pt;
+  }
+
+  .cover-sub {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-size: 10.6pt;
+    line-height: 1.55;
+    color: #F3EFEB;
+  }
+
+  .cover-side {
+    border: 1pt solid var(--frame-blue);
+    padding: 12pt;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--panel-fill);
+  }
+
+  .cover-side .label {
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    color: var(--frame-blue);
+    margin-bottom: 8pt;
+  }
+
+  .cover-side .value {
+    font-size: 14pt;
+    line-height: 1.45;
+    color: var(--near-black);
+  }
+
+  .cover-footer {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    padding: 6pt 0;
-    border-bottom: 0.3pt dotted var(--border);
-    font-size: 11pt;
-  }
-  .toc-num {
-    color: var(--brand);
-    font-weight: 500;
-    min-width: 30pt;
-  }
-  .toc-title {
-    flex: 1;
-    color: var(--near-black);
-    padding-left: 6pt;
-  }
-  .toc-page {
-    color: var(--stone);
-    font-variant-numeric: tabular-nums;
+    align-items: end;
+    gap: 16pt;
+    margin-top: 24mm;
   }
 
-  /* ========== HEADINGS ========== */
+  .cover-note {
+    max-width: 112mm;
+    border-top: 1pt solid var(--frame-blue);
+    border-bottom: 0.45pt solid var(--blue-soft);
+    padding: 8pt 0 10pt;
+    font-size: 9.4pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+  }
+
+  .cover-meta {
+    text-align: right;
+    font-size: 9pt;
+    line-height: 1.55;
+    color: var(--stone);
+  }
+
+  .header-band {
+    position: relative;
+    margin-bottom: 12pt;
+    padding-bottom: 9pt;
+    border-bottom: 1pt solid var(--frame-blue);
+  }
+
+  .header-band::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3pt;
+    border-bottom: 0.45pt solid var(--blue-soft);
+  }
+
+  .chapter-num {
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    color: var(--frame-blue);
+    margin-bottom: 6pt;
+  }
+
   h1 {
-    font-size: 22pt;
+    font-size: 24pt;
+    line-height: 1.18;
     font-weight: 500;
-    line-height: 1.2;
-    margin: 0 0 10pt 0;
-    padding-bottom: 4pt;
-    border-bottom: 1pt solid var(--brand);
     color: var(--near-black);
-    break-after: avoid;
   }
 
   h2 {
-    font-size: 15pt;
+    font-size: 14pt;
+    line-height: 1.25;
     font-weight: 500;
-    line-height: 1.3;
-    margin: 24pt 0 6pt 0;
     color: var(--near-black);
+    margin: 14pt 0 6pt;
     break-after: avoid;
   }
 
   h3 {
-    font-size: 12pt;
-    font-weight: 500;
+    font-size: 11.5pt;
     line-height: 1.3;
-    margin: 18pt 0 4pt 0;
+    font-weight: 500;
     color: var(--dark-warm);
+    margin: 12pt 0 4pt;
     break-after: avoid;
   }
 
-  .chapter-num {
-    font-family: "Source Han Sans SC", sans-serif;
-    font-size: 10pt;
-    color: var(--brand);
-    letter-spacing: 1pt;
-    text-transform: uppercase;
-    margin-bottom: 6pt;
-  }
-
-  /* ========== PARAGRAPHS ========== */
   p {
-    margin: 0 0 10pt 0;
+    font-size: 10.2pt;
     line-height: 1.55;
-    color: var(--near-black);
+    color: var(--dark-warm);
+    margin-bottom: 8pt;
   }
 
   .lead {
-    font-size: 12pt;
+    font-size: 11.6pt;
     line-height: 1.55;
-    color: var(--dark-warm);
-    margin-bottom: 14pt;
-  }
-
-  .hl { color: var(--brand); font-weight: 500; }
-
-  /* ========== LISTS ========== */
-  ul, ol {
-    margin: 6pt 0 10pt 0;
-    padding-left: 20pt;
-    line-height: 1.55;
-  }
-  ul li::marker { color: var(--brand); }
-  ol li::marker { color: var(--brand); font-weight: 500; }
-
-  /* ========== QUOTE ========== */
-  blockquote, .quote {
-    border-left: 2pt solid var(--brand);
-    margin: 12pt 0;
-    padding: 4pt 0 4pt 16pt;
-    color: var(--olive);
-    line-height: 1.55;
-    break-inside: avoid;
-  }
-  blockquote .cite, .quote .cite {
-    display: block;
-    font-size: 9pt;
-    color: var(--stone);
-    margin-top: 4pt;
-  }
-
-  /* ========== CODE ========== */
-  code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
-    font-size: 9pt;
-    background: var(--ivory);
-    padding: 1pt 4pt;
-    border-radius: 2pt;
-    color: var(--dark-warm);
-  }
-  pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
-    font-size: 8.5pt;
-    line-height: 1.5;
-    background: var(--ivory);
-    border: 0.5pt solid var(--border-soft);
-    border-radius: 4pt;
-    padding: 10pt 14pt;
-    margin: 10pt 0;
-    white-space: pre-wrap;
     color: var(--near-black);
-    break-inside: avoid;
+    margin-bottom: 12pt;
   }
-  pre code { background: transparent; padding: 0; font-size: inherit; }
 
-  /* ========== TABLE ========== */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 9.5pt;
-    margin: 12pt 0;
-    break-inside: avoid;
-  }
-  table th {
-    text-align: left;
+  .hl {
+    color: var(--frame-blue);
     font-weight: 500;
-    color: var(--charcoal);
-    padding: 6pt 8pt;
-    border-bottom: 1pt solid var(--brand);
-    background: var(--ivory);
-  }
-  table td {
-    padding: 5pt 8pt;
-    border-bottom: 0.3pt solid var(--border-soft);
-    vertical-align: top;
   }
 
-  /* ========== CALLOUT ========== */
-  .callout {
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8pt;
+    margin-top: 14pt;
+  }
+
+  .toc-item {
+    display: grid;
+    grid-template-columns: 34pt 1fr 28pt;
+    align-items: baseline;
+    border: 1pt solid var(--frame-blue);
     background: var(--ivory);
-    border-left: 2pt solid var(--brand);
-    padding: 10pt 14pt;
-    border-radius: 3pt;
-    margin: 12pt 0;
-    line-height: 1.55;
+  }
+
+  .toc-num {
+    background: var(--frame-blue);
+    color: var(--ivory);
+    padding: 7pt 8pt;
+    font-size: 9pt;
+    line-height: 1.35;
+  }
+
+  .toc-title {
+    padding: 7pt 10pt;
+    font-size: 11pt;
+    line-height: 1.35;
+    color: var(--near-black);
+  }
+
+  .toc-page {
+    padding: 7pt 8pt;
+    text-align: right;
+    color: var(--stone);
+    font-size: 9pt;
+    line-height: 1.35;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 0.84fr 1.16fr;
+    gap: 10pt;
+  }
+
+  .panel {
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+    padding: 10pt 12pt;
     break-inside: avoid;
   }
 
-  .takeaway {
-    background: var(--ivory);
-    border: 0.5pt solid var(--border);
-    border-radius: 4pt;
-    padding: 10pt 14pt;
-    margin: 14pt 0;
-    break-inside: avoid;
+  .panel-title {
+    font-size: 12.5pt;
+    line-height: 1.25;
+    color: var(--frame-blue);
+    margin-bottom: 6pt;
+    font-weight: 500;
   }
-  .takeaway-label {
-    font-family: "Source Han Sans SC", sans-serif;
-    font-size: 8pt;
-    color: var(--brand);
-    letter-spacing: 0.5pt;
-    text-transform: uppercase;
+
+  ul,
+  ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 18pt;
+    line-height: 1.5;
+    color: var(--dark-warm);
+  }
+
+  li {
     margin-bottom: 4pt;
   }
 
-  /* ========== TAG ========== */
+  li::marker {
+    color: var(--frame-blue);
+  }
+
+  blockquote,
+  .quote {
+    position: relative;
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+    margin: 12pt 0;
+    padding: 11pt 14pt 11pt 20pt;
+    color: var(--dark-warm);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+
+  blockquote::before,
+  .quote::before {
+    content: "";
+    position: absolute;
+    left: 10pt;
+    top: 11pt;
+    bottom: 11pt;
+    width: 3pt;
+    background: var(--frame-blue);
+  }
+
+  .cite {
+    display: block;
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-size: 8.5pt;
+    line-height: 1.4;
+    color: var(--stone);
+    margin-top: 5pt;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    line-height: 1.45;
+    margin: 10pt 0;
+    break-inside: avoid;
+    background: var(--ivory);
+    border: 1pt solid var(--frame-blue);
+  }
+
+  th {
+    background: var(--frame-blue);
+    color: var(--ivory);
+    text-align: left;
+    font-weight: 500;
+    padding: 6pt 8pt;
+  }
+
+  td {
+    border-top: 0.45pt solid var(--rule);
+    padding: 6pt 8pt;
+    color: var(--dark-warm);
+    vertical-align: top;
+  }
+
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+    font-size: 8.3pt;
+    line-height: 1.45;
+    background: var(--ivory);
+    border: 1pt solid var(--frame-blue);
+    padding: 9pt 12pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--charcoal);
+    break-inside: avoid;
+  }
+
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+    font-size: 8.5pt;
+    background: var(--tag-bg);
+    color: var(--frame-blue);
+    padding: 1pt 4pt;
+  }
+
+  .callout,
+  .takeaway {
+    position: relative;
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+    padding: 10pt 14pt 10pt 20pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+
+  .callout::before,
+  .takeaway::before {
+    content: "";
+    position: absolute;
+    left: 10pt;
+    top: 10pt;
+    bottom: 10pt;
+    width: 3pt;
+    background: var(--frame-blue);
+  }
+
+  .label {
+    font-size: 8pt;
+    line-height: 1.35;
+    color: var(--frame-blue);
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    margin-bottom: 5pt;
+  }
+
   .tag {
     display: inline-block;
     background: var(--tag-bg);
-    color: var(--brand);
-    font-family: "Source Han Sans SC", sans-serif;
+    color: var(--frame-blue);
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
     font-size: 8pt;
+    line-height: 1.35;
     font-weight: 500;
     padding: 1pt 6pt;
-    border-radius: 3pt;
+    border-radius: 2pt;
     margin-right: 4pt;
   }
-
-  /* ========== FIGURE ========== */
-  figure {
-    margin: 14pt 0;
-    break-inside: avoid;
-  }
-  figure img {
-    max-width: 100%;
-    border-radius: 4pt;
-  }
-  figcaption {
-    font-family: "Source Han Sans SC", sans-serif;
-    font-size: 9pt;
-    color: var(--stone);
-    margin-top: 6pt;
-    text-align: center;
-  }
-
-  /* ========== EXECUTIVE SUMMARY ========== */
-  .exec-summary {
-    background: var(--ivory);
-    border: 0.5pt solid var(--border);
-    border-radius: 6pt;
-    padding: 16pt 20pt;
-    margin: 14pt 0;
-    break-inside: avoid;
-  }
-  .exec-summary h2 {
-    margin-top: 0;
-    font-size: 13pt;
-  }
-
-  /* ========== CHAPTER BREAK ========== */
-  .chapter { break-before: page; }
 </style>
 </head>
 <body>
 
 <!-- ═════════════ COVER ═════════════ -->
-<section class="cover">
-  <div>
-    <div class="cover-eyebrow">{{EYEBROW · 如 "技术报告" / "年度总结" / "白皮书"}}</div>
-    <div class="cover-title">{{文档主标题<br>可以两行}}</div>
-    <div class="cover-sub">{{副标题，一句话说清这份文档是什么 / 为谁而写}}</div>
-    <div class="cover-divider"></div>
-  </div>
-  <div class="cover-meta">
-    <strong>{{作者 / 团队}}</strong><br>
-    {{版本 V1.0}}  ·  {{日期 2026.04}}<br>
-    {{发布方 / 机构}}
-  </div>
-</section>
+<section class="folio">
+  <div class="sheet cover">
+    <div class="content">
+      <div class="topline">
+        <div class="blue-tag">{{WHITE PAPER · INTERNAL EDITION}}</div>
+        <div class="meta">{{文档分类}}<br>{{公开级别 / 内部公开版}}</div>
+      </div>
 
-<!-- ═════════════ 目录 ═════════════ -->
-<section class="toc">
-  <h2>目录</h2>
-  <div class="toc-item">
-    <span class="toc-num">01</span>
-    <span class="toc-title">执行摘要</span>
-    <span class="toc-page">03</span>
-  </div>
-  <div class="toc-item">
-    <span class="toc-num">02</span>
-    <span class="toc-title">背景与问题定义</span>
-    <span class="toc-page">04</span>
-  </div>
-  <div class="toc-item">
-    <span class="toc-num">03</span>
-    <span class="toc-title">方法与发现</span>
-    <span class="toc-page">06</span>
-  </div>
-  <div class="toc-item">
-    <span class="toc-num">04</span>
-    <span class="toc-title">结论与建议</span>
-    <span class="toc-page">09</span>
-  </div>
-  <div class="toc-item">
-    <span class="toc-num">05</span>
-    <span class="toc-title">附录</span>
-    <span class="toc-page">11</span>
+      <div class="cover-main">
+        <div class="cover-plaque">
+          <div class="kicker">{{Archive Knowledge System}}</div>
+          <div class="cover-title">{{文档主标题<br>可以两行}}</div>
+          <div class="cover-sub">{{副标题：一句话说清这份白皮书解决什么问题、为谁而写。}}</div>
+        </div>
+
+        <aside class="cover-side">
+          <div>
+            <div class="label">Filed Under</div>
+            <div class="value">{{团队 / 部门}}<br>{{专题 / 项目}}</div>
+          </div>
+          <div>
+            <div class="label">Version</div>
+            <div class="value">{{V1.0}}<br>{{2026.04}}</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="content cover-footer">
+      <p class="cover-note">{{封面注记：本文档聚焦哪几个问题，读者读完能获得什么判断。}}</p>
+      <div class="cover-meta">
+        作者：{{作者 / 团队}}<br>
+        发布：{{发布方 / 机构}}<br>
+        页数：{{示意页数}}
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- ═════════════ Chapter 01：执行摘要 ═════════════ -->
-<section>
-  <div class="chapter-num">01 · Executive Summary</div>
-  <h1>执行摘要</h1>
+<!-- ═════════════ TOC ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="content">
+      <div class="header-band">
+        <div class="chapter-num">Table of Contents</div>
+        <h1>目录</h1>
+      </div>
 
-  <p class="lead">
-    {{一段 2-3 句话的大论点开场。用 <span class="hl">关键词高亮</span> 抓住读者注意力。
-    让读者读这段就能理解整份文档想表达什么。}}
-  </p>
-
-  <h2>核心 Takeaways</h2>
-  <ul>
-    <li>{{Takeaway 1：一句话，可量化的结论}}</li>
-    <li>{{Takeaway 2：有数据的洞察}}</li>
-    <li>{{Takeaway 3：对未来的判断}}</li>
-  </ul>
-
-  <div class="takeaway">
-    <div class="takeaway-label">本文档回答的问题</div>
-    {{用疑问句列出 3 个本文档的核心问题。让读者立刻 get 到是否需要读完。}}
+      <div class="toc-grid">
+        <div class="toc-item">
+          <span class="toc-num">01</span>
+          <span class="toc-title">执行摘要</span>
+          <span class="toc-page">03</span>
+        </div>
+        <div class="toc-item">
+          <span class="toc-num">02</span>
+          <span class="toc-title">背景与问题定义</span>
+          <span class="toc-page">04</span>
+        </div>
+        <div class="toc-item">
+          <span class="toc-num">03</span>
+          <span class="toc-title">方法与发现</span>
+          <span class="toc-page">06</span>
+        </div>
+        <div class="toc-item">
+          <span class="toc-num">04</span>
+          <span class="toc-title">结论与建议</span>
+          <span class="toc-page">09</span>
+        </div>
+        <div class="toc-item">
+          <span class="toc-num">05</span>
+          <span class="toc-title">附录</span>
+          <span class="toc-page">11</span>
+        </div>
+      </div>
+    </div>
+    <div class="page-no">KAMI DOC · 2</div>
   </div>
 </section>
 
-<!-- ═════════════ Chapter 02：背景 ═════════════ -->
-<section class="chapter">
-  <div class="chapter-num">02 · Background</div>
-  <h1>背景与问题定义</h1>
+<!-- ═════════════ CHAPTER 01 ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="content">
+      <div class="header-band">
+        <div class="chapter-num">01 · Executive Summary</div>
+        <h1>执行摘要</h1>
+      </div>
 
-  <p class="lead">
-    {{章节导语：这一章要解决什么问题，为什么重要。1-2 句。}}
-  </p>
+      <p class="lead">{{一段 2-3 句话的大论点开场。用 <span class="hl">关键词高亮</span> 抓住读者注意力，让读者读这一段就理解整份文档。}}</p>
 
-  <h2>当前现状</h2>
-  <p>{{3-5 行段落，铺陈当前状况。用 <span class="hl">具体数据</span> 而不是形容词。}}</p>
+      <div class="two-col">
+        <aside class="panel">
+          <div class="panel-title">核心 Takeaways</div>
+          <ol>
+            <li>{{Takeaway 1：一句话，可量化}}</li>
+            <li>{{Takeaway 2：有数据的洞察}}</li>
+            <li>{{Takeaway 3：对未来的判断}}</li>
+          </ol>
+        </aside>
 
-  <h2>核心问题</h2>
-  <p>{{陈述具体的核心问题。可以用 callout 突出关键观察：}}</p>
-
-  <div class="callout">
-    {{一段重要引用或核心观察。和正文语气略有不同，给读者呼吸节奏。}}
-  </div>
-
-  <h2>衡量标准</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>维度</th>
-        <th>当前水平</th>
-        <th>目标水平</th>
-        <th>差距</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{维度 1}}</td>
-        <td>{{数据}}</td>
-        <td>{{数据}}</td>
-        <td>{{差距}}</td>
-      </tr>
-      <tr>
-        <td>{{维度 2}}</td>
-        <td>{{数据}}</td>
-        <td>{{数据}}</td>
-        <td>{{差距}}</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
-
-<!-- ═════════════ Chapter 03：方法 ═════════════ -->
-<section class="chapter">
-  <div class="chapter-num">03 · Methodology</div>
-  <h1>方法与发现</h1>
-
-  <p class="lead">{{章节导语}}</p>
-
-  <h2>研究方法</h2>
-  <p>{{描述方法论。可以用代码 / 公式示例：}}</p>
-
-  <pre><code>示例代码块
-def analyze(data):
-    return transform(data)</code></pre>
-
-  <h2>关键发现</h2>
-
-  <h3>发现 1：{{标题}}</h3>
-  <p>{{一段论述。包含数据：<span class="hl">具体数字 / 具体比例</span>。}}</p>
-
-  <h3>发现 2：{{标题}}</h3>
-  <p>{{一段论述。}}</p>
-
-  <blockquote>
-    {{一段引用，可以是用户访谈、专家观点、文献引用}}
-    <span class="cite">— {{来源 / 人物}}，{{日期}}</span>
-  </blockquote>
-</section>
-
-<!-- ═════════════ Chapter 04：结论 ═════════════ -->
-<section class="chapter">
-  <div class="chapter-num">04 · Conclusions</div>
-  <h1>结论与建议</h1>
-
-  <p class="lead">{{章节导语：一句话总结结论，下面展开建议。}}</p>
-
-  <h2>核心结论</h2>
-  <ol>
-    <li>{{结论 1}}</li>
-    <li>{{结论 2}}</li>
-    <li>{{结论 3}}</li>
-  </ol>
-
-  <h2>下一步建议</h2>
-  <p>{{基于结论的具体可执行建议。}}</p>
-
-  <div class="takeaway">
-    <div class="takeaway-label">Call to Action</div>
-    {{如果读者要做一件事，是什么？具体到可以周一早上就开始行动。}}
+        <article>
+          <h2>本文档回答的问题</h2>
+          <p>{{用一段话说明为什么现在需要这份文档，以及决策者读完以后应该采取什么行动。}}</p>
+          <div class="takeaway">
+            <div class="label">Filed Question</div>
+            {{列出 3 个核心问题：范围、方法、交付标准。}}
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="page-no">KAMI DOC · 3</div>
   </div>
 </section>
 
-<!-- ═════════════ Chapter 05：附录 ═════════════ -->
-<section class="chapter">
-  <div class="chapter-num">05 · Appendix</div>
-  <h1>附录</h1>
+<!-- ═════════════ CHAPTER 02 ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="content">
+      <div class="header-band">
+        <div class="chapter-num">02 · Background</div>
+        <h1>背景与问题定义</h1>
+      </div>
 
-  <h2>A. 参考资料</h2>
-  <ul>
-    <li>{{参考文献 1}}</li>
-    <li>{{参考文献 2}}</li>
-  </ul>
+      <p class="lead">{{章节导语：这一章要解决什么问题，为什么重要。}}</p>
 
-  <h2>B. 术语表</h2>
-  <p><strong>{{术语}}</strong>：{{定义}}</p>
-  <p><strong>{{术语}}</strong>：{{定义}}</p>
+      <h2>当前现状</h2>
+      <p>{{3-5 行段落，铺陈当前状况。用 <span class="hl">具体数据</span> 而不是形容词。}}</p>
 
-  <h2>C. 致谢</h2>
-  <p>{{致谢段落}}</p>
+      <h2>核心问题</h2>
+      <p>{{陈述具体问题，说明它如何影响交付、效率或判断质量。}}</p>
+
+      <blockquote>
+        {{一段重要引用或核心观察。和正文语气略有不同，给读者呼吸节奏。}}
+        <span class="cite">— {{来源 / 人物}}，{{日期}}</span>
+      </blockquote>
+
+      <h2>衡量标准</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>当前水平</th>
+            <th>目标水平</th>
+            <th>差距</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{维度 1}}</td>
+            <td>{{数据}}</td>
+            <td>{{数据}}</td>
+            <td>{{差距}}</td>
+          </tr>
+          <tr>
+            <td>{{维度 2}}</td>
+            <td>{{数据}}</td>
+            <td>{{数据}}</td>
+            <td>{{差距}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="page-no">KAMI DOC · 4</div>
+  </div>
+</section>
+
+<!-- ═════════════ CHAPTER 03 ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="content">
+      <div class="header-band">
+        <div class="chapter-num">03 · Methodology</div>
+        <h1>方法与发现</h1>
+      </div>
+
+      <p class="lead">{{章节导语：说明研究方法和最重要的发现。}}</p>
+
+      <h2>研究方法</h2>
+      <p>{{描述资料来源、访谈范围、样本口径或分析方法。}}</p>
+
+      <pre><code>{{如需代码或规则示例，放在这里；不需要时删除整个 pre。}}</code></pre>
+
+      <h2>关键发现</h2>
+      <h3>发现 1：{{标题}}</h3>
+      <p>{{一段论述，包含 <span class="hl">具体数字 / 具体比例</span>。}}</p>
+
+      <h3>发现 2：{{标题}}</h3>
+      <p>{{一段论述，说明原因和影响。}}</p>
+
+      <div class="callout">
+        <div class="label">Operational Note</div>
+        {{对执行者最重要的一句提醒。}}
+      </div>
+    </div>
+    <div class="page-no">KAMI DOC · 5</div>
+  </div>
+</section>
+
+<!-- ═════════════ CHAPTER 04 ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="content">
+      <div class="header-band">
+        <div class="chapter-num">04 · Conclusions</div>
+        <h1>结论与建议</h1>
+      </div>
+
+      <p class="lead">{{一句话总结结论，下面展开建议。}}</p>
+
+      <h2>核心结论</h2>
+      <ol>
+        <li>{{结论 1}}</li>
+        <li>{{结论 2}}</li>
+        <li>{{结论 3}}</li>
+      </ol>
+
+      <h2>下一步建议</h2>
+      <p>{{基于结论的具体可执行建议。}}</p>
+
+      <div class="takeaway">
+        <div class="label">Call to Action</div>
+        {{如果读者要做一件事，是什么？具体到可以周一早上就开始行动。}}
+      </div>
+
+      <h2>附录</h2>
+      <p><span class="tag">参考资料</span><span class="tag">术语表</span><span class="tag">致谢</span></p>
+      <p>{{附录摘要或参考资料说明。}}</p>
+    </div>
+    <div class="page-no">KAMI DOC · 6</div>
+  </div>
 </section>
 
 </body>
