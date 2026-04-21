@@ -24,7 +24,7 @@ Kaku（写代码）· Waza（练习惯）· **Kami（出文档）** 三部曲之
 | `references/writing.md` | Claude | 低 |
 | `references/production.md` | Claude + 维护者 | 中（新踩坑追加） |
 | `assets/templates/*.html` / `slides.py` | Claude 填内容 | 中 |
-| `assets/demos/*.html/.pdf/.png` | README demo 展示 | 样式改动后重新生成 |
+| `assets/demos/*.html/.pdf/.png/.pptx` | README demo 展示 | 样式改动后重新生成 |
 | `scripts/build.py` | 维护者 + CI | 低 |
 
 ## 字体分发
@@ -71,7 +71,7 @@ python3 scripts/build.py
 python3 scripts/build.py --check
 
 # 3. 字体是否真的加载了
-pdffonts assets/demos/demo-tesla.pdf | head
+pdffonts assets/demos/demo-long-doc.pdf | head
 
 # 4. 隐私扫描（改动后）
 # 把 KEYWORDS 换成自己真实姓名 / 公司 / 电话等，避免误泄漏到模板
@@ -94,7 +94,7 @@ zip -rq kami.zip kami/ -x '*/.*'   # 忽略 .DS_Store 等
 ## 待办 / V2 候选
 
 1. **打磨现有模板的边缘情况**（最高优先级）--portfolio 的图片占位 -> 真实 `<img>`；resume 在 Noto Serif fallback 下的 2 页严格性
-2. **slides.py 补图文混排 + 数据图表版式**（两个高频场景缺口）
+2. **slides.py 继续补真实图文混排 + 数据图表版式**（当前已有民国文稿版基础 deck）
 3. **新模板候选**：学术论文 / 证书 / 菜单 / 邀请函
 4. **scripts/inspect.py** 视觉回归（对比修改前后的 PDF 渲染像素）
 

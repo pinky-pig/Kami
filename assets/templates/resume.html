@@ -34,7 +34,11 @@
     --brand-tint-strong: #E4ECF5;   /* solid equivalent of rgba(1B365D, 0.14) */
   }
 
-  html, body { background: var(--parchment); }
+  html, body {
+    background:
+      url("../images/paper-overlay.png") center / 72mm auto repeat,
+      var(--parchment);
+  }
 
   body {
     color: var(--near-black);

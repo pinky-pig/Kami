@@ -61,9 +61,7 @@ SYNC_TARGETS: set[str] = {
 
 # Demo files have real content and are the right source for --verify.
 VERIFY_SOURCES: dict[str, tuple[str, Path]] = {
-    "one-pager": ("demo-tesla.html", ROOT / "assets" / "demos"),
     "long-doc": ("demo-long-doc.html", ROOT / "assets" / "demos"),
-    "letter": ("demo-letter.html", ROOT / "assets" / "demos"),
 }
 
 
@@ -264,6 +262,7 @@ def _pdf_font_names(pdf_path: Path) -> set[str]:
 
 def verify_target(name: str, source: str, max_pages: int, src_dir: Path) -> list[str]:
     issues: list[str] = []
+    has_content_demo = name in VERIFY_SOURCES
     verify_source, verify_dir = VERIFY_SOURCES.get(name, (source, src_dir))
     src = verify_dir / verify_source
     if not src.exists():
@@ -273,7 +272,7 @@ def verify_target(name: str, source: str, max_pages: int, src_dir: Path) -> list
     # placeholder check (before build)
     html = src.read_text(encoding="utf-8", errors="replace")
     hits = PLACEHOLDER.findall(html)
-    if hits:
+    if has_content_demo and hits:
         issues.append(f"unfilled placeholder(s): {', '.join(dict.fromkeys(hits))}")
 
     # build

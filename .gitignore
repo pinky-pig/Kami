@@ -16,3 +16,6 @@ assets/examples/
 /tmp/
 *.log
 .vercel
+
+# Office temporary files
+~$*.pptx

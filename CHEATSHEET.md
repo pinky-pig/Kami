@@ -4,9 +4,9 @@
 
 ## V1 范围
 
-- 正式支持：中文 `one-pager`、`long-doc`、`letter`
+- 正式支持：中文 `one-pager`、`long-doc`、`letter`、`slides`
 - 风格目标：深蓝外框、旧纸内页、明显 padding、蓝色题签、档案式边框
-- 暂不主推：英文模板、简历、作品集、slides
+- 暂不主推：英文模板、简历、作品集
 
 ## 八条铁律
 
@@ -26,6 +26,7 @@
 | 帮我生成一份白皮书 | `long-doc.html` |
 | 生成一份项目方案 / 做一页项目方案 | `one-pager.html` |
 | 帮我写一份推荐信 / 写一封推荐函 | `letter.html` |
+| 做一套汇报 slides / 生成一个 Slides | `slides.py` |
 | 帮我把这些内容排版成好看的 PDF | 先判断 `one-pager` / `long-doc` / `letter` |
 
 ## 色板

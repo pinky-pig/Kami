@@ -14,25 +14,25 @@
 
 ## V1 Scope
 
-- 正式支持：中文 `One-Pager`、`Long Doc`、`Letter`，其中 `Letter` 覆盖正式信件、推荐信、推荐函
+- 正式支持：中文 `One-Pager`、`Long Doc`、`Letter`、`Slides`，其中 `Letter` 覆盖正式信件、推荐信、推荐函
 - 视觉原则：深蓝外框 `#243851`、旧纸底 `#EBE5DD`、明显 padding、蓝色题签、档案式边框
-- 暂不主推：英文模板、简历、作品集、slides
+- 暂不主推：英文模板、简历、作品集
 
 ## Use Naturally
 
-Just tell Claude what you need: "帮我生成一份白皮书", "生成一份项目方案", "帮我写一份推荐信", "写一封推荐函", "帮我把这些内容排版成好看的 PDF".
+Just tell Claude what you need: "帮我生成一份白皮书", "生成一份项目方案", "帮我写一份推荐信", "写一封推荐函", "做一套汇报 slides", "帮我把这些内容排版成好看的 PDF".
 
 The skill auto-triggers from the request, no slash command needed. Chinese v1 routes to the framed Republican-era manuscript templates.
 
 ## Preview
 
 <div align="center">
-  <a href="assets/demos/demo-tesla.pdf">
-    <img src="assets/demos/demo-tesla.png" alt="Republican-era blue one-pager preview" width="520" />
+  <a href="assets/demos/demo-long-doc.pdf">
+    <img src="assets/demos/demo-long-doc.png" alt="Republican-era blue document preview" width="520" />
   </a>
 </div>
 
-<p align="center"><sub>Chinese One-Pager demo · 民国文稿蓝主题 · <a href="assets/demos/demo-tesla.pdf">PDF</a></sub></p>
+<p align="center"><sub>Chinese Document demo · 民国文稿蓝主题 · <a href="assets/demos/demo-long-doc.pdf">PDF</a></sub></p>
 
 ## Install
 
@@ -59,6 +59,7 @@ The skill auto-triggers from the request, no slash command needed. Chinese v1 ro
 python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
+python3 scripts/build.py slides
 python3 scripts/build.py --check
 ```
 
@@ -68,4 +69,4 @@ python3 scripts/build.py --check
 
 - 这不是运行时主题切换版，而是直接把当前 fork 改造成“民国文稿版”
 - v1 不做竖排正文、纹理贴图、印章贴图和高拟物海报化
-- 第二阶段若方向成立，再扩展到 `resume / portfolio / slides` 或英文主题
+- 第二阶段若方向成立，再扩展到 `resume / portfolio` 或英文主题

@@ -1,6 +1,6 @@
 ---
 name: kami
-description: 'Typeset Chinese professional documents in a republican-manuscript style: one-pagers, white papers, project proposals, formal letters, recommendation letters, and reference letters. Style 1 uses a deep archive-blue outer frame, padded old-paper sheet, blue bordered title plaques, serif-led hierarchy, and stable print spacing. Chinese output uses 京華老宋体 (KingHwa_OldSong) + Source Han; v1 does not officially support English styling. Auto-triggers from natural requests such as "帮我生成一份白皮书", "生成一份项目方案", "帮我写一份推荐信", "写一封推荐函", "做 PDF", "排版", "生成报告", "一页纸", "正式信件", "高质量文档", "好看的排版", "民国风", "文稿风", "档案风", and when raw Chinese content is handed over to be typeset or made presentable.'
+description: 'Typeset Chinese professional documents in a republican-manuscript style: one-pagers, white papers, project proposals, formal letters, recommendation letters, reference letters, and slide decks. Style 1 uses a deep archive-blue outer frame, padded old-paper sheet, blue bordered title plaques, serif-led hierarchy, and stable print spacing. Chinese output uses 京華老宋体 (KingHwa_OldSong) + Source Han; v1 does not officially support English styling. Auto-triggers from natural requests such as "帮我生成一份白皮书", "生成一份项目方案", "帮我写一份推荐信", "写一封推荐函", "做一套汇报 slides", "做 PDF", "排版", "生成报告", "一页纸", "正式信件", "高质量文档", "好看的排版", "民国风", "文稿风", "档案风", and when raw Chinese content is handed over to be typeset or made presentable.'
 ---
 
 # kami · 紙
@@ -13,9 +13,9 @@ Part of `Kaku · Waza · Kami` - Kaku writes code, Waza drills habits, **Kami de
 
 ## V1 scope
 
-- Officially supported: Chinese `one-pager`, `long-doc`, `letter`
+- Officially supported: Chinese `one-pager`, `long-doc`, `letter`, `slides`
 - Visual standard: Style 1, `#243851` archive-blue frame + `#EBE5DD` old-paper base
-- Pending migration: English styling, resume, portfolio, slides
+- Pending migration: English styling, resume, portfolio
 
 ## Natural prompt entry
 
@@ -24,6 +24,7 @@ No slash command is needed. If the user says any of the following, route directl
 - "帮我生成一份白皮书" -> `long-doc`
 - "生成一份项目方案" / "做一页项目方案" -> `one-pager`
 - "帮我写一份推荐信" / "写一封推荐函" -> `letter`
+- "做一套汇报 slides" / "生成一个 Slides" -> `slides`
 - "帮我把这些内容排版成好看的 PDF" -> infer the closest of `one-pager`, `long-doc`, `letter`
 
 ## Step 1 · Decide the language
@@ -44,8 +45,9 @@ When ambiguous (e.g. a one-word command like "resume"), ask a one-liner rather t
 | "one-pager / 方案 / 项目方案 / 执行摘要" | One-Pager | `one-pager.html` |
 | "white paper / 白皮书 / 长文 / 年度总结" | Long Doc | `long-doc.html` |
 | "formal letter / 信件 / 正式信件 / 推荐信 / 推荐函 / reference letter / recommendation letter / memo" | Letter | `letter.html` |
+| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides.py` |
 
-If the user asks for `resume / portfolio / slides / English`, say those paths are still the old kami style and are not the official v1 target of this fork.
+If the user asks for `resume / portfolio / English`, say those paths are still not the official v1 target of this fork.
 
 If unsure, ask a one-liner about the scenario rather than guess.
 
@@ -119,6 +121,7 @@ python3 scripts/build.py --verify one-pager # verify content-filled Chinese demo
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py --check            # CSS rule violations only (fast, no build)
+python3 scripts/build.py slides             # generate the republican-manuscript slide deck
 ```
 
 `--verify` now prefers content-filled demo HTMLs for the migrated Chinese trio. Visual anomalies (tag double rectangle, font fallback, page break issues) -> `production.md` / `production.en.md` Part 4.

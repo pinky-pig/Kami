@@ -44,7 +44,11 @@
     --tag-bg:    #E4ECF5;
   }
 
-  html, body { background: var(--parchment); }
+  html, body {
+    background:
+      url("../images/paper-overlay.png") center / 72mm auto repeat,
+      var(--parchment);
+  }
 
   body {
     color: var(--near-black);

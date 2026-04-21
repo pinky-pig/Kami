@@ -836,7 +836,9 @@
     padding: 34px 28px 28px;
     border: 14px solid var(--brand);
     border-radius: 2px;
-    background: linear-gradient(135deg, #f6f1e8 0%, var(--parchment) 48%, #efe5d8 100%);
+    background:
+      url("assets/images/paper-overlay.png") center / 180px auto repeat,
+      linear-gradient(135deg, #f6f1e8 0%, var(--parchment) 48%, #efe5d8 100%);
     overflow: hidden;
   }
   .preview-sheet::before {

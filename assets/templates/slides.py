@@ -1,316 +1,668 @@
 #!/usr/bin/env python3
 """
-gen_slides.py - parchment design system slide deck generator
+Kami republican-manuscript slide deck generator.
 
-用法：
-  pip install python-pptx --break-system-packages
-  python3 gen_slides.py
+Run from this directory via:
+  python3 slides.py
 
-输出：
-  output.pptx (16:9 宽屏, parchment 风格)
-
-这是一个模板脚本 - 填充自己的内容后直接运行。
+The script writes output.pptx. scripts/build.py moves it to
+assets/examples/slides.pptx when invoked as `python3 scripts/build.py slides`.
 """
 
+from __future__ import annotations
+
+import zipfile
+from pathlib import Path
+
 from pptx import Presentation
-from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
+from pptx.oxml.xmlchemy import OxmlElement
+from pptx.util import Inches, Pt
 
-# ═══════════════════════════════════════════════════════════
-# Design System Constants
-# ═══════════════════════════════════════════════════════════
 
-# 色板
-PARCHMENT   = RGBColor(0xf5, 0xf4, 0xed)
-IVORY       = RGBColor(0xfa, 0xf9, 0xf5)
-BRAND       = RGBColor(0x1B, 0x36, 0x5D)
-BRAND_DEEP  = RGBColor(0x1B, 0x36, 0x5D)
-NEAR_BLACK  = RGBColor(0x14, 0x14, 0x13)
-DARK_WARM   = RGBColor(0x3d, 0x3d, 0x3a)
-CHARCOAL    = RGBColor(0x4d, 0x4c, 0x48)
-OLIVE       = RGBColor(0x5e, 0x5d, 0x59)
-STONE       = RGBColor(0x87, 0x86, 0x7f)
-BORDER      = RGBColor(0xe8, 0xe6, 0xdc)
-WHITE       = RGBColor(0xff, 0xff, 0xff)
+# ---------------------------------------------------------------------------
+# Design tokens
+# ---------------------------------------------------------------------------
 
-# 字体（PPT 会按序 fallback）
-SERIF = "Source Han Serif SC"   # 中文 serif
-SANS  = "Source Han Sans SC"    # 中文 sans
+NAVY = RGBColor(0x24, 0x38, 0x51)
+NAVY_SOFT = RGBColor(0x4D, 0x5B, 0x6D)
+PAPER = RGBColor(0xEB, 0xE5, 0xDD)
+PAPER_LIGHT = RGBColor(0xF6, 0xF1, 0xE8)
+IVORY = RGBColor(0xF3, 0xEF, 0xEB)
+INK = RGBColor(0x23, 0x22, 0x22)
+COPY = RGBColor(0x4A, 0x49, 0x47)
+MUTED = RGBColor(0x66, 0x63, 0x61)
+STONE = RGBColor(0x8B, 0x87, 0x82)
+RULE = RGBColor(0xD0, 0xC7, 0xBB)
+TAG = RGBColor(0xD5, 0xDE, 0xE7)
 
-# 16:9 宽屏
-SLIDE_W = Inches(13.33)
+SERIF = "KingHwa_OldSong"
+SERIF_EA = "京華老宋体"
+SANS = "Source Han Sans SC"
+MONO = "JetBrains Mono"
+
+SLIDE_W = Inches(13.333)
 SLIDE_H = Inches(7.5)
+PAD = Inches(0.42)
+INNER_X = PAD
+INNER_Y = PAD
+INNER_W = SLIDE_W - PAD * 2
+INNER_H = SLIDE_H - PAD * 2
+TEXTURE = Path(__file__).resolve().parent.parent / "images" / "paper-overlay.png"
 
 
-# ═══════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 # Helpers
-# ═══════════════════════════════════════════════════════════
+# ---------------------------------------------------------------------------
 
-def blank_slide(prs, bg_color=PARCHMENT):
-    """创建空白幻灯片，指定背景色"""
-    slide = prs.slides.add_slide(prs.slide_layouts[6])   # 6 = Blank
-    bg = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE,
-                                 0, 0, prs.slide_width, prs.slide_height)
-    bg.fill.solid()
-    bg.fill.fore_color.rgb = bg_color
-    bg.line.fill.background()
-    bg.shadow.inherit = False
-    return slide
+def rgb(color: RGBColor) -> RGBColor:
+    return color
 
 
-def add_text(slide, text, left, top, width, height,
-             font=SANS, size=18, bold=False, italic=False,
-             color=NEAR_BLACK, align=PP_ALIGN.LEFT,
-             vanchor=MSO_ANCHOR.TOP):
-    """加一段文字"""
-    tb = slide.shapes.add_textbox(left, top, width, height)
-    tf = tb.text_frame
-    tf.word_wrap = True
-    tf.margin_left = tf.margin_right = 0
-    tf.margin_top = tf.margin_bottom = 0
-    tf.vertical_anchor = vanchor
-    p = tf.paragraphs[0]
+def add_shape(slide, shape_type, left, top, width, height, fill, line=None, weight=1):
+    shape = slide.shapes.add_shape(shape_type, left, top, width, height)
+    if fill is None:
+        shape.fill.background()
+    else:
+        shape.fill.solid()
+        shape.fill.fore_color.rgb = rgb(fill)
+    if line is None:
+        shape.line.fill.background()
+    else:
+        shape.line.color.rgb = rgb(line)
+        shape.line.width = Pt(weight)
+    shape.shadow.inherit = False
+    return shape
+
+
+def add_text(
+    slide,
+    text,
+    left,
+    top,
+    width,
+    height,
+    *,
+    font=SANS,
+    size=18,
+    color=INK,
+    bold=False,
+    align=PP_ALIGN.LEFT,
+    valign=MSO_ANCHOR.TOP,
+    line_spacing=1.0,
+    tracking=False,
+):
+    box = slide.shapes.add_textbox(left, top, width, height)
+    frame = box.text_frame
+    frame.clear()
+    frame.word_wrap = True
+    frame.margin_left = 0
+    frame.margin_right = 0
+    frame.margin_top = 0
+    frame.margin_bottom = 0
+    frame.vertical_anchor = valign
+    p = frame.paragraphs[0]
     p.alignment = align
+    p.line_spacing = line_spacing
     run = p.add_run()
-    run.text = text
+    run.text = text.upper() if tracking else text
     run.font.name = font
     run.font.size = Pt(size)
     run.font.bold = bold
-    run.font.italic = italic
-    run.font.color.rgb = color
-    return tb
+    run.font.color.rgb = rgb(color)
+    apply_typeface(run, font)
+    return box
 
 
-def add_line(slide, left, top, width, color=BRAND, weight_pt=1):
-    """加水平线"""
+def apply_typeface(run, font):
+    """Set Latin, East Asian, and complex-script font slots.
+
+    python-pptx only writes <a:latin> for run.font.name. PowerPoint uses
+    <a:ea> for Chinese glyphs, so without this the deck silently falls back
+    to the default Chinese font even though the XML appears to name a font.
+    """
+    run.font.name = font
+    # PPTX separates Latin and East Asian font slots. Keep Latin labels in
+    # their requested face, but force all Chinese glyphs through KingHwa.
+    east_asian = SERIF_EA
+    r_pr = run._r.get_or_add_rPr()
+    for tag in ("{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+                "{http://schemas.openxmlformats.org/drawingml/2006/main}ea",
+                "{http://schemas.openxmlformats.org/drawingml/2006/main}cs"):
+        for child in list(r_pr):
+            if child.tag == tag:
+                r_pr.remove(child)
+    latin = OxmlElement("a:latin")
+    latin.set("typeface", font)
+    ea = OxmlElement("a:ea")
+    ea.set("typeface", east_asian)
+    cs = OxmlElement("a:cs")
+    cs.set("typeface", font)
+    r_pr.append(latin)
+    r_pr.append(ea)
+    r_pr.append(cs)
+
+
+def patch_theme_fonts(pptx_path: str):
+    """Make the deck theme default to KingHwa for Chinese text as well."""
+    path = Path(pptx_path)
+    tmp = path.with_suffix(".tmp.pptx")
+    with zipfile.ZipFile(path, "r") as src, zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as dst:
+        for item in src.infolist():
+            data = src.read(item.filename)
+            if item.filename == "ppt/theme/theme1.xml":
+                text = data.decode("utf-8")
+                text = text.replace('<a:ea typeface=""/>', f'<a:ea typeface="{SERIF_EA}"/>')
+                text = text.replace('script="Hans" typeface="宋体"', f'script="Hans" typeface="{SERIF_EA}"')
+                text = text.replace('script="Hant" typeface="新細明體"', f'script="Hant" typeface="{SERIF_EA}"')
+                data = text.encode("utf-8")
+            dst.writestr(item, data)
+    tmp.replace(path)
+
+
+def add_line(slide, left, top, width, color=NAVY, weight=1.0):
     line = slide.shapes.add_connector(1, left, top, left + width, top)
-    line.line.color.rgb = color
-    line.line.width = Pt(weight_pt)
+    line.line.color.rgb = rgb(color)
+    line.line.width = Pt(weight)
     return line
 
 
-def add_card(slide, left, top, width, height,
-             fill=IVORY, border=BORDER, border_weight=0.5):
-    """加卡片背景"""
-    card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE,
-                                   left, top, width, height)
-    card.fill.solid()
-    card.fill.fore_color.rgb = fill
-    card.line.color.rgb = border
-    card.line.width = Pt(border_weight)
-    card.shadow.inherit = False
-    return card
-
-
-# ═══════════════════════════════════════════════════════════
-# Slide Templates
-# ═══════════════════════════════════════════════════════════
-
-def cover_slide(prs, title, subtitle, author, date):
-    """封面：大标题 + 副标题 + 作者/日期"""
-    s = blank_slide(prs)
-    # 大标题（serif 44pt 居中）
-    add_text(s, title,
-             Inches(1), Inches(2.5), Inches(11.33), Inches(1.5),
-             font=SERIF, size=44, color=NEAR_BLACK,
-             align=PP_ALIGN.CENTER)
-    # 品牌色短线
-    add_line(s, Inches(6.17), Inches(4.2), Inches(1), weight_pt=1.5)
-    # 副标题
-    add_text(s, subtitle,
-             Inches(1), Inches(4.5), Inches(11.33), Inches(0.8),
-             font=SANS, size=18, color=OLIVE,
-             align=PP_ALIGN.CENTER)
-    # 作者 + 日期
-    add_text(s, f"{author}　·　{date}",
-             Inches(1), Inches(6.5), Inches(11.33), Inches(0.4),
-             font=SANS, size=13, color=STONE,
-             align=PP_ALIGN.CENTER)
-    return s
-
-
-def toc_slide(prs, items):
-    """目录页：01 章节名 列表"""
-    s = blank_slide(prs)
-    add_text(s, "目录",
-             Inches(1.2), Inches(0.8), Inches(10), Inches(0.8),
-             font=SERIF, size=32, color=NEAR_BLACK)
-    add_line(s, Inches(1.2), Inches(1.8), Inches(11), weight_pt=1)
-
+def add_bullets(slide, items, left, top, width, height, size=16, color=COPY):
+    box = slide.shapes.add_textbox(left, top, width, height)
+    frame = box.text_frame
+    frame.clear()
+    frame.margin_left = 0
+    frame.margin_right = 0
+    frame.margin_top = 0
+    frame.margin_bottom = 0
+    frame.word_wrap = True
     for i, item in enumerate(items):
-        y = Inches(2.4 + i * 0.9)
-        add_text(s, f"0{i+1}",
-                 Inches(1.2), y, Inches(1), Inches(0.6),
-                 font=SERIF, size=28, color=BRAND)
-        add_text(s, item,
-                 Inches(2.4), y, Inches(9), Inches(0.6),
-                 font=SERIF, size=22, color=NEAR_BLACK,
-                 vanchor=MSO_ANCHOR.MIDDLE)
-    return s
+        p = frame.paragraphs[0] if i == 0 else frame.add_paragraph()
+        p.level = 0
+        p.space_after = Pt(7)
+        p.line_spacing = 1.18
+        run = p.add_run()
+        run.text = item
+        run.font.size = Pt(size)
+        run.font.color.rgb = rgb(color)
+        apply_typeface(run, SANS)
+    return box
 
 
-def chapter_slide(prs, number, title):
-    """章节首页：油墨蓝色背景 + 居中大标题"""
-    s = blank_slide(prs, bg_color=BRAND)
-    add_text(s, f"0{number}",
-             Inches(0.8), Inches(0.5), Inches(2), Inches(0.8),
-             font=SERIF, size=26, color=WHITE)
-    add_text(s, title,
-             Inches(1), Inches(3), Inches(11.33), Inches(1.5),
-             font=SERIF, size=56, color=WHITE,
-             align=PP_ALIGN.CENTER)
-    return s
+def framed_slide(prs, section="KAMI", page=None):
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    add_shape(slide, MSO_SHAPE.RECTANGLE, 0, 0, SLIDE_W, SLIDE_H, NAVY)
+    add_shape(slide, MSO_SHAPE.RECTANGLE, INNER_X, INNER_Y, INNER_W, INNER_H, PAPER_LIGHT)
+    if TEXTURE.exists():
+        slide.shapes.add_picture(str(TEXTURE), INNER_X, INNER_Y, width=INNER_W, height=INNER_H)
+    add_shape(
+        slide,
+        MSO_SHAPE.RECTANGLE,
+        INNER_X + Inches(0.18),
+        INNER_Y + Inches(0.18),
+        INNER_W - Inches(0.36),
+        INNER_H - Inches(0.36),
+        None,
+        NAVY,
+        1.0,
+    )
+    add_shape(
+        slide,
+        MSO_SHAPE.RECTANGLE,
+        INNER_X + Inches(0.29),
+        INNER_Y + Inches(0.29),
+        INNER_W - Inches(0.58),
+        INNER_H - Inches(0.58),
+        None,
+        NAVY_SOFT,
+        0.45,
+    )
+    add_text(
+        slide,
+        section,
+        INNER_X + Inches(0.48),
+        INNER_Y + INNER_H - Inches(0.38),
+        Inches(3.4),
+        Inches(0.16),
+        font=MONO,
+        size=7.5,
+        color=STONE,
+        tracking=True,
+    )
+    if page is not None:
+        add_text(
+            slide,
+            f"{page:02d} / 08",
+            INNER_X + INNER_W - Inches(1.5),
+            INNER_Y + INNER_H - Inches(0.38),
+            Inches(1.0),
+            Inches(0.16),
+            font=MONO,
+            size=7.5,
+            color=STONE,
+            align=PP_ALIGN.RIGHT,
+        )
+    return slide
 
 
-def content_slide(prs, eyebrow, title, body, page_num=None):
-    """内容页：小标题 + 大标题 + 短线 + 正文"""
-    s = blank_slide(prs)
-    # eyebrow
-    add_text(s, eyebrow,
-             Inches(1.2), Inches(0.6), Inches(10), Inches(0.4),
-             font=SANS, size=12, color=STONE)
-    # title
-    add_text(s, title,
-             Inches(1.2), Inches(1.2), Inches(11.33), Inches(1.2),
-             font=SERIF, size=32, color=NEAR_BLACK)
-    # brand line
-    add_line(s, Inches(1.2), Inches(2.5), Inches(1), weight_pt=1.5)
-    # body
-    add_text(s, body,
-             Inches(1.2), Inches(3), Inches(11), Inches(3.5),
-             font=SANS, size=18, color=DARK_WARM)
-    # page number
-    if page_num is not None:
-        add_text(s, f"— {page_num:02d}",
-                 Inches(11.5), Inches(6.9), Inches(1.5), Inches(0.3),
-                 font=SANS, size=11, color=STONE,
-                 align=PP_ALIGN.RIGHT)
-    return s
+def title_plaque(slide, left, top, width, height, kicker, title, subtitle=None):
+    add_shape(slide, MSO_SHAPE.RECTANGLE, left, top, width, height, NAVY)
+    add_shape(
+        slide,
+        MSO_SHAPE.RECTANGLE,
+        left + Inches(0.13),
+        top + Inches(0.13),
+        width - Inches(0.26),
+        height - Inches(0.26),
+        NAVY,
+        IVORY,
+        0.75,
+    )
+    add_text(
+        slide,
+        kicker,
+        left + Inches(0.38),
+        top + Inches(0.32),
+        width - Inches(0.76),
+        Inches(0.28),
+        font=MONO,
+        size=9,
+        color=TAG,
+        tracking=True,
+    )
+    add_text(
+        slide,
+        title,
+        left + Inches(0.36),
+        top + Inches(0.76),
+        width - Inches(0.72),
+        height - Inches(1.15),
+        font=SERIF,
+        size=34,
+        color=IVORY,
+        valign=MSO_ANCHOR.MIDDLE,
+        line_spacing=0.92,
+    )
+    if subtitle:
+        add_text(
+            slide,
+            subtitle,
+            left + Inches(0.38),
+            top + height - Inches(0.48),
+            width - Inches(0.76),
+            Inches(0.22),
+            font=SANS,
+            size=10,
+            color=TAG,
+        )
 
 
-def metrics_slide(prs, title, metrics):
-    """数据页：标题 + N 张数据卡并排
-    metrics: [(value, label), ...]
-    """
-    s = blank_slide(prs)
-    # 标题
-    add_text(s, title,
-             Inches(1.2), Inches(0.8), Inches(11), Inches(1),
-             font=SERIF, size=28, color=NEAR_BLACK,
-             align=PP_ALIGN.CENTER)
-    add_line(s, Inches(6.17), Inches(2), Inches(1))
-
-    # 数据卡
-    n = len(metrics)
-    card_w = Inches(2.8)
-    gap = Inches(0.3)
-    total_w = card_w * n + gap * (n - 1)
-    start = (SLIDE_W - total_w) / 2
-
-    for i, (value, label) in enumerate(metrics):
-        x = start + (card_w + gap) * i
-        # 大数字
-        add_text(s, value,
-                 x, Inches(3), card_w, Inches(1.5),
-                 font=SERIF, size=52, color=BRAND,
-                 align=PP_ALIGN.CENTER)
-        # 标签
-        add_text(s, label,
-                 x, Inches(4.8), card_w, Inches(0.6),
-                 font=SANS, size=14, color=OLIVE,
-                 align=PP_ALIGN.CENTER)
-    return s
-
-
-def quote_slide(prs, quote, source):
-    """引用页：极简，居中斜体引文"""
-    s = blank_slide(prs)
-    add_text(s, f"\u201c{quote}\u201d",
-             Inches(1.5), Inches(2.8), Inches(10.33), Inches(2.5),
-             font=SERIF, size=28, italic=True, color=NEAR_BLACK,
-             align=PP_ALIGN.CENTER,
-             vanchor=MSO_ANCHOR.MIDDLE)
-    add_text(s, f"— {source}",
-             Inches(1.5), Inches(5.2), Inches(10.33), Inches(0.4),
-             font=SANS, size=14, color=OLIVE,
-             align=PP_ALIGN.CENTER)
-    return s
-
-
-def ending_slide(prs, message, contact):
-    """结束页"""
-    s = blank_slide(prs)
-    add_text(s, message,
-             Inches(1), Inches(3), Inches(11.33), Inches(1.2),
-             font=SERIF, size=40, color=NEAR_BLACK,
-             align=PP_ALIGN.CENTER)
-    add_line(s, Inches(6.17), Inches(4.5), Inches(1), weight_pt=1.5)
-    add_text(s, contact,
-             Inches(1), Inches(4.8), Inches(11.33), Inches(0.6),
-             font=SANS, size=16, color=OLIVE,
-             align=PP_ALIGN.CENTER)
-    return s
+def section_header(slide, number, title, lede, page):
+    add_text(
+        slide,
+        f"{number:02d} · SECTION",
+        INNER_X + Inches(0.7),
+        INNER_Y + Inches(0.58),
+        Inches(2.4),
+        Inches(0.2),
+        font=MONO,
+        size=8,
+        color=STONE,
+        tracking=True,
+    )
+    add_text(
+        slide,
+        title,
+        INNER_X + Inches(0.7),
+        INNER_Y + Inches(0.92),
+        Inches(5.7),
+        Inches(0.55),
+        font=SERIF,
+        size=26,
+        color=INK,
+    )
+    add_line(slide, INNER_X + Inches(0.7), INNER_Y + Inches(1.55), Inches(4.2), NAVY, 0.75)
+    add_text(
+        slide,
+        lede,
+        INNER_X + Inches(7.0),
+        INNER_Y + Inches(0.9),
+        Inches(4.8),
+        Inches(0.76),
+        font=SANS,
+        size=11,
+        color=MUTED,
+        line_spacing=1.14,
+    )
+    add_text(
+        slide,
+        f"{page:02d} / 08",
+        INNER_X + INNER_W - Inches(1.5),
+        INNER_Y + INNER_H - Inches(0.38),
+        Inches(1.0),
+        Inches(0.16),
+        font=MONO,
+        size=7.5,
+        color=STONE,
+        align=PP_ALIGN.RIGHT,
+    )
 
 
-# ═══════════════════════════════════════════════════════════
-# Main: 示例 deck，按实际需求改
-# ═══════════════════════════════════════════════════════════
+def metric_card(slide, left, top, width, value, label, note):
+    add_shape(slide, MSO_SHAPE.RECTANGLE, left, top, width, Inches(1.18), IVORY, NAVY_SOFT, 0.8)
+    add_text(slide, value, left + Inches(0.18), top + Inches(0.16), width - Inches(0.36), Inches(0.38), font=SERIF, size=24, color=NAVY)
+    add_text(slide, label, left + Inches(0.18), top + Inches(0.58), width - Inches(0.36), Inches(0.18), font=SANS, size=8.5, color=STONE, tracking=True)
+    add_text(slide, note, left + Inches(0.18), top + Inches(0.82), width - Inches(0.36), Inches(0.2), font=SANS, size=8.5, color=MUTED)
+
+
+def archive_card(slide, left, top, width, height, title, body, label=None):
+    add_shape(slide, MSO_SHAPE.RECTANGLE, left, top, width, height, IVORY, RULE, 0.7)
+    if label:
+        add_shape(slide, MSO_SHAPE.RECTANGLE, left, top, width, Inches(0.34), NAVY)
+        add_text(slide, label, left + Inches(0.18), top + Inches(0.1), width - Inches(0.36), Inches(0.12), font=MONO, size=7.2, color=TAG, tracking=True)
+        body_top = top + Inches(0.48)
+    else:
+        body_top = top + Inches(0.24)
+    add_text(slide, title, left + Inches(0.2), body_top, width - Inches(0.4), Inches(0.34), font=SERIF, size=17, color=INK)
+    add_text(slide, body, left + Inches(0.2), body_top + Inches(0.48), width - Inches(0.4), height - Inches(0.76), font=SANS, size=10.5, color=COPY, line_spacing=1.15)
+
+
+# ---------------------------------------------------------------------------
+# Slides
+# ---------------------------------------------------------------------------
+
+def slide_cover(prs):
+    s = framed_slide(prs, "REPUBLICAN MANUSCRIPT EDITION", 1)
+    title_plaque(
+        s,
+        INNER_X + Inches(0.72),
+        INNER_Y + Inches(0.78),
+        Inches(7.0),
+        Inches(2.8),
+        "KAMI · SLIDES DEMO",
+        "把 AI 文档\n排成馆藏文稿",
+        "深蓝外框 / 旧纸内页 / 档案题签",
+    )
+    add_text(
+        s,
+        "Just tell Claude what you need:\n“帮我生成一份白皮书” / “生成一份项目方案” / “帮我写一份推荐信” / “做一套汇报 slides”",
+        INNER_X + Inches(8.18),
+        INNER_Y + Inches(1.0),
+        Inches(3.45),
+        Inches(1.46),
+        font=SANS,
+        size=13,
+        color=COPY,
+        line_spacing=1.12,
+    )
+    metric_card(s, INNER_X + Inches(8.18), INNER_Y + Inches(2.82), Inches(1.55), "05", "demo set", "docs + slides")
+    metric_card(s, INNER_X + Inches(9.9), INNER_Y + Inches(2.82), Inches(1.55), "01", "visual rule", "archive blue")
+    add_text(
+        s,
+        "2026.04 · Kami Fork",
+        INNER_X + Inches(0.74),
+        INNER_Y + Inches(5.7),
+        Inches(4.0),
+        Inches(0.22),
+        font=MONO,
+        size=8.5,
+        color=STONE,
+        tracking=True,
+    )
+
+
+def slide_principle(prs):
+    s = framed_slide(prs, "METHOD", 2)
+    section_header(
+        s,
+        1,
+        "生成原理",
+        "好看的本质不是每次重新设计，而是把内容填进稳定模板。",
+        2,
+    )
+    x0 = INNER_X + Inches(0.72)
+    y = INNER_Y + Inches(2.05)
+    w = Inches(2.52)
+    for idx, (title, body) in enumerate(
+        [
+            ("路由", "先判断语言与文档类型：one-pager、long-doc、letter、slides。"),
+            ("整理", "把 raw material 拆成事实、数字、判断和行动，而不是直接堆文字。"),
+            ("填充", "使用固定骨架承载内容，避免 AI 每次自由发挥版式。"),
+            ("校验", "构建脚本检查页数、字体、占位符与 CSS 约束。"),
+        ]
+    ):
+        archive_card(s, x0 + (w + Inches(0.35)) * idx, y, w, Inches(2.45), title, body, f"STEP {idx + 1:02d}")
+    add_text(
+        s,
+        "固定版式 + design token + 字体层级 + 构建校验",
+        INNER_X + Inches(1.3),
+        INNER_Y + Inches(5.26),
+        Inches(10.0),
+        Inches(0.45),
+        font=SERIF,
+        size=24,
+        color=NAVY,
+        align=PP_ALIGN.CENTER,
+    )
+
+
+def slide_visual_language(prs):
+    s = framed_slide(prs, "DESIGN TOKENS", 3)
+    section_header(
+        s,
+        2,
+        "民国文稿视觉语言",
+        "不做复古海报，不做重纹理，只把专业文档整理成被认真归档过的样子。",
+        3,
+    )
+    swatches = [
+        ("Archive Blue", NAVY, "#243851", "外框 / 题签 / 强调"),
+        ("Old Paper", PAPER, "#EBE5DD", "正文纸面"),
+        ("Ivory", IVORY, "#F3EFEB", "卡片与浮层"),
+        ("Border", RULE, "#D0C7BB", "细线和分隔"),
+    ]
+    for i, (name, color, hex_value, use) in enumerate(swatches):
+        left = INNER_X + Inches(0.78) + Inches(2.8) * i
+        top = INNER_Y + Inches(2.15)
+        add_shape(s, MSO_SHAPE.RECTANGLE, left, top, Inches(2.2), Inches(1.15), color, NAVY_SOFT if i else IVORY, 0.5)
+        add_text(s, name, left, top + Inches(1.35), Inches(2.2), Inches(0.2), font=MONO, size=8, color=STONE, tracking=True, align=PP_ALIGN.CENTER)
+        add_text(s, hex_value, left, top + Inches(1.65), Inches(2.2), Inches(0.25), font=SERIF, size=15, color=NAVY, align=PP_ALIGN.CENTER)
+        add_text(s, use, left, top + Inches(1.98), Inches(2.2), Inches(0.24), font=SANS, size=9, color=MUTED, align=PP_ALIGN.CENTER)
+    archive_card(
+        s,
+        INNER_X + Inches(1.2),
+        INNER_Y + Inches(5.05),
+        Inches(10.5),
+        Inches(0.88),
+        "装饰边界",
+        "只允许蓝色题签、细双线内框、档案边框；不加入纹理图片、印章贴图和竖排正文。",
+    )
+
+
+def slide_templates(prs):
+    s = framed_slide(prs, "TEMPLATES", 4)
+    section_header(
+        s,
+        3,
+        "现在能生成什么",
+        "中文 v1 的正式能力聚焦三类高频文档，简历和作品集已保留为补充样例。",
+        4,
+    )
+    cards = [
+        ("One-Pager", "公司介绍、项目方案、执行摘要。重点是 30 秒抓住核心。", "1 page"),
+        ("Long Doc", "白皮书、长文报告、年度总结。强调章节结构与证据链。", "multi"),
+        ("Letter", "正式信件、推荐信、推荐函。关系、证据、匹配、推荐。", "1 page"),
+        ("Resume", "固定坐标版简历样例，适合验证蓝框档案式布局。", "demo"),
+        ("Portfolio", "作品集样例，保留更多视觉叙事与项目卡片。", "demo"),
+    ]
+    x0 = INNER_X + Inches(0.75)
+    y0 = INNER_Y + Inches(2.03)
+    for i, (title, body, tag) in enumerate(cards):
+        row = i // 3
+        col = i % 3
+        archive_card(
+            s,
+            x0 + Inches(3.8) * col,
+            y0 + Inches(1.62) * row,
+            Inches(3.36),
+            Inches(1.22),
+            title,
+            body,
+            tag.upper(),
+        )
+
+
+def slide_prompt(prs):
+    s = framed_slide(prs, "NATURAL PROMPTS", 5)
+    section_header(
+        s,
+        4,
+        "不用 slash command",
+        "用户只要说任务，skill 根据意图选择模板。输出是文档，不是聊天里的格式建议。",
+        5,
+    )
+    prompts = [
+        ("帮我生成一份白皮书", "long-doc"),
+        ("生成一份项目方案", "one-pager"),
+        ("帮我写一份推荐信", "letter"),
+        ("帮我把这些内容排版成好看的 PDF", "infer"),
+        ("做一套汇报 slides", "slides"),
+    ]
+    for i, (text, route) in enumerate(prompts):
+        top = INNER_Y + Inches(2.0 + i * 0.72)
+        add_shape(s, MSO_SHAPE.RECTANGLE, INNER_X + Inches(1.0), top, Inches(8.7), Inches(0.48), IVORY, RULE, 0.45)
+        add_text(s, f"“{text}”", INNER_X + Inches(1.25), top + Inches(0.14), Inches(6.6), Inches(0.18), font=SERIF, size=14, color=INK)
+        add_text(s, route, INNER_X + Inches(8.35), top + Inches(0.15), Inches(1.0), Inches(0.16), font=MONO, size=8, color=NAVY, tracking=True, align=PP_ALIGN.RIGHT)
+    add_shape(s, MSO_SHAPE.RECTANGLE, INNER_X + Inches(10.12), INNER_Y + Inches(2.0), Inches(1.4), Inches(3.38), NAVY)
+    add_text(s, "AUTO\nTRIGGER", INNER_X + Inches(10.27), INNER_Y + Inches(2.98), Inches(1.1), Inches(0.8), font=MONO, size=12, color=IVORY, align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE)
+
+
+def slide_density(prs):
+    s = framed_slide(prs, "LAYOUT RHYTHM", 6)
+    section_header(
+        s,
+        5,
+        "排版骨架不变",
+        "我们换的是时代气质，不是阅读效率。信息密度、留白与页数约束仍然可控。",
+        6,
+    )
+    metric_card(s, INNER_X + Inches(0.95), INNER_Y + Inches(2.08), Inches(2.2), "1", "one-pager", "严格单页")
+    metric_card(s, INNER_X + Inches(3.48), INNER_Y + Inches(2.08), Inches(2.2), "1", "letter", "严格单页")
+    metric_card(s, INNER_X + Inches(6.01), INNER_Y + Inches(2.08), Inches(2.2), "3", "demo long-doc", "章节展开")
+    metric_card(s, INNER_X + Inches(8.54), INNER_Y + Inches(2.08), Inches(2.2), "500+", "check rules", "字体 / CSS / 占位符")
+    add_bullets(
+        s,
+        [
+            "旧纸底不是装饰图，而是稳定色块。",
+            "题签和细线负责时代感，正文仍按专业文档阅读。",
+            "京華老宋体用于 serif 气质，功能文字保持清晰。",
+        ],
+        INNER_X + Inches(1.1),
+        INNER_Y + Inches(4.25),
+        Inches(10.6),
+        Inches(1.2),
+        size=15,
+    )
+
+
+def slide_pipeline(prs):
+    s = framed_slide(prs, "DELIVERY", 7)
+    section_header(
+        s,
+        6,
+        "交付链路",
+        "生成不止是写文件，还要让 PDF/PPTX 和预览资产都能被检查。",
+        7,
+    )
+    steps = [
+        ("HTML / PPTX", "内容进入固定模板"),
+        ("Build", "生成交付文件"),
+        ("Verify", "检查页数、字体、占位符"),
+        ("Preview", "导出 demo 预览"),
+    ]
+    y = INNER_Y + Inches(2.7)
+    for i, (title, body) in enumerate(steps):
+        x = INNER_X + Inches(0.9) + Inches(2.86) * i
+        archive_card(s, x, y, Inches(2.35), Inches(1.28), title, body, f"{i + 1:02d}")
+        if i < len(steps) - 1:
+            add_line(s, x + Inches(2.45), y + Inches(0.64), Inches(0.32), NAVY_SOFT, 1.0)
+    add_text(
+        s,
+        ".venv/bin/python scripts/build.py --verify one-pager\n.venv/bin/python scripts/build.py --check\n.venv/bin/python scripts/build.py slides",
+        INNER_X + Inches(1.3),
+        INNER_Y + Inches(5.2),
+        Inches(9.8),
+        Inches(0.62),
+        font=MONO,
+        size=10.5,
+        color=NAVY,
+        align=PP_ALIGN.CENTER,
+        line_spacing=1.05,
+    )
+
+
+def slide_end(prs):
+    s = framed_slide(prs, "END", 8)
+    add_text(
+        s,
+        "好看的本质是稳定",
+        INNER_X + Inches(1.0),
+        INNER_Y + Inches(2.4),
+        Inches(10.8),
+        Inches(0.8),
+        font=SERIF,
+        size=39,
+        color=NAVY,
+        align=PP_ALIGN.CENTER,
+    )
+    add_line(s, INNER_X + Inches(5.6), INNER_Y + Inches(3.5), Inches(1.2), NAVY, 1.3)
+    add_text(
+        s,
+        "固定版式 · design token · 字体层级 · 构建校验",
+        INNER_X + Inches(1.0),
+        INNER_Y + Inches(3.95),
+        Inches(10.8),
+        Inches(0.28),
+        font=SANS,
+        size=16,
+        color=MUTED,
+        align=PP_ALIGN.CENTER,
+    )
+    add_text(
+        s,
+        "Kami · Republican Manuscript Edition",
+        INNER_X + Inches(1.0),
+        INNER_Y + Inches(5.45),
+        Inches(10.8),
+        Inches(0.2),
+        font=MONO,
+        size=8,
+        color=STONE,
+        tracking=True,
+        align=PP_ALIGN.CENTER,
+    )
+
 
 def main():
     prs = Presentation()
-    prs.slide_width  = SLIDE_W
+    prs.slide_width = SLIDE_W
     prs.slide_height = SLIDE_H
 
-    # 1. 封面
-    cover_slide(prs,
-        title="{{文档标题}}",
-        subtitle="{{一句话描述}}",
-        author="{{作者}}",
-        date="2026.04")
+    slide_cover(prs)
+    slide_principle(prs)
+    slide_visual_language(prs)
+    slide_templates(prs)
+    slide_prompt(prs)
+    slide_density(prs)
+    slide_pipeline(prs)
+    slide_end(prs)
 
-    # 2. 目录
-    toc_slide(prs, items=[
-        "{{章节 1}}",
-        "{{章节 2}}",
-        "{{章节 3}}",
-        "{{Q&A}}",
-    ])
-
-    # 3. 章节首页
-    chapter_slide(prs, 1, "{{章节标题}}")
-
-    # 4. 内容页
-    content_slide(prs,
-        eyebrow="{{章节 · 本页}}",
-        title="{{核心论点标题}}",
-        body="{{一段正文，18pt sans 字体。控制在 3 行内，一屏一个核心信息。}}",
-        page_num=4)
-
-    # 5. 数据页
-    metrics_slide(prs,
-        title="关键结果",
-        metrics=[
-            ("+42%",   "转化率提升"),
-            ("3.8M",   "月活用户"),
-            ("99.9%",  "可用性 SLA"),
-            ("5,000+", "QPS 峰值"),
-        ])
-
-    # 6. 引用
-    quote_slide(prs,
-        quote="好的设计是尽可能少的设计。",
-        source="Dieter Rams")
-
-    # 7. 结束
-    ending_slide(prs,
-        message="Thank you",
-        contact="{{邮箱}}　·　{{网站}}")
-
-    prs.save('output.pptx')
+    prs.save("output.pptx")
+    patch_theme_fonts("output.pptx")
     print("✓ Saved output.pptx")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
