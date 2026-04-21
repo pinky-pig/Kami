@@ -29,9 +29,9 @@ Kaku（写代码）· Waza（练习惯）· **Kami（出文档）** 三部曲之
 
 ## 字体分发
 
-**TsangerJinKai02-W04.ttf 是商业字体**，已包含在仓库中。商业用途需从 [tsanger.cn](https://tsanger.cn) 获取授权。
+**京華老宋体v2.002.ttf 是用户提供字体**，授权与商用范围请以字体来源为准。
 
-- 所有 CN 模板和 CN demo 的 `<style>` 里都有 `@font-face { src: url("../fonts/TsangerJinKai02-W04.ttf") }`，相对路径挂载
+- 所有 CN 模板和 CN demo 的 `<style>` 里都有 `@font-face { src: url("../fonts/京華老宋体v2.002.ttf") }`，相对路径挂载
 - 没字体 -> fallback 链自动接手: Source Han Serif SC -> Noto Serif CJK SC -> Songti SC -> Georgia
 - 英文模板 body 和标题都用 Newsreader serif，sans 只用于 UI 元素
 
@@ -71,7 +71,7 @@ python3 scripts/build.py
 python3 scripts/build.py --check
 
 # 3. 字体是否真的加载了
-pdffonts assets/demos/demo-musk-resume.pdf | head
+pdffonts assets/demos/demo-tesla.pdf | head
 
 # 4. 隐私扫描（改动后）
 # 把 KEYWORDS 换成自己真实姓名 / 公司 / 电话等，避免误泄漏到模板

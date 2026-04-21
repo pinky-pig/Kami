@@ -1,6 +1,6 @@
 ---
 name: kami
-description: 'Typeset Chinese professional documents in a republican-manuscript style: one-pagers, white papers, project proposals, formal letters, recommendation letters, and reference letters. Style 1 uses a deep archive-blue outer frame, padded old-paper sheet, blue bordered title plaques, serif-led hierarchy, and stable print spacing. Chinese output uses TsangerJinKai02 + Source Han; v1 does not officially support English styling. Auto-triggers from natural requests such as "帮我生成一份白皮书", "生成一份项目方案", "帮我写一份推荐信", "写一封推荐函", "做 PDF", "排版", "生成报告", "一页纸", "正式信件", "高质量文档", "好看的排版", "民国风", "文稿风", "档案风", and when raw Chinese content is handed over to be typeset or made presentable.'
+description: 'Typeset Chinese professional documents in a republican-manuscript style: one-pagers, white papers, project proposals, formal letters, recommendation letters, and reference letters. Style 1 uses a deep archive-blue outer frame, padded old-paper sheet, blue bordered title plaques, serif-led hierarchy, and stable print spacing. Chinese output uses 京華老宋体 (KingHwa_OldSong) + Source Han; v1 does not officially support English styling. Auto-triggers from natural requests such as "帮我生成一份白皮书", "生成一份项目方案", "帮我写一份推荐信", "写一封推荐函", "做 PDF", "排版", "生成报告", "一页纸", "正式信件", "高质量文档", "好看的排版", "民国风", "文稿风", "档案风", and when raw Chinese content is handed over to be typeset or made presentable.'
 ---
 
 # kami · 紙
@@ -126,7 +126,7 @@ python3 scripts/build.py --check            # CSS rule violations only (fast, no
 ## Fonts
 
 **Chinese**
-- Main serif: TsangerJinKai02-W04.ttf (commercial, included in repo)
+- Main serif: 京華老宋体v2.002.ttf (user-provided; keep license aligned with the font source)
 - Fallback chain baked into templates: Source Han Serif SC -> Noto Serif CJK SC -> Songti SC -> Georgia
 
 **English**

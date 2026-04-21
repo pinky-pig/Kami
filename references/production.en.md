@@ -53,7 +53,7 @@ font-family: "Newsreader", "Source Serif 4", "Charter",
              Georgia, serif;
 
 /* Chinese */
-font-family: "TsangerJinKai02", "Source Han Serif SC",
+font-family: "KingHwa_OldSong", "Source Han Serif SC",
              "Noto Serif CJK SC", "Songti SC", Georgia, serif;
 ```
 
@@ -224,7 +224,7 @@ pdftoppm -png -r 300 out.pdf inspect
 pdffonts output.pdf
 ```
 
-If the output shows `DejaVuSerif` / `Bitstream Vera` - your specified font didn't load, fell through to system ultimate fallback. Expected: `Newsreader`, `Charter`, or `TsangerJinKai02`.
+If the output shows `DejaVuSerif` / `Bitstream Vera` - your specified font didn't load, fell through to system ultimate fallback. Expected: `Newsreader`, `Charter`, or `KingHwa_OldSong`.
 
 ### One-step build + validate
 

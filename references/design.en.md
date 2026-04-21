@@ -111,7 +111,7 @@ font-family: "Newsreader",             /* Google Fonts - preferred */
              Georgia, "Times New Roman", serif;
 
 /* Sans for UI elements - Silicon Valley default */
-font-family: "Inter", "TsangerJinKai02",
+font-family: "Inter", "KingHwa_OldSong",
              -apple-system, BlinkMacSystemFont,
              "Helvetica Neue", Arial, sans-serif;
 
@@ -120,7 +120,7 @@ font-family: "JetBrains Mono", "SF Mono", "Fira Code",
              Consolas, Monaco, monospace;
 ```
 
-For Chinese documents, see `design.md` for the TsangerJinKai02 + Source Han stack.
+For Chinese documents, see `design.md` for the KingHwa_OldSong + Source Han stack.
 
 ### Size scale (pt for print A4, px for screen)
 

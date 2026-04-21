@@ -232,7 +232,7 @@ def sync_check(verbose: bool = False) -> int:
 PLACEHOLDER = re.compile(r"\{\{[^}]+\}\}")
 
 # Primary fonts expected in embedded PDF font names
-CN_PRIMARY_FONTS = {"TsangerJinKai02"}
+CN_PRIMARY_FONTS = {"KingHwa_OldSong"}
 EN_PRIMARY_FONTS = {"Newsreader", "Inter"}
 
 
@@ -301,7 +301,7 @@ def verify_target(name: str, source: str, max_pages: int, src_dir: Path) -> list
         primary = next(iter(expected))
         fallback_present = any(
             kw in font for font in embedded
-            for kw in ("Newsreader", "Inter", "TsangerJinKai", "SourceHan", "Noto", "Georgia", "Charter", "Songti")
+            for kw in ("Newsreader", "Inter", "KingHwa_OldSong", "SourceHan", "Noto", "Georgia", "Charter", "Songti")
         )
         if not fallback_present:
             issues.append(f"no recognizable font embedded in {out.name}")

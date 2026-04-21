@@ -34,8 +34,8 @@
     font-display: swap;
   }
   @font-face {
-    font-family: "TsangerJinKai02";
-    src: url("assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-family: "KingHwa_OldSong";
+    src: url("assets/fonts/京華老宋体v2.002.ttf") format("truetype");
     font-weight: 500;
     font-display: swap;
   }
@@ -67,8 +67,8 @@
     --ring-warm:    #c3cdd8;
     --ring-deep:    #b2becb;
 
-    --serif: "TsangerJinKai02", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
-    --sans: "Inter", "TsangerJinKai02", -apple-system, BlinkMacSystemFont, "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    --serif: "KingHwa_OldSong", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    --sans: "Inter", "KingHwa_OldSong", -apple-system, BlinkMacSystemFont, "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
     --mono: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, Monaco, monospace;
   }
 

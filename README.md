@@ -45,7 +45,7 @@ The skill auto-triggers from the request, no slash command needed. Chinese v1 ro
 1. 页面用深蓝外框包住旧纸内页，不再是普通白底文档
 2. 强调色只有档案蓝 `#243851`
 3. 中性灰偏纸本暖灰，不用冷蓝灰
-4. 不新增字体依赖，继续使用仓耳今楷 / Newsreader / Source Han
+4. 中文 serif 使用京華老宋体，英文与功能文字继续使用 Newsreader / Source Han / system fallback
 5. Serif 字重固定 500，不用粗黑体
 6. 行距延续原版：标题 1.1-1.3，正文 1.4-1.55
 7. Tag 背景必须实色 hex，禁 `rgba()`

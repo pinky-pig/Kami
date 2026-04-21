@@ -38,16 +38,16 @@ python3 -c "from weasyprint import HTML; HTML('doc.html').write_pdf('out.pdf')"
 ```html
 <style>
 @font-face {
-  font-family: "TsangerJinKai02";
-  src: url("TsangerJinKai02-W04.ttf");
+  font-family: "KingHwa_OldSong";
+  src: url("京華老宋体v2.002.ttf");
 }
-body { font-family: "TsangerJinKai02", serif; }
+body { font-family: "KingHwa_OldSong", serif; }
 </style>
 ```
 
 **商业字体不可得时**，fallback 链已内嵌在所有模板里：
 ```css
-font-family: "TsangerJinKai02",
+font-family: "KingHwa_OldSong",
              "Source Han Serif SC", "Noto Serif CJK SC",
              "Songti SC", Georgia, serif;
 ```
@@ -142,7 +142,7 @@ TAG_BG      = RGBColor(0xed, 0xd9, 0xce)
 | Footer | 12pt | Sans 400 |
 
 中文字体栈：
-- Serif：`TsangerJinKai02` -> `Source Han Serif SC` -> `宋体`
+- Serif：`KingHwa_OldSong` -> `Source Han Serif SC` -> `宋体`
 - Sans：`Source Han Sans SC` -> `PingFang SC` -> `微软雅黑`
 
 ### 8 种标准版式
@@ -250,7 +250,7 @@ pdftoppm -png -r 300 out.pdf inspect
 pdffonts output.pdf
 ```
 
-输出里如果看到 `DejaVuSerif` / `Bitstream Vera`，说明指定字体没生效，走到了系统兜底。正确应该看到 `TsangerJinKai02` 或 `Source Han Serif SC`。
+输出里如果看到 `DejaVuSerif` / `Bitstream Vera`，说明指定字体没生效，走到了系统兜底。正确应该看到 `KingHwa_OldSong` 或 `Source Han Serif SC`。
 
 ### 一键生成 + 验证脚本
 
@@ -374,7 +374,7 @@ for variant, vars_css in [
 
 ```bash
 # 把 .ttf 放 HTML 同目录
-cp TsangerJinKai02-W04.ttf workspace/
+cp 京華老宋体v2.002.ttf workspace/
 
 # 或系统安装（Linux）
 apt install fonts-noto-cjk
