@@ -1,0 +1,22 @@
+{
+  "name": "kami-themes",
+  "description": "Kami document theme skills for AI-assisted professional document typesetting, including Republican manuscript and newspaper styles.",
+  "version": "0.1.0",
+  "author": {
+    "name": "pinky-pig"
+  },
+  "homepage": "https://github.com/pinky-pig/kami",
+  "repository": "https://github.com/pinky-pig/kami",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "documents",
+    "themes",
+    "newspaper",
+    "manuscript",
+    "typesetting",
+    "pdf",
+    "slides",
+    "kami"
+  ]
+}

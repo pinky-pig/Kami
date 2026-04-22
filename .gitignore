@@ -7,16 +7,18 @@ __pycache__/
 .pytest_cache/
 
 # Font build artifacts
-assets/fonts/*.otf
-assets/fonts/Newsreader-italic.woff
+plugins/*/skills/*/assets/fonts/*.otf
+plugins/*/skills/*/assets/fonts/Newsreader-italic.woff
 
-# Template examples with placeholder content, regenerate via: python3 scripts/build.py
-assets/examples/
+# Template examples with placeholder content.
+# Regenerate from a theme skill directory, e.g.:
+# python3 plugins/kami-themes/skills/republican-manuscript/scripts/build.py
+plugins/*/skills/*/assets/examples/
 
 /tmp/
 *.log
 .vercel
-images
+/images/
 
 # Office temporary files
 ~$*.pptx

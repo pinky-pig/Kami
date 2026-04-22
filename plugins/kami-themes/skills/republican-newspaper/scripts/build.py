@@ -1,0 +1,696 @@
+#!/usr/bin/env python3
+"""kami build & check
+
+Usage:
+    python3 scripts/build.py                      # build all 15 examples (10 HTML + 3 diagrams + 2 PPTX)
+    python3 scripts/build.py resume               # build one template, print pages + fonts
+    python3 scripts/build.py --check              # scan templates for CSS rule violations
+    python3 scripts/build.py --check -v           # verbose (show each scanned file)
+    python3 scripts/build.py --sync               # check CSS token drift across templates
+    python3 scripts/build.py --verify             # build all + page count + font + placeholder checks
+    python3 scripts/build.py --verify resume-en   # single target full verification
+    python3 scripts/build.py --verify slides      # build slides + check configured PPTX font slots
+    python3 scripts/build.py --check-fonts        # check local configured font availability
+    python3 scripts/build.py --install-fonts      # install bundled configured font for local PPTX viewing
+"""
+from __future__ import annotations
+
+import os
+import json
+import re
+import shutil
+import subprocess
+import sys
+import zipfile
+from dataclasses import dataclass
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+TEMPLATES = ROOT / "assets" / "templates"
+DIAGRAMS = ROOT / "assets" / "diagrams"
+EXAMPLES = ROOT / "assets" / "examples"
+FONTS = ROOT / "assets" / "fonts"
+FONT_CONFIG = FONTS / "fonts.json"
+
+# name -> (source, max_pages). max_pages=0 means no hard check.
+HTML_TARGETS: dict[str, tuple[str, int]] = {
+    # Chinese
+    "one-pager":    ("one-pager.html", 1),
+    "letter":       ("letter.html", 1),
+    "long-doc":     ("long-doc.html", 0),
+    "portfolio":    ("portfolio.html", 0),
+    "resume":       ("resume.html", 2),
+    # English
+    "one-pager-en": ("one-pager-en.html", 1),
+    "letter-en":    ("letter-en.html", 1),
+    "long-doc-en":  ("long-doc-en.html", 0),
+    "portfolio-en": ("portfolio-en.html", 0),
+    "resume-en":    ("resume-en.html", 2),
+}
+PPTX_TARGETS: dict[str, str] = {
+    "slides":    "slides.py",
+    "slides-en": "slides-en.py",
+}
+
+# Diagram HTMLs live in a separate directory and have no page-count contract.
+DIAGRAM_TARGETS: dict[str, str] = {
+    "diagram-architecture": "architecture.html",
+    "diagram-flowchart":    "flowchart.html",
+    "diagram-quadrant":     "quadrant.html",
+}
+
+# Phase-1 migration scope: only these Chinese templates are expected to stay
+# token-perfect with references/tokens.json.
+SYNC_TARGETS: set[str] = {
+    "one-pager.html",
+    "long-doc.html",
+    "letter.html",
+}
+
+# Demo files have real content and are the right source for --verify.
+VERIFY_SOURCES: dict[str, tuple[str, Path]] = {
+    "one-pager": ("demo-one-pager.html", ROOT / "assets" / "demos"),
+    "long-doc": ("demo-long-doc.html", ROOT / "assets" / "demos"),
+}
+
+
+# ------------------------- build -------------------------
+
+def build_html(name: str, source: str, max_pages: int,
+               src_dir: Path = TEMPLATES) -> bool:
+    try:
+        from weasyprint import HTML
+        from pypdf import PdfReader
+    except ImportError:
+        print("✗ missing deps: pip install weasyprint pypdf --break-system-packages")
+        return False
+
+    src = src_dir / source
+    if not src.exists():
+        print(f"✗ {name}: source not found ({src})")
+        return False
+
+    EXAMPLES.mkdir(parents=True, exist_ok=True)
+    out = EXAMPLES / f"{name}.pdf"
+
+    # weasyprint resolves @font-face relative to CWD. Run from the source dir
+    # so fonts placed next to the HTML are found.
+    HTML(str(src), base_url=str(src.parent)).write_pdf(str(out))
+    n = len(PdfReader(str(out)).pages)
+    msg = f"✓ {name}: {n} pages"
+    if max_pages and n > max_pages:
+        msg = f"✗ {name}: {n} pages (limit {max_pages})"
+        print(msg)
+        return False
+    print(msg)
+    return True
+
+
+def build_slides(name: str = "slides") -> bool:
+    source = PPTX_TARGETS.get(name)
+    if source is None:
+        print(f"✗ {name}: unknown slides target")
+        return False
+    src = TEMPLATES / source
+    if not src.exists():
+        print(f"✗ {name}: source not found ({src})")
+        return False
+
+    EXAMPLES.mkdir(parents=True, exist_ok=True)
+    out = EXAMPLES / f"{name}.pptx"
+    result = subprocess.run(
+        [sys.executable, str(src)],
+        cwd=str(src.parent),
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        print(f"✗ {name}: {result.stderr.strip() or 'script failed'}")
+        return False
+    # The script writes output.pptx in cwd; move to examples/ under our name.
+    generated = src.parent / "output.pptx"
+    if generated.exists():
+        generated.replace(out)
+        print(f"✓ {name}: generated {out.name}")
+        return True
+    print(f"✗ {name}: output.pptx not produced")
+    return False
+
+
+def build_all() -> int:
+    failures = 0
+    for name, (source, max_pages) in HTML_TARGETS.items():
+        if not build_html(name, source, max_pages):
+            failures += 1
+    for name, source in DIAGRAM_TARGETS.items():
+        if not build_html(name, source, 0, src_dir=DIAGRAMS):
+            failures += 1
+    for name in PPTX_TARGETS:
+        if not build_slides(name):
+            failures += 1
+    return failures
+
+
+def build_single(name: str) -> int:
+    if name in HTML_TARGETS:
+        source, max_pages = HTML_TARGETS[name]
+        ok = build_html(name, source, max_pages)
+        if ok:
+            show_fonts(EXAMPLES / f"{name}.pdf")
+        return 0 if ok else 1
+    if name in DIAGRAM_TARGETS:
+        source = DIAGRAM_TARGETS[name]
+        ok = build_html(name, source, 0, src_dir=DIAGRAMS)
+        return 0 if ok else 1
+    if name in PPTX_TARGETS:
+        return 0 if build_slides(name) else 1
+    known = list(HTML_TARGETS) + list(DIAGRAM_TARGETS) + list(PPTX_TARGETS)
+    print(f"✗ unknown target: {name}. Known: {', '.join(known)}")
+    return 2
+
+
+# ------------------------- fonts -------------------------
+
+def load_font_config() -> dict[str, dict[str, str]]:
+    if not FONT_CONFIG.exists():
+        raise FileNotFoundError(f"font config not found: {FONT_CONFIG.relative_to(ROOT)}")
+    return json.loads(FONT_CONFIG.read_text(encoding="utf-8"))
+
+
+def configured_font(role: str = "serif") -> dict[str, str]:
+    config = load_font_config()
+    if role not in config:
+        raise KeyError(f"font role not found in {FONT_CONFIG.relative_to(ROOT)}: {role}")
+    return config[role]
+
+
+def configured_font_file(role: str = "serif") -> Path:
+    font = configured_font(role)
+    filename = font.get("file")
+    if not filename:
+        raise KeyError(f"font role has no file entry in {FONT_CONFIG.relative_to(ROOT)}: {role}")
+    return FONTS / filename
+
+
+def _user_font_dir() -> Path:
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Fonts"
+    if sys.platform.startswith("linux"):
+        return Path.home() / ".local" / "share" / "fonts"
+    if sys.platform.startswith("win"):
+        root = os.environ.get("LOCALAPPDATA")
+        if root:
+            return Path(root) / "Microsoft" / "Windows" / "Fonts"
+        return Path.home() / "AppData" / "Local" / "Microsoft" / "Windows" / "Fonts"
+    return Path.home() / ".fonts"
+
+
+def _fc_match(name: str) -> str | None:
+    if shutil.which("fc-match") is None:
+        return None
+    result = subprocess.run(["fc-match", name], capture_output=True, text=True, check=False)
+    if result.returncode != 0:
+        return None
+    return result.stdout.strip()
+
+
+def check_fonts() -> int:
+    issues: list[str] = []
+    try:
+        font = configured_font("serif")
+        font_file = configured_font_file("serif")
+    except (FileNotFoundError, KeyError) as exc:
+        print(f"✗ {exc}")
+        return 1
+
+    if not font_file.exists():
+        issues.append(f"bundled font missing: {font_file.relative_to(ROOT)}")
+
+    installed = _user_font_dir() / font_file.name
+    if installed.exists():
+        print(f"✓ local font file: {installed}")
+    else:
+        print(f"• local font file not found at {installed}")
+
+    expected_names = {
+        font.get("latin", ""),
+        font.get("eastAsian", ""),
+        font.get("complexScript", ""),
+    }
+    expected_names.discard("")
+    matches = [m for name in sorted(expected_names) for m in [_fc_match(name)] if m]
+    if matches:
+        for match in matches:
+            print(f"✓ fontconfig match: {match}")
+        if not any(expected in match for expected in expected_names for match in matches):
+            issues.append("fontconfig did not resolve the configured serif font")
+    else:
+        print("• fc-match unavailable; relying on OS font directory check")
+        if not installed.exists():
+            issues.append("configured serif font is not installed in the user font directory")
+
+    if issues:
+        for issue in issues:
+            print(f"✗ {issue}")
+        print("Run: python3 scripts/build.py --install-fonts")
+        return 1
+    return 0
+
+
+def install_fonts() -> int:
+    try:
+        font_file = configured_font_file("serif")
+    except (FileNotFoundError, KeyError) as exc:
+        print(f"✗ {exc}")
+        return 1
+
+    if not font_file.exists():
+        print(f"✗ bundled font missing: {font_file}")
+        return 1
+
+    dest_dir = _user_font_dir()
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    dest = dest_dir / font_file.name
+    shutil.copy2(font_file, dest)
+
+    if sys.platform.startswith("linux") and shutil.which("fc-cache"):
+        subprocess.run(["fc-cache", "-f", str(dest_dir)], check=False)
+
+    print(f"✓ installed configured font to {dest}")
+    print("Restart PowerPoint if it was already open, then regenerate/open slides.")
+    return check_fonts()
+
+
+def show_fonts(pdf: Path) -> None:
+    if not pdf.exists():
+        return
+    try:
+        out = subprocess.run(["pdffonts", str(pdf)], capture_output=True, text=True, check=False)
+        if out.returncode == 0:
+            print("--- pdffonts ---")
+            print(out.stdout.rstrip())
+    except FileNotFoundError:
+        pass  # pdffonts not installed; silent
+
+
+# ------------------------- sync -------------------------
+
+ROOT_BLOCK = re.compile(r":root\s*\{([^}]*)\}", re.DOTALL)
+CSS_VAR = re.compile(r"--([\w-]+)\s*:\s*([^;]+);")
+TOKENS_FILE = ROOT / "references" / "tokens.json"
+
+
+def sync_check(verbose: bool = False) -> int:
+    if not TOKENS_FILE.exists():
+        print(f"✗ tokens.json not found at {TOKENS_FILE.relative_to(ROOT)}")
+        return 1
+
+    canonical: dict[str, str] = json.loads(TOKENS_FILE.read_text())
+
+    targets = [
+        path for path in sorted(TEMPLATES.glob("*.html"))
+        if path.name in SYNC_TARGETS
+    ]
+
+    drift: list[tuple[str, str, str, str]] = []  # (file, token, expected, actual)
+
+    for path in sorted(targets):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        block_match = ROOT_BLOCK.search(text)
+        if not block_match:
+            if verbose:
+                print(f"  (skip {path.name}: no :root block)")
+            continue
+        root_block = block_match.group(1)
+        found: dict[str, str] = {
+            m.group(1): m.group(2).strip()
+            for m in CSS_VAR.finditer(root_block)
+        }
+        rel = path.relative_to(ROOT)
+        for token, expected in canonical.items():
+            name = token.lstrip("-")
+            actual = found.get(name)
+            # Only flag if the template defines the token but with a wrong value.
+            # Templates that don't use a token don't need to define it.
+            if actual is not None and actual.lower() != expected.lower():
+                drift.append((str(rel), token, expected, actual))
+
+    if not drift:
+        print(f"✓ tokens in sync across {len(targets)} migrated template(s)")
+        return 0
+
+    print(f"\n[token-drift] {len(drift)}")
+    for file, token, expected, actual in drift:
+        print(f"  {file}: {token} expected {expected}, got {actual}")
+
+    return 1
+
+
+# ------------------------- verify -------------------------
+
+PLACEHOLDER = re.compile(r"\{\{[^}]+\}\}")
+
+def configured_font_names(*roles: str) -> set[str]:
+    if not roles:
+        roles = ("serif",)
+    names: set[str] = set()
+    try:
+        config = load_font_config()
+    except (FileNotFoundError, KeyError):
+        return set()
+    for role in roles:
+        font = config.get(role, {})
+        names.update(
+            {
+                font.get("latin", ""),
+                font.get("eastAsian", ""),
+                font.get("complexScript", ""),
+            }
+        )
+    names.discard("")
+    return names
+
+
+def _pdf_font_names(pdf_path: Path) -> set[str]:
+    try:
+        from pypdf import PdfReader
+        reader = PdfReader(str(pdf_path))
+        fonts: set[str] = set()
+        for page in reader.pages:
+            resources = page.get("/Resources")
+            if resources is None:
+                continue
+            font_dict = resources.get("/Font")
+            if font_dict is None:
+                continue
+            for obj in font_dict.values():
+                try:
+                    resolved = obj.get_object() if hasattr(obj, "get_object") else obj
+                except Exception:
+                    resolved = obj
+                if isinstance(resolved, dict):
+                    base = resolved.get("/BaseFont")
+                    if base:
+                        fonts.add(str(base).lstrip("/"))
+        return fonts
+    except Exception:
+        return set()
+
+
+def verify_target(name: str, source: str, max_pages: int, src_dir: Path) -> list[str]:
+    issues: list[str] = []
+    has_content_demo = name in VERIFY_SOURCES
+    verify_source, verify_dir = VERIFY_SOURCES.get(name, (source, src_dir))
+    src = verify_dir / verify_source
+    if not src.exists():
+        issues.append(f"source not found: {src}")
+        return issues
+
+    # placeholder check (before build)
+    html = src.read_text(encoding="utf-8", errors="replace")
+    hits = PLACEHOLDER.findall(html)
+    if has_content_demo and hits:
+        issues.append(f"unfilled placeholder(s): {', '.join(dict.fromkeys(hits))}")
+
+    # build
+    try:
+        from weasyprint import HTML
+        from pypdf import PdfReader
+    except ImportError:
+        issues.append("missing deps: pip install weasyprint pypdf --break-system-packages")
+        return issues
+
+    EXAMPLES.mkdir(parents=True, exist_ok=True)
+    out = EXAMPLES / f"{name}.pdf"
+    HTML(str(src), base_url=str(src_dir)).write_pdf(str(out))
+
+    # page count check
+    n = len(PdfReader(str(out)).pages)
+    if max_pages and n > max_pages:
+        issues.append(f"page overflow: {n} pages (limit {max_pages})")
+
+    # font check
+    embedded = _pdf_font_names(out)
+    is_en = name.endswith("-en")
+    expected = configured_font_names("englishSerif", "englishSans") if is_en else configured_font_names("serif")
+    if not expected:
+        issues.append("configured serif font names are missing")
+        return issues
+    if not any(exp in font_name for exp in expected for font_name in embedded):
+        primary = next(iter(expected))
+        fallback_keywords = set(expected) | {"SourceHan", "Noto", "Georgia", "Charter", "Songti"}
+        fallback_present = any(kw in font for font in embedded for kw in fallback_keywords)
+        if not fallback_present:
+            issues.append(f"no recognizable font embedded in {out.name}")
+        else:
+            issues.append(f"primary font ({primary}) not embedded; using fallback")
+
+    return issues
+
+
+def _pptx_typefaces(pptx_path: Path) -> set[str]:
+    face = re.compile(r'typeface="([^"]+)"')
+    faces: set[str] = set()
+    try:
+        with zipfile.ZipFile(pptx_path, "r") as zf:
+            for name in zf.namelist():
+                if not name.endswith(".xml"):
+                    continue
+                if not (
+                    name.startswith("ppt/slides/")
+                    or name.startswith("ppt/slideLayouts/")
+                    or name.startswith("ppt/slideMasters/")
+                    or name == "ppt/theme/theme1.xml"
+                ):
+                    continue
+                text = zf.read(name).decode("utf-8", errors="replace")
+                faces.update(face.findall(text))
+    except Exception:
+        return set()
+    return faces
+
+
+def verify_slides_target(name: str) -> list[str]:
+    if not build_slides(name):
+        return [f"{name}: slide build failed"]
+
+    if name != "slides":
+        return []
+
+    out = EXAMPLES / f"{name}.pptx"
+    faces = _pptx_typefaces(out)
+    try:
+        font = configured_font("serif")
+    except (FileNotFoundError, KeyError) as exc:
+        return [str(exc)]
+
+    issues: list[str] = []
+    for slot in ("latin", "eastAsian", "complexScript"):
+        expected = font.get(slot)
+        if expected and expected not in faces:
+            issues.append(f"{out.name}: missing configured {slot} font in PPTX slots")
+    return issues
+
+
+def verify_all(target: str | None = None) -> int:
+    targets_to_run: dict[str, tuple[str, int, Path]] = {}
+    slide_targets: list[str] = []
+    if target:
+        if target in HTML_TARGETS:
+            src, mp = HTML_TARGETS[target]
+            targets_to_run[target] = (src, mp, TEMPLATES)
+        elif target in DIAGRAM_TARGETS:
+            targets_to_run[target] = (DIAGRAM_TARGETS[target], 0, DIAGRAMS)
+        elif target in PPTX_TARGETS:
+            slide_targets.append(target)
+        else:
+            print(f"✗ unknown target: {target}")
+            return 2
+    else:
+        for name, (src, mp) in HTML_TARGETS.items():
+            targets_to_run[name] = (src, mp, TEMPLATES)
+        for name, src in DIAGRAM_TARGETS.items():
+            targets_to_run[name] = (src, 0, DIAGRAMS)
+        slide_targets = list(PPTX_TARGETS)
+
+    failures = 0
+    rows: list[tuple[str, str]] = []
+    for name, (source, max_pages, src_dir) in targets_to_run.items():
+        issues = verify_target(name, source, max_pages, src_dir)
+        if issues:
+            rows.append((f"✗ {name}", "; ".join(issues)))
+            failures += 1
+        else:
+            rows.append((f"✓ {name}", "ok"))
+
+    for name in slide_targets:
+        issues = verify_slides_target(name)
+        if issues:
+            rows.append((f"✗ {name}", "; ".join(issues)))
+            failures += 1
+        else:
+            rows.append((f"✓ {name}", "ok"))
+
+    for status, detail in rows:
+        print(f"{status}: {detail}")
+
+    return 0 if failures == 0 else 1
+
+
+# ------------------------- check -------------------------
+
+# Cool / neutral gray hex values that violate the "warm undertone only" rule.
+COOL_GRAY_BLOCKLIST = {
+    "#888", "#888888", "#666", "#666666", "#999", "#999999",
+    "#ccc", "#cccccc", "#ddd", "#dddddd", "#eee", "#eeeeee",
+    "#111", "#111111", "#222", "#222222", "#333", "#333333",
+    "#444", "#444444", "#555", "#555555", "#777", "#777777",
+    "#aaa", "#aaaaaa", "#bbb", "#bbbbbb",
+    # Tailwind cool grays
+    "#6b7280", "#9ca3af", "#d1d5db", "#e5e7eb", "#f3f4f6",
+    "#4b5563", "#374151", "#1f2937", "#111827",
+    # Bootstrap-like neutrals
+    "#f8f9fa", "#e9ecef", "#dee2e6", "#ced4da", "#adb5bd",
+    "#6c757d", "#495057", "#343a40", "#212529",
+}
+
+RGBA_BG_DIRECT = re.compile(r"background(?:-color)?\s*:\s*[^;]*rgba\s*\(", re.IGNORECASE)
+RGBA_VAR_DEF = re.compile(r"--([\w-]+)\s*:\s*[^;]*rgba\s*\(", re.IGNORECASE)
+BG_VAR_USE = re.compile(r"background(?:-color)?\s*:\s*[^;]*var\s*\(\s*--([\w-]+)", re.IGNORECASE)
+RGBA_BORDER_DIRECT = re.compile(r"border(?:-\w+)?\s*:\s*[^;]*rgba\s*\(", re.IGNORECASE)
+BORDER_VAR_USE = re.compile(r"border(?:-\w+)?\s*:\s*[^;]*var\s*\(\s*--([\w-]+)", re.IGNORECASE)
+LINE_HEIGHT_LOOSE = re.compile(r"line-height\s*:\s*1\.[6-9]\d*", re.IGNORECASE)
+UNICODE_ARROW = re.compile(r"→")  # U+2192; should not appear in EN template body
+HEX_ANY = re.compile(r"#[0-9a-fA-F]{3,6}\b")
+
+
+@dataclass
+class Finding:
+    file: Path
+    line: int
+    rule: str
+    excerpt: str
+
+
+def scan_file(path: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    text = path.read_text(encoding="utf-8", errors="replace")
+    lines = text.splitlines()
+
+    # Pass 1: collect variable names that hold rgba(...) so the tag-background
+    # bug can be detected through one level of indirection.
+    rgba_vars: set[str] = set()
+    for raw in lines:
+        m = RGBA_VAR_DEF.search(raw)
+        if m:
+            rgba_vars.add(m.group(1))
+
+    is_en = path.name.endswith("-en.html")
+
+    # Pass 2: per-line rule checks
+    for i, raw in enumerate(lines, start=1):
+        line = raw.strip()
+        if not line or line.startswith("//") or line.startswith("#"):
+            continue
+
+        if RGBA_BG_DIRECT.search(raw):
+            findings.append(Finding(path, i, "rgba-background",
+                                    "rgba() used directly on background (tag double-rectangle bug)"))
+
+        bg_var = BG_VAR_USE.search(raw)
+        if bg_var and bg_var.group(1) in rgba_vars:
+            findings.append(Finding(path, i, "rgba-background",
+                                    f"background: var(--{bg_var.group(1)}) resolves to rgba() (tag double-rectangle bug)"))
+
+        if RGBA_BORDER_DIRECT.search(raw):
+            findings.append(Finding(path, i, "rgba-border",
+                                    "rgba() used on border (violates solid-color invariant)"))
+
+        border_var = BORDER_VAR_USE.search(raw)
+        if border_var and border_var.group(1) in rgba_vars:
+            findings.append(Finding(path, i, "rgba-border",
+                                    f"border: var(--{border_var.group(1)}) resolves to rgba() (solid-color invariant)"))
+
+        if is_en and UNICODE_ARROW.search(raw):
+            # skip CSS comment lines (/* ... */) and the arrow-in-CSS-content patterns
+            stripped = raw.lstrip()
+            if not stripped.startswith("/*") and not stripped.startswith("*") and "content:" not in raw:
+                findings.append(Finding(path, i, "arrow-unicode-in-en",
+                                        "→ (U+2192) in English template; use 'to' or '->' per patterns §2"))
+
+        m = LINE_HEIGHT_LOOSE.search(raw)
+        if m:
+            findings.append(Finding(path, i, "line-height-too-loose",
+                                    f"{m.group(0)} exceeds 1.55 ceiling"))
+
+        for hex_match in HEX_ANY.finditer(raw):
+            h = hex_match.group(0).lower()
+            if h in COOL_GRAY_BLOCKLIST:
+                findings.append(Finding(path, i, "cool-gray",
+                                        f"{h} is a cool / neutral gray, use warm undertone"))
+    return findings
+
+
+def check_all(verbose: bool) -> int:
+    targets: list[Path] = []
+    for p in TEMPLATES.glob("*.html"):
+        targets.append(p)
+    for p in TEMPLATES.glob("*.py"):
+        targets.append(p)
+    if DIAGRAMS.exists():
+        for p in DIAGRAMS.glob("*.html"):
+            targets.append(p)
+
+    findings: list[Finding] = []
+    for p in sorted(targets):
+        file_findings = scan_file(p)
+        findings.extend(file_findings)
+        if verbose:
+            print(f"scanned {p.relative_to(ROOT)}: {len(file_findings)} finding(s)")
+
+    if not findings:
+        print(f"✓ no violations across {len(targets)} templates")
+        return 0
+
+    by_rule: dict[str, list[Finding]] = {}
+    for f in findings:
+        by_rule.setdefault(f.rule, []).append(f)
+
+    print(f"✗ {len(findings)} violation(s) across {len({f.file for f in findings})} file(s)")
+    for rule, items in by_rule.items():
+        print(f"\n[{rule}] {len(items)}")
+        for f in items:
+            rel = f.file.relative_to(ROOT)
+            print(f"  {rel}:{f.line}  {f.excerpt}")
+    return 1
+
+
+# ------------------------- entry -------------------------
+
+def main(argv: list[str]) -> int:
+    args = argv[1:]
+    if not args:
+        return build_all()
+    if args[0] in ("-h", "--help"):
+        print(__doc__)
+        return 0
+    if args[0] == "--check":
+        verbose = "-v" in args[1:] or "--verbose" in args[1:]
+        css_result = check_all(verbose)
+        sync_result = sync_check(verbose)
+        return max(css_result, sync_result)
+    if args[0] == "--sync":
+        verbose = "-v" in args[1:] or "--verbose" in args[1:]
+        return sync_check(verbose)
+    if args[0] == "--verify":
+        target = args[1] if len(args) > 1 and not args[1].startswith("-") else None
+        return verify_all(target)
+    if args[0] == "--check-fonts":
+        return check_fonts()
+    if args[0] == "--install-fonts":
+        return install_fonts()
+    return build_single(args[0])
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

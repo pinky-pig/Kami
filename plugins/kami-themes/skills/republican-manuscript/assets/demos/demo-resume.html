@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>林若川 · 简历</title>
+<style>
+  @font-face {
+    font-family: "KingHwa_OldSong";
+    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #243851;
+  }
+
+  :root {
+    --navy: #243851;
+    --navy-soft: #4D5B6D;
+    --paper: #EBE5DD;
+    --paper-light: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --ivory: #F3EFEB;
+    --ink: #232222;
+    --copy: #4A4947;
+    --muted: #8B8782;
+    --rule: #CABBA7;
+    --tag: #D5DEE7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--navy);
+    color: var(--ink);
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  body {
+    padding: 10.5mm;
+  }
+
+  .folio {
+    position: relative;
+    width: 189mm;
+    height: 276mm;
+    background:
+      url("../images/paper-overlay.png") center / 72mm auto repeat,
+      linear-gradient(135deg, var(--paper-light) 0%, var(--paper) 48%, var(--paper-deep) 100%);
+    overflow: hidden;
+  }
+
+  .folio::before,
+  .folio::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .folio::before {
+    inset: 6mm;
+    border: 1pt solid var(--navy);
+  }
+
+  .folio::after {
+    inset: 8.5mm;
+    border: 0.45pt solid var(--navy-soft);
+  }
+
+  .card,
+  .metric,
+  .summary,
+  .footer {
+    position: absolute;
+    z-index: 1;
+  }
+
+  .plaque {
+    background: var(--navy);
+    color: var(--ivory);
+  }
+
+  .plaque::before,
+  .plaque::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .plaque::before {
+    inset: 6pt;
+    border: 0.85pt solid #F3EFEB;
+  }
+
+  .plaque::after {
+    inset: 9pt;
+    border: 0.45pt solid #D5DEE7;
+  }
+
+  .name-card {
+    left: 13mm;
+    top: 13mm;
+    width: 101mm;
+    height: 33mm;
+    padding: 10pt 14pt;
+  }
+
+  .contact-card {
+    left: 119mm;
+    top: 13mm;
+    width: 57mm;
+    height: 33mm;
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+    padding: 10pt 11pt;
+    text-align: right;
+  }
+
+  .eyebrow,
+  .label,
+  .tag,
+  .meta,
+  .footer,
+  .metric-label,
+  .section-en {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .eyebrow {
+    font-size: 7.3pt;
+    line-height: 1.35;
+    letter-spacing: 1.8pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+    margin-bottom: 6pt;
+  }
+
+  h1,
+  h2,
+  h3,
+  .metric-value {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-weight: 500;
+  }
+
+  h1 {
+    font-size: 27pt;
+    line-height: 1.08;
+    letter-spacing: 0.8pt;
+    margin-bottom: 5pt;
+  }
+
+  .role {
+    font-size: 9.2pt;
+    line-height: 1.35;
+    color: #F3EFEB;
+  }
+
+  .contact-card h2 {
+    font-size: 14pt;
+    line-height: 1.2;
+    margin-bottom: 7pt;
+  }
+
+  .contact-card .meta {
+    font-size: 8.2pt;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .summary {
+    left: 13mm;
+    top: 51mm;
+    width: 163mm;
+    height: 18mm;
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+    padding: 8pt 12pt 8pt 18pt;
+  }
+
+  .summary::before {
+    content: "";
+    position: absolute;
+    left: 8pt;
+    top: 9pt;
+    bottom: 9pt;
+    width: 3pt;
+    background: var(--navy);
+  }
+
+  .summary p {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
+    font-size: 10.2pt;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  .hl {
+    color: var(--navy);
+    font-weight: 500;
+  }
+
+  .metric {
+    top: 74mm;
+    width: 38.75mm;
+    height: 18mm;
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+    padding: 6pt 7pt;
+  }
+
+  .m1 { left: 13mm; }
+  .m2 { left: 54.42mm; }
+  .m3 { left: 95.84mm; }
+  .m4 { left: 137.25mm; }
+
+  .metric-value {
+    font-size: 16pt;
+    line-height: 1;
+    color: var(--navy);
+    margin-bottom: 4pt;
+  }
+
+  .metric-label {
+    font-size: 7.4pt;
+    line-height: 1.3;
+    color: var(--copy);
+  }
+
+  .section {
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+  }
+
+  .section-head {
+    position: relative;
+    height: 11mm;
+    background: var(--navy);
+    color: var(--ivory);
+    padding: 5pt 9pt;
+  }
+
+  .section-head h2 {
+    font-size: 11.6pt;
+    line-height: 1.1;
+  }
+
+  .section-en {
+    position: absolute;
+    right: 9pt;
+    top: 6pt;
+    font-size: 6.9pt;
+    line-height: 1.35;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+  }
+
+  .section-body {
+    padding: 7pt 9pt 8pt;
+  }
+
+  .experience {
+    left: 13mm;
+    top: 97mm;
+    width: 97mm;
+    height: 73mm;
+  }
+
+  .skills {
+    left: 115mm;
+    top: 97mm;
+    width: 61mm;
+    height: 73mm;
+  }
+
+  .projects {
+    left: 13mm;
+    top: 176mm;
+    width: 53mm;
+    height: 53mm;
+  }
+
+  .education {
+    left: 68.5mm;
+    top: 176mm;
+    width: 52mm;
+    height: 53mm;
+  }
+
+  .method {
+    left: 123mm;
+    top: 176mm;
+    width: 53mm;
+    height: 53mm;
+  }
+
+  .job {
+    border-bottom: 0.45pt solid var(--rule);
+    padding-bottom: 6pt;
+    margin-bottom: 6pt;
+  }
+
+  .job:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .job-title,
+  .edu-row {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin-bottom: 3pt;
+  }
+
+  .job-title h3,
+  .edu-row h3 {
+    display: table-cell;
+    font-size: 10.2pt;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .date {
+    display: table-cell;
+    width: 18mm;
+    text-align: right;
+    font-size: 7.5pt;
+    line-height: 1.35;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  p,
+  li {
+    font-size: 8pt;
+    line-height: 1.42;
+    color: var(--copy);
+  }
+
+  ul {
+    list-style: none;
+    margin-top: 4pt;
+  }
+
+  li {
+    position: relative;
+    padding-left: 9pt;
+    margin-bottom: 2.4pt;
+  }
+
+  li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--navy);
+  }
+
+  .tags {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4pt;
+    margin-bottom: 10pt;
+  }
+
+  .tag {
+    background: var(--tag);
+    color: var(--navy);
+    font-size: 7.2pt;
+    line-height: 1.35;
+    padding: 2pt 4pt;
+    text-align: center;
+  }
+
+  .skill-note {
+    border-top: 0.45pt solid var(--rule);
+    padding-top: 7pt;
+    margin-top: 2pt;
+  }
+
+  .skill-note h3 {
+    font-size: 10.3pt;
+    line-height: 1.25;
+    margin-bottom: 4pt;
+  }
+
+  .edu-row {
+    border-bottom: 0.45pt solid var(--rule);
+    padding-bottom: 6pt;
+    margin-bottom: 6pt;
+  }
+
+  .edu-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+
+  .edu-row p {
+    margin-top: 2pt;
+  }
+
+  .quote {
+    border: 1pt solid var(--navy);
+    background: var(--ivory);
+    padding: 7pt 8pt;
+    margin-top: 7pt;
+  }
+
+  .quote .label {
+    color: var(--navy);
+    font-size: 7.2pt;
+    line-height: 1.35;
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  .footer {
+    left: 13mm;
+    top: 238mm;
+    width: 163mm;
+    display: table;
+    table-layout: fixed;
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 0.6pt;
+    color: var(--muted);
+  }
+
+  .footer span {
+    display: table-cell;
+  }
+
+  .footer span:last-child {
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+<main class="folio">
+  <section class="card name-card plaque">
+    <div class="eyebrow">Resume · Product Design</div>
+    <h1>林若川</h1>
+    <div class="role">高级产品设计师 · B2B SaaS / 数据产品 / 设计系统</div>
+  </section>
+
+  <aside class="card contact-card">
+    <h2>上海 · 远程可协作</h2>
+    <div class="meta">lin@example.com<br>+86 138 0000 2026<br>portfolio.example.com</div>
+  </aside>
+
+  <section class="summary">
+    <p>8 年产品设计经验，长期负责复杂后台、数据分析平台和内部 AI 工具。擅长把业务流程整理成 <span class="hl">可交付的信息架构、设计系统和跨团队工作流</span>。</p>
+  </section>
+
+  <section class="metric m1"><div class="metric-value">8 年</div><div class="metric-label">产品设计经验</div></section>
+  <section class="metric m2"><div class="metric-value">12+</div><div class="metric-label">中大型项目</div></section>
+  <section class="metric m3"><div class="metric-value">46%</div><div class="metric-label">核心流程耗时下降</div></section>
+  <section class="metric m4"><div class="metric-value">3 套</div><div class="metric-label">设计系统落地</div></section>
+
+  <section class="card section experience">
+    <div class="section-head"><h2>工作经历</h2><span class="section-en">Experience</span></div>
+    <div class="section-body">
+      <article class="job">
+        <div class="job-title">
+          <h3>高级产品设计师 · 明川数据</h3>
+          <span class="date">2022 - 至今</span>
+        </div>
+        <p>负责企业经营分析工作台、权限体系与指标中心设计，连接业务、财务与数据团队。</p>
+        <ul>
+          <li>将 17 张分散报表整合为统一分析入口，月度复盘准备时间从 3 天降至 1.5 天。</li>
+          <li>重建指标命名、筛选、钻取与导出规则，减少跨团队口径争议。</li>
+        </ul>
+      </article>
+
+      <article class="job">
+        <div class="job-title">
+          <h3>产品设计师 · 云章协作</h3>
+          <span class="date">2019 - 2022</span>
+        </div>
+        <p>主导企业协作套件的信息架构、审批流与移动端体验优化。</p>
+        <ul>
+          <li>设计审批模板市场，使管理员配置时间下降 38%。</li>
+          <li>推动组件库从 24 个基础组件扩展到 68 个业务组件。</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="card section skills">
+    <div class="section-head"><h2>能力标签</h2><span class="section-en">Skills</span></div>
+    <div class="section-body">
+      <div class="tags">
+        <span class="tag">信息架构</span>
+        <span class="tag">复杂表单</span>
+        <span class="tag">数据可视化</span>
+        <span class="tag">设计系统</span>
+        <span class="tag">用户研究</span>
+        <span class="tag">Figma</span>
+        <span class="tag">HTML/CSS</span>
+        <span class="tag">AI 工作流</span>
+      </div>
+      <div class="skill-note">
+        <h3>方法偏好</h3>
+        <p>先定义对象和状态，再推进界面；先拉齐口径，再追求视觉细节。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card section projects">
+    <div class="section-head"><h2>代表项目</h2><span class="section-en">Selected Work</span></div>
+    <div class="section-body">
+      <article class="job">
+        <div class="job-title"><h3>AI 运营工作台</h3><span class="date">2025</span></div>
+        <p>将工单摘要、风险提示和知识库检索整合到一个审阅台。</p>
+      </article>
+      <article class="job">
+        <div class="job-title"><h3>指标中心 2.0</h3><span class="date">2024</span></div>
+        <p>建立指标血缘、负责人、口径版本与变更记录。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="card section education">
+    <div class="section-head"><h2>教育背景</h2><span class="section-en">Education</span></div>
+    <div class="section-body">
+      <div class="edu-row">
+        <h3>同济大学</h3>
+        <span class="date">2016 - 2019</span>
+        <p>设计学 · 硕士</p>
+      </div>
+      <div class="edu-row">
+        <h3>浙江大学</h3>
+        <span class="date">2012 - 2016</span>
+        <p>工业设计 · 本科</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card section method">
+    <div class="section-head"><h2>工作方式</h2><span class="section-en">Method</span></div>
+    <div class="section-body">
+      <p>重视对象、状态、权限、异常和交付节奏，让复杂后台能被长期维护。</p>
+      <div class="quote">
+        <div class="label">Filed Remark</div>
+        <p>“好的后台不是把信息堆出来，而是让下一位接手的人也能继续维护。”</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>RESUME · PRODUCT DESIGN</span>
+    <span>KAMI DEMO · 1 / 1</span>
+  </footer>
+</main>
+</body>
+</html>

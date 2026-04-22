@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     ONE-PAGER TEMPLATE · republican newspaper style 2
+     单页 A4 报纸头版 / 号外 / 项目特刊 / 执行摘要
+     视觉：旧报纸底、黑色铅字、竖排题名、密集分栏、剪报框、灰度照片、红印
+     目标：页数必须 == 1
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{报纸特刊标题}}</title>
+<style>
+  @font-face {
+    font-family: "KingHwa_OldSong";
+    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #E8DFC9;
+  }
+
+  :root {
+    --parchment:  #E8DFC9;
+    --ivory:      #F8F1DD;
+    --brand:      #161411;
+    --near-black: #1F1B16;
+    --dark-warm:  #3E382E;
+    --charcoal:   #514A3F;
+    --olive:      #6A6257;
+    --stone:      #8A8173;
+
+    --ink:        #161411;
+    --rule-ink:   #4B4036;
+    --paper-light:#F8F1DD;
+    --paper-deep: #DED4BD;
+    --rule:       #B9AA91;
+    --panel-fill: #F5EBD3;
+    --tag-paper:  #E9DEC2;
+    --seal-red:   #B7352A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--parchment);
+    color: var(--near-black);
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  }
+
+  body {
+    padding: 8mm;
+  }
+
+  .folio {
+    position: relative;
+    min-height: 281mm;
+    padding: 9.5mm 10mm 8.5mm;
+    background:
+      url("../images/paper-overlay.png") center / 68mm auto repeat,
+      linear-gradient(135deg, var(--paper-light) 0%, var(--parchment) 54%, var(--paper-deep) 100%);
+    overflow: hidden;
+    border: 1.2pt solid var(--ink);
+    box-shadow: inset 0 0 0 2.3pt var(--paper-light), inset 0 0 0 3pt var(--rule-ink);
+  }
+
+  .folio::before {
+    content: "";
+    position: absolute;
+    left: 8mm;
+    right: 8mm;
+    top: 8mm;
+    bottom: 8mm;
+    border: 0.45pt solid var(--rule);
+    pointer-events: none;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .sans,
+  .dateline,
+  .reverse-label,
+  .issue-meta,
+  .caption,
+  .tiny,
+  .footer,
+  .stat-label,
+  .action-list {
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .masthead {
+    display: grid;
+    grid-template-columns: 1fr 28mm;
+    gap: 7mm;
+    align-items: end;
+    padding: 0 0 4.6mm;
+    border-bottom: 2.1pt double var(--ink);
+  }
+
+  .masthead-name {
+    font-size: 42pt;
+    line-height: 1.02;
+    letter-spacing: 3.4pt;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .masthead-sub {
+    margin-top: 3.2mm;
+    font-size: 8.3pt;
+    line-height: 1.3;
+    letter-spacing: 1.2pt;
+    color: var(--dark-warm);
+  }
+
+  .issue-mark {
+    position: relative;
+    width: 27mm;
+    height: 27mm;
+    border: 1.1pt solid var(--seal-red);
+    border-radius: 50%;
+    color: var(--seal-red);
+    opacity: 0.72;
+  }
+
+  .issue-mark::before {
+    content: "";
+    position: absolute;
+    inset: 4.2mm;
+    border: 0.55pt solid var(--seal-red);
+    border-radius: 50%;
+  }
+
+  .issue-mark b {
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%, -50%);
+    font-size: 16pt;
+    line-height: 1;
+    font-weight: 500;
+  }
+
+  .issue-mark span {
+    position: absolute;
+    left: 3.8mm;
+    right: 3.8mm;
+    bottom: 4.2mm;
+    text-align: center;
+    font-size: 5.5pt;
+    letter-spacing: 0.8pt;
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .dateline {
+    display: flex;
+    justify-content: space-between;
+    gap: 6mm;
+    padding: 2.4mm 0 2.8mm;
+    border-bottom: 0.65pt solid var(--ink);
+    font-size: 7.4pt;
+    line-height: 1.35;
+    letter-spacing: 0.6pt;
+    color: var(--dark-warm);
+  }
+
+  .top-layout {
+    display: grid;
+    grid-template-columns: 18mm minmax(0, 1.28fr) 44mm;
+    gap: 4.2mm;
+    padding-top: 4.2mm;
+    margin-bottom: 4.2mm;
+  }
+
+  .vertical-rail {
+    border: 1pt solid var(--ink);
+    background: var(--panel-fill);
+    min-height: 101mm;
+    padding: 4mm 2.2mm;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    justify-items: center;
+    align-items: start;
+  }
+
+  .rail-kicker {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    background: var(--ink);
+    color: var(--ivory);
+    font-size: 8.2pt;
+    line-height: 1.2;
+    letter-spacing: 1pt;
+    padding: 3mm 1.4mm;
+    margin-bottom: 3mm;
+  }
+
+  .vertical-title {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: 24pt;
+    line-height: 1.08;
+    letter-spacing: 1.1pt;
+    color: var(--ink);
+  }
+
+  .rail-date {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 7.2pt;
+    line-height: 1.3;
+    color: var(--stone);
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .lead-story {
+    border-top: 1.35pt solid var(--ink);
+    border-bottom: 1pt solid var(--ink);
+    padding: 3.2mm 0 0;
+  }
+
+  .reverse-label {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--ivory);
+    padding: 1.4mm 2.3mm 1.2mm;
+    font-size: 8pt;
+    line-height: 1.1;
+    letter-spacing: 1pt;
+    margin-bottom: 2.6mm;
+  }
+
+  h1 {
+    font-size: 27.5pt;
+    line-height: 1.08;
+    letter-spacing: 0.6pt;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 2.8mm;
+  }
+
+  .lead {
+    font-size: 10.5pt;
+    line-height: 1.46;
+    color: var(--near-black);
+    margin-bottom: 3.2mm;
+  }
+
+  .lead-columns {
+    columns: 2;
+    column-gap: 4.2mm;
+    column-rule: 0.45pt solid var(--rule);
+    font-size: 8.75pt;
+    line-height: 1.42;
+    color: var(--dark-warm);
+    text-align: justify;
+  }
+
+  .lead-columns p {
+    margin-bottom: 2.6mm;
+  }
+
+  .photo-strip {
+    display: grid;
+    grid-template-columns: 1fr 0.68fr;
+    gap: 2.8mm;
+    margin-top: 3mm;
+    padding-top: 3mm;
+    border-top: 0.55pt solid var(--rule);
+  }
+
+  .photo-placeholder {
+    min-height: 30mm;
+    border: 0.75pt solid var(--ink);
+    background:
+      linear-gradient(135deg, #D9D0BA 0%, #BDB29D 50%, #E6DCC5 100%);
+    filter: grayscale(1) contrast(0.9);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .photo-placeholder::before,
+  .photo-placeholder::after {
+    content: "";
+    position: absolute;
+    background: var(--rule-ink);
+    opacity: 0.18;
+  }
+
+  .photo-placeholder::before {
+    width: 36mm;
+    height: 0.8pt;
+    left: -3mm;
+    top: 14mm;
+    transform: rotate(-12deg);
+  }
+
+  .photo-placeholder::after {
+    width: 0.8pt;
+    height: 34mm;
+    right: 13mm;
+    top: -2mm;
+    transform: rotate(18deg);
+  }
+
+  .caption {
+    font-size: 7.3pt;
+    line-height: 1.35;
+    color: var(--stone);
+    border-left: 0.75pt solid var(--ink);
+    padding-left: 2.4mm;
+  }
+
+  .side-stack {
+    display: grid;
+    gap: 3.2mm;
+  }
+
+  .clipping {
+    border: 0.85pt solid var(--ink);
+    background: var(--panel-fill);
+    padding: 3.1mm 3.3mm 3.2mm;
+    break-inside: avoid;
+  }
+
+  .clipping.tight {
+    padding: 2.5mm 2.8mm;
+  }
+
+  .clip-head {
+    display: flex;
+    align-items: center;
+    gap: 2mm;
+    margin-bottom: 2.3mm;
+    padding-bottom: 1.8mm;
+    border-bottom: 0.55pt solid var(--ink);
+  }
+
+  .clip-head .num {
+    display: inline-grid;
+    place-items: center;
+    min-width: 7mm;
+    height: 7mm;
+    background: var(--ink);
+    color: var(--ivory);
+    font-size: 8pt;
+    line-height: 1;
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  .clip-head h2,
+  .clipping h3 {
+    font-size: 12pt;
+    line-height: 1.18;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .clipping p,
+  .clipping li {
+    font-size: 8.1pt;
+    line-height: 1.42;
+    color: var(--dark-warm);
+  }
+
+  .clipping p + p {
+    margin-top: 2mm;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.3mm;
+    margin-top: 2.8mm;
+  }
+
+  .stat {
+    border: 0.45pt solid var(--rule);
+    padding: 2.4mm 2mm 2.2mm;
+    background: var(--ivory);
+  }
+
+  .stat-value {
+    font-size: 15pt;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 1.6mm;
+  }
+
+  .stat-label {
+    font-size: 6.8pt;
+    line-height: 1.25;
+    color: var(--stone);
+  }
+
+  .seal-card {
+    display: grid;
+    grid-template-columns: 15mm 1fr;
+    gap: 3mm;
+    align-items: center;
+  }
+
+  .seal {
+    display: grid;
+    place-items: center;
+    width: 14mm;
+    height: 14mm;
+    border: 1.2pt solid var(--seal-red);
+    color: var(--seal-red);
+    font-size: 8.8pt;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .mid-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3.4mm;
+    margin-bottom: 4mm;
+  }
+
+  .mini-title {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--ivory);
+    padding: 1.1mm 2mm;
+    font-size: 7.7pt;
+    line-height: 1.1;
+    letter-spacing: 0.8pt;
+    margin-bottom: 2.5mm;
+    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+  }
+
+  ul.news-list {
+    list-style: none;
+  }
+
+  ul.news-list li {
+    position: relative;
+    padding-left: 3.1mm;
+    margin-bottom: 1.8mm;
+  }
+
+  ul.news-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2.15mm;
+    width: 1.35mm;
+    height: 1.35mm;
+    background: var(--ink);
+  }
+
+  .bottom-news {
+    display: grid;
+    grid-template-columns: 1.26fr 0.74fr;
+    gap: 3.8mm;
+    padding-top: 3.2mm;
+    border-top: 1.2pt solid var(--ink);
+  }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.8mm;
+  }
+
+  .timebox {
+    border-left: 0.8pt solid var(--ink);
+    padding-left: 2.5mm;
+  }
+
+  .timebox b {
+    display: block;
+    font-size: 10.5pt;
+    line-height: 1.15;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 1.6mm;
+  }
+
+  .timebox span {
+    display: block;
+    font-size: 7.7pt;
+    line-height: 1.38;
+    color: var(--olive);
+  }
+
+  .action-list {
+    border: 1pt solid var(--ink);
+    padding: 2.8mm 3.2mm;
+    background: var(--panel-fill);
+  }
+
+  .action-list h3 {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 11.5pt;
+    line-height: 1.15;
+    font-weight: 500;
+    margin-bottom: 2mm;
+  }
+
+  .action-list p {
+    font-size: 8pt;
+    line-height: 1.42;
+    color: var(--dark-warm);
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 5mm;
+    margin-top: 3.4mm;
+    padding-top: 2.2mm;
+    border-top: 0.55pt solid var(--rule);
+    font-size: 7.2pt;
+    line-height: 1.3;
+    letter-spacing: 0.4pt;
+    color: var(--stone);
+  }
+
+  .hl {
+    color: var(--ink);
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+<main class="folio">
+  <div class="content">
+    <header class="masthead">
+      <div>
+        <div class="masthead-name">{{报头 · 如 家书特刊 / 项目号外 / 燕京时报}}</div>
+        <div class="masthead-sub">{{报头副句 · 如 战火隔不断，血脉邮路捎不住牵挂}}</div>
+      </div>
+      <div class="issue-mark" aria-label="发行邮戳">
+        <b>{{印}}</b>
+        <span>{{邮戳短字}}</span>
+      </div>
+    </header>
+
+    <div class="dateline">
+      <span>◎ {{日期 · 如 民国二十七年十月十二日 / 2026.04.22}}</span>
+      <span>{{地点 / 期号 / 内部公开版}}</span>
+      <span>{{一句报刊口号}}</span>
+    </div>
+
+    <section class="top-layout">
+      <aside class="vertical-rail">
+        <div class="rail-kicker">{{反白竖栏 · 如 一纸家书抵万金}}</div>
+        <div class="vertical-title">{{竖排题名 · 如 家书抵万金}}</div>
+        <div class="rail-date">{{短日期 / 分类}}</div>
+      </aside>
+
+      <article class="lead-story">
+        <div class="reverse-label">{{要闻 / 头条 / 编辑按}}</div>
+        <h1>{{主标题：12-20 字，像报纸头条}}</h1>
+        <p class="lead">{{导语 45-75 字：直接说发生了什么、为什么重要、读者应记住什么。可用 <span class="hl">关键词</span> 做轻强调。}}</p>
+        <div class="lead-columns">
+          <p>{{正文第一栏：用事实、日期、人物、地点说明背景。避免“近年来/随着”这类现代报告开头。}}</p>
+          <p>{{正文第二栏：补充判断、影响和下一步。句子短一点，像一段可读的新闻报道。}}</p>
+        </div>
+        <div class="photo-strip">
+          <div class="photo-placeholder" aria-label="灰度新闻图片占位"></div>
+          <div class="caption">图注 / 证据说明：{{这里替换成灰度照片或删掉图片区。图片应像新闻证据，不做彩色 hero。}}</div>
+        </div>
+      </article>
+
+      <aside class="side-stack">
+        <article class="clipping tight">
+          <div class="clip-head">
+            <span class="num">壹</span>
+            <h2>{{侧栏标题}}</h2>
+          </div>
+          <p>{{侧栏说明：用 2-3 句放关键背景、读者对象或判断边界。}}</p>
+        </article>
+
+        <article class="clipping tight">
+          <h3>{{数字简报}}</h3>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-value">{{数字}}</div>
+              <div class="stat-label">{{指标说明}}</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">{{数字}}</div>
+              <div class="stat-label">{{指标说明}}</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">{{数字}}</div>
+              <div class="stat-label">{{指标说明}}</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value">{{数字}}</div>
+              <div class="stat-label">{{指标说明}}</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="clipping tight seal-card">
+          <div class="seal">{{红印<br>短字}}</div>
+          <p>{{落款 / 发行说明 / 推荐意见。红印只保留一处，不要把红色扩散到普通标题。}}</p>
+        </article>
+      </aside>
+    </section>
+
+    <section class="mid-grid">
+      <article class="clipping">
+        <div class="mini-title">{{栏目一 · 如 一线记录}}</div>
+        <ul class="news-list">
+          <li>{{事实 bullet：时间 / 人物 / 数据}}</li>
+          <li>{{事实 bullet：可核验结果}}</li>
+          <li>{{事实 bullet：风险或约束}}</li>
+        </ul>
+      </article>
+
+      <article class="clipping">
+        <div class="mini-title">{{栏目二 · 如 见字速归}}</div>
+        <p>{{短段落：可以放引用、用户反馈、推荐理由或关键证据。}}</p>
+        <p>{{第二段补充：保持短句，别写成现代商业总结。}}</p>
+      </article>
+
+      <article class="clipping">
+        <div class="mini-title">{{栏目三 · 如 后续行动}}</div>
+        <ul class="news-list">
+          <li>{{下一步 1}}</li>
+          <li>{{下一步 2}}</li>
+          <li>{{下一步 3}}</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="bottom-news">
+      <div>
+        <div class="mini-title">{{时间线 / 本期索引}}</div>
+        <div class="timeline">
+          <div class="timebox">
+            <b>{{阶段 1}}</b>
+            <span>{{一句说明}}</span>
+          </div>
+          <div class="timebox">
+            <b>{{阶段 2}}</b>
+            <span>{{一句说明}}</span>
+          </div>
+          <div class="timebox">
+            <b>{{阶段 3}}</b>
+            <span>{{一句说明}}</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="action-list">
+        <h3>{{编辑按 / 明日办理}}</h3>
+        <p>{{收束段：明确希望读者采取什么行动，或给出最终推荐/判断。}}</p>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>{{发行方 / 作者 / 联系方式}}</span>
+      <span>{{版号 / 分类 / 保密级别}}</span>
+    </footer>
+  </div>
+</main>
+</body>
+</html>

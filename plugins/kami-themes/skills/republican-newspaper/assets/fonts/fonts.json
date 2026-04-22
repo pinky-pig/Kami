@@ -1,0 +1,28 @@
+{
+  "serif": {
+    "file": "京華老宋体v2.002.ttf",
+    "latin": "KingHwa_OldSong",
+    "eastAsian": "京華老宋体",
+    "complexScript": "KingHwa_OldSong"
+  },
+  "sans": {
+    "latin": "Source Han Sans SC",
+    "eastAsian": "Source Han Sans SC",
+    "complexScript": "Source Han Sans SC"
+  },
+  "mono": {
+    "latin": "JetBrains Mono",
+    "eastAsian": "JetBrains Mono",
+    "complexScript": "JetBrains Mono"
+  },
+  "englishSerif": {
+    "latin": "Newsreader",
+    "eastAsian": "Newsreader",
+    "complexScript": "Newsreader"
+  },
+  "englishSans": {
+    "latin": "Inter",
+    "eastAsian": "Inter",
+    "complexScript": "Inter"
+  }
+}

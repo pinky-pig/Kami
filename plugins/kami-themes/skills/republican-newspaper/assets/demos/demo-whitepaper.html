@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>主题 Skill 体系白皮书 · 民国报纸 Demo</title>
+<link rel="stylesheet" href="./demo-theme.css">
+</head>
+<body>
+
+<section class="page">
+  <div class="content">
+    <header class="masthead">
+      <div>
+        <div class="masthead-name">白皮书特刊</div>
+        <div class="masthead-sub">KAMI DEMO LAB · 主题 Skill 体系 · 架构与交付说明</div>
+      </div>
+      <div class="stamp"><b>白</b><span>虚拟研究</span></div>
+    </header>
+
+    <div class="dateline">
+      <span>◎ 2026.04.22</span>
+      <span>NO. 003 / 内部研究样张</span>
+      <span>演示数据均为虚构，仅用于版式测试</span>
+    </div>
+
+    <div class="hero">
+      <aside class="rail">
+        <div class="kicker">研究专号</div>
+        <div class="title">主题体系白皮书</div>
+        <div class="note">Skill / Plugin / Demo</div>
+      </aside>
+
+      <article class="lead">
+        <div class="reverse">封面摘要 / EXECUTIVE BRIEF</div>
+        <h1>从单一主题仓库到可持续扩展的主题 Skill 体系</h1>
+        <p class="lede">这份白皮书以虚拟项目 “Kami Demo Lab” 为样本，说明如何把散落的设计风格、模板、脚本和示例产物，整理成可以安装、展示、验证和持续新增的本地 skill 体系。</p>
+        <div class="columns">
+          <p>核心观点是：主题不是一份静态 HTML，也不是一个孤立模板，而是由风格说明、写作策略、资源目录、生成脚本和 demos 共同组成的可执行知识包。它既服务人，也服务 AI 代理。</p>
+          <p>报纸化排版让信息以“头版、专栏、剪报、号外”的方式被组织。相比普通报告，它更适合展示主题能力、项目案例和方法论摘要，同时保留正式文档的阅读秩序。</p>
+        </div>
+
+        <div class="toc">
+          <div><b>01</b><span>主题资产如何拆分：apps/web 展示，plugins 承载能力。</span></div>
+          <div><b>02</b><span>每个 skill 需要哪些文件：说明、模板、脚本、示例与参考。</span></div>
+          <div><b>03</b><span>多格式交付如何生成：HTML、PDF、PNG、PPTX。</span></div>
+          <div><b>04</b><span>后续新增主题的复制、替换、验证路径。</span></div>
+        </div>
+      </article>
+
+      <aside class="side">
+        <article class="clip">
+          <div class="clip-head"><span class="num">壹</span><h2>研究对象</h2></div>
+          <p>虚拟主题仓库：一个 web 展示层、一个 themes plugin、多个可复用 skill。</p>
+        </article>
+        <article class="clip">
+          <h3>示例指标</h3>
+          <div class="stats">
+            <div class="stat"><div class="stat-value">06</div><div class="stat-label">类主题资产</div></div>
+            <div class="stat"><div class="stat-value">04</div><div class="stat-label">种交付格式</div></div>
+            <div class="stat"><div class="stat-value">03</div><div class="stat-label">层目录边界</div></div>
+            <div class="stat"><div class="stat-value">01</div><div class="stat-label">统一展示入口</div></div>
+          </div>
+        </article>
+        <article class="clip">
+          <h3>阅读提示</h3>
+          <p>白皮书内容为虚构，重点用于验证长文、表格、流程和分栏在报纸主题里的呈现。</p>
+        </article>
+      </aside>
+    </div>
+  </div>
+  <footer class="footer"><span>Whitepaper Demo / Cover</span><span>第一页 / 执行摘要</span></footer>
+</section>
+
+<section class="page">
+  <div class="content">
+    <div class="section-title">
+      <h2>体系模型</h2>
+      <span>MODEL · DIRECTORY · GOVERNANCE</span>
+    </div>
+
+    <div class="report-grid">
+      <article class="report-panel">
+        <h3>一、目录边界</h3>
+        <p>建议将展示层和能力层分离：展示层只负责主题导航、预览和使用入口；能力层则包含每个主题的 SKILL、参考资料、模板、脚本和产物。这样新增主题不会污染前端展示，也不会把交付逻辑散落到根目录。</p>
+        <table class="table">
+          <thead>
+            <tr><th>层级</th><th>责任</th><th>虚拟示例</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>apps/web</td><td>展示与入口</td><td>主题目录、demo 链接、安装说明</td></tr>
+            <tr><td>plugins/kami-themes</td><td>插件元信息</td><td>plugin.json、总览 README</td></tr>
+            <tr><td>skills/*</td><td>单主题能力包</td><td>SKILL.md、assets、references、scripts</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="report-panel">
+        <h3>二、主题最小闭环</h3>
+        <ul>
+          <li>风格：用设计说明描述版式、色彩、字体和禁区。</li>
+          <li>内容：用写作规范限制标题、导语、栏目和注释口吻。</li>
+          <li>模板：HTML/PPT 模板负责可复制的结构。</li>
+          <li>产物：demos 目录保留真实可打开的样张。</li>
+          <li>验证：脚本检查占位符、字体、页数和生成结果。</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="section-title">
+      <h2>交付流程</h2>
+      <span>FROM REFERENCE TO DEMO</span>
+    </div>
+
+    <div class="flow">
+      <div class="flow-step"><b>观察</b><span>提取参考图中的报头、框线、分栏、纸张和印章。</span></div>
+      <div class="flow-step"><b>抽象</b><span>写成 tokens、design spec、writing guide 和禁用项。</span></div>
+      <div class="flow-step"><b>模板</b><span>制作可替换内容的 HTML、PDF、PPTX 结构。</span></div>
+      <div class="flow-step"><b>生成</b><span>用虚拟数据跑出 resume、whitepaper 和 slide deck。</span></div>
+      <div class="flow-step"><b>回归</b><span>检查无真实个人信息、无占位符、无明显溢出。</span></div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-mark">摘</div>
+      <p>一个主题 skill 的价值，不在于复制一张图，而在于让之后的任意内容都能稳定套用同一种审美与结构，并且可以被本地脚本重新生成。</p>
+    </div>
+  </div>
+  <footer class="footer"><span>Whitepaper Demo / System Model</span><span>第二页 / 体系模型</span></footer>
+</section>
+
+<section class="page">
+  <div class="content">
+    <div class="section-title">
+      <h2>实施路线</h2>
+      <span>ROADMAP · DEMO OPERATIONS</span>
+    </div>
+
+    <div class="report-grid">
+      <article class="report-panel">
+        <h3>三阶段推进</h3>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">第 01 周</div>
+            <div class="timeline-body"><h3>整理主题源材料</h3><p>收集参考图、提炼关键词、拆出纸张、字体、版式和栏目结构，形成最初的 design notes。</p></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">第 02 周</div>
+            <div class="timeline-body"><h3>落地模板与示例</h3><p>以真实排版结构生成 one-pager、resume、whitepaper、pptx 等 demo，使用虚拟数据避免隐私泄露。</p></div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">第 03 周</div>
+            <div class="timeline-body"><h3>接入展示与验证</h3><p>把 demos 放进 web 入口，补充脚本检查与生成命令，让新增主题可以按同一流程复制。</p></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="report-panel">
+        <h3>验收清单</h3>
+        <ul>
+          <li>打开 HTML 时，首页能直接看到该主题的核心视觉信号。</li>
+          <li>导出的 PDF 页面尺寸正确，背景、框线和字体完整。</li>
+          <li>PPTX 文字可编辑，不依赖整页截图。</li>
+          <li>demo 内容使用虚拟姓名、邮箱、组织和指标。</li>
+          <li>后续新增主题时，只需要复制 skill 目录并替换资源。</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="section-title">
+      <h2>结论剪报</h2>
+      <span>CONCLUSION CLIPPING</span>
+    </div>
+
+    <div class="clipping-grid">
+      <article class="clipping">
+        <span class="label">结论一</span>
+        <h3>主题即能力包</h3>
+        <p>主题应包含执行说明、模板、参考、脚本和示例，而不是只保留一个静态页面。</p>
+      </article>
+      <article class="clipping">
+        <span class="label">结论二</span>
+        <h3>demo 即验收</h3>
+        <p>resume、whitepaper、pptx 等 demo 覆盖不同内容密度，是判断主题是否可复用的直接证据。</p>
+      </article>
+      <article class="clipping">
+        <span class="label">结论三</span>
+        <h3>隐私先行</h3>
+        <p>公开样张默认使用虚拟数据，真实姓名、联系方式和公司信息只在正式交付版本中替换。</p>
+      </article>
+      <article class="clipping">
+        <span class="label">结论四</span>
+        <h3>持续扩展</h3>
+        <p>当目录边界清楚后，新增 n 个主题 skill 会变成重复可靠的生产动作。</p>
+      </article>
+    </div>
+  </div>
+  <footer class="footer"><span>Whitepaper Demo / Roadmap</span><span>第三页 / 结论与清单</span></footer>
+</section>
+
+</body>
+</html>

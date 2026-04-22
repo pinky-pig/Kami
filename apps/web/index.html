@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Kami · Theme Skills</title>
+  <meta name="viewport" content="width=1280">
+  <meta name="description" content="Kami theme skills showcase. 当前包含民国文稿与民国报纸两个中文文档排版 skill。">
+  <link rel="icon" href="https://gw.alipayobjects.com/zos/k/vl/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<nav class="lang-switch"><a href="./index.html" class="active">中</a><a href="./index-en.html">EN</a></nav>
+<main class="page">
+
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Kami Theme Skills · v1 · April 2026</p>
+      <h1>Kami<span class="cn">紙</span></h1>
+      <p class="tagline">把文档排版主题拆成可以并列扩展的 skills。当前已有民国文稿和民国报纸两套中文文档主题。</p>
+      <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a href="https://github.com/tw93/kami" class="btn btn-primary" style="text-decoration:none; font-size:14px; padding:10px 20px;">Fork Base</a>
+        <span class="btn btn-ghost" style="cursor:default;">Plugin · kami-themes</span>
+      </div>
+    </div>
+    <div class="meta">
+      <div><b>Theme 01</b>&nbsp;&nbsp;republican-manuscript</div>
+      <div><b>Theme 02</b>&nbsp;&nbsp;republican-newspaper</div>
+      <div><b>Plugin</b>&nbsp;&nbsp;kami-themes</div>
+      <div><b>Fonts</b>&nbsp;&nbsp;KingHwa_OldSong + Source Han</div>
+      <div style="margin-top:10px; color: var(--olive);">apps/web + plugins/kami-themes</div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">00 · Themes</p>
+      <h2 class="section-title">主题 Skills</h2>
+      <p class="section-lede">同一套 Kami 生成方法，现在按主题拆成平级 skill。后续新增主题继续放在 <code>plugins/kami-themes/skills/</code>。</p>
+    </div>
+    <div class="comp-grid">
+      <div class="comp">
+        <h4>民国文稿</h4>
+        <p class="hint">republican-manuscript</p>
+        <p>深蓝外框、旧纸内页、档案蓝题签，适合白皮书、推荐信、正式项目方案。</p>
+      </div>
+      <div class="comp theme-card">
+        <a href="../../plugins/kami-themes/skills/republican-newspaper/assets/reference-images/style-2-1.jpg" target="_blank">
+          <img class="theme-shot" src="../../plugins/kami-themes/skills/republican-newspaper/assets/reference-images/style-2-1.jpg" alt="民国报纸风格总览">
+        </a>
+        <h4>民国报纸</h4>
+        <p class="hint">republican-newspaper</p>
+        <p>旧报纸底、黑色铅字、竖排题名、密集分栏、剪报框和红印章，适合特刊、号外、家书和报告。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">01 · Preview</p>
+      <h2 class="section-title">模板预览</h2>
+      <p class="section-lede">当前展示第一套主题 skill。骨架沿用原版 kami，时代气质交给深蓝外框、旧纸内页和档案题签。</p>
+    </div>
+    <div class="demo-grid">
+      <div class="demo-card">
+        <a href="../../plugins/kami-themes/skills/republican-manuscript/assets/demos/demo-long-doc.pdf" target="_blank" class="preview-sheet">
+          <div class="preview-kicker">Document</div>
+          <div class="preview-title">白皮书 / 长文</div>
+          <div class="preview-subtitle">封面、目录、章节页统一成档案文稿语气。</div>
+          <div class="preview-rule"></div>
+          <div class="preview-grid">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="preview-lines">
+            <span class="long"></span>
+            <span class="long"></span>
+            <span class="mid"></span>
+          </div>
+          <div class="preview-note">A4 · PDF</div>
+        </a>
+        <p class="demo-title">Document · PDF</p>
+        <p class="demo-desc">保留一份文档类 demo，覆盖旧纸底、蓝框、细线和纸纹输出效果。</p>
+      </div>
+
+      <div class="demo-card">
+        <a href="../../plugins/kami-themes/skills/republican-manuscript/assets/demos/demo-resume.pdf" target="_blank" class="preview-sheet">
+          <div class="preview-kicker">Resume</div>
+          <div class="preview-title">简历档案页</div>
+          <div class="preview-subtitle">固定坐标排版，蓝框卡片与纸纹背景保持一致。</div>
+          <div class="preview-rule"></div>
+          <div class="preview-lines">
+            <span class="short"></span>
+            <span class="long"></span>
+            <span class="long"></span>
+            <span class="mid"></span>
+            <span class="long"></span>
+          </div>
+          <div class="preview-note">A4 · PDF</div>
+        </a>
+        <p class="demo-title">Resume · PDF</p>
+        <p class="demo-desc">保留一份简历 demo，用来检查信息卡、栅格和中文字体效果。</p>
+      </div>
+
+      <div class="demo-card">
+        <a href="../../plugins/kami-themes/skills/republican-manuscript/assets/demos/demo-slides.pptx" target="_blank" class="preview-sheet">
+          <div class="preview-kicker">Slides</div>
+          <div class="preview-title">汇报演示稿</div>
+          <div class="preview-subtitle">PPTX 使用同一套深蓝外框、旧纸底和纸纹背景。</div>
+          <div class="preview-rule"></div>
+          <div class="preview-lines">
+            <span class="mid"></span>
+            <span class="short"></span>
+            <span class="long"></span>
+            <span class="long"></span>
+            <span class="mid"></span>
+          </div>
+          <div class="preview-note">16:9 · PPTX</div>
+        </a>
+        <p class="demo-title">Slides · PPTX</p>
+        <p class="demo-desc">保留一份 PPT demo，用来检查字体槽、纸纹图片和可编辑文本。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">02 · Natural Prompt</p>
+      <h2 class="section-title">直接说你要什么</h2>
+      <p class="section-lede">不需要 slash command。告诉 Claude 你的文档任务，skill 会自动选择中文模板。</p>
+    </div>
+    <div class="scope-list">
+      <div class="comp">
+        <h4>白皮书</h4>
+        <p class="hint">long-doc</p>
+        <p>“帮我生成一份白皮书”</p>
+      </div>
+      <div class="comp">
+        <h4>项目方案</h4>
+        <p class="hint">one-pager</p>
+        <p>“生成一份项目方案”</p>
+      </div>
+      <div class="comp">
+        <h4>推荐信</h4>
+        <p class="hint">letter</p>
+        <p>“帮我写一份推荐信”</p>
+      </div>
+      <div class="comp">
+        <h4>汇报 Slides</h4>
+        <p class="hint">slides</p>
+        <p>“做一套汇报 slides”</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">03 · Scope</p>
+      <h2 class="section-title">V1 范围</h2>
+      <p class="section-lede">仓库现在按插件和 skill 组织。当前主题是一次明确收敛的视觉迁移，后续主题可以作为平级 skill 加入。</p>
+    </div>
+    <div class="scope-list">
+      <div class="comp">
+        <h4>正式支持</h4>
+        <p class="hint">Chinese-first</p>
+        <ul class="dash">
+          <li>One-Pager</li>
+          <li>Long Doc</li>
+          <li>Letter / 推荐信 / 推荐函</li>
+          <li>Slides / 演示稿</li>
+        </ul>
+      </div>
+      <div class="comp">
+        <h4>明确保留</h4>
+        <p class="hint">same generation model</p>
+        <ul class="dash">
+          <li>模板骨架与页边距</li>
+          <li>字体策略与 fallback</li>
+          <li>构建校验与页数约束</li>
+        </ul>
+      </div>
+      <div class="comp">
+        <h4>暂不处理</h4>
+        <p class="hint">out of v1</p>
+        <ul class="dash">
+          <li>英文主题化</li>
+          <li>Resume / Portfolio</li>
+          <li>竖排正文 / 印章贴图 / 纹理图片</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">04 · Manifesto</p>
+      <h2 class="section-title">设计宣言</h2>
+    </div>
+    <p class="manifesto">不是做旧报纸，不是做海报拟物，而是把文档整理成一份看起来被认真归档过的文稿。<em>深蓝外框</em>负责气场，serif 负责权威，旧纸内页负责情绪，档案题签负责焦点。</p>
+    <ol class="rules">
+      <li><span class="n">1</span><p>页面改成深蓝外框包住旧纸内页，不再是普通留白文档。</p></li>
+      <li><span class="n">2</span><p>主强调色只有档案蓝 <code>#243851</code>，次线使用 <code>#4D5B6D</code>。</p></li>
+      <li><span class="n">3</span><p>时代感来自框页、题签、边框，不来自纹理图片或印章贴图。</p></li>
+      <li><span class="n">4</span><p>中文 serif 统一使用京華老宋体，功能文字继续走 Source Han / system fallback，先保住稳定输出。</p></li>
+      <li><span class="n">5</span><p>Serif 仍固定 500，存在感靠字号和线条，不靠粗体。</p></li>
+      <li><span class="n">6</span><p>行距延续原版 kami，保持可读性，不模仿旧报刊的拥挤感。</p></li>
+      <li><span class="n">7</span><p>Tag 与边框继续使用实色 hex，避免 WeasyPrint 的半透明 bug。</p></li>
+      <li><span class="n">8</span><p>所有迁移都以“版式骨架不变”为前提，只换主题，不重做模板逻辑。</p></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">05 · Palette</p>
+      <h2 class="section-title">主题色板</h2>
+      <p class="section-lede">这套色板比原版更冷静，但仍然是纸本颜色，不是屏幕 UI 颜色。</p>
+    </div>
+
+    <h3 class="subhead">画布 · Paper</h3>
+    <div class="swatches">
+      <div class="swatch"><div class="chip" style="background:#EBE5DD"></div><div class="info"><p class="name">Old Paper</p><p class="role">页面底色，旧纸但不脏旧</p><span class="hex">#EBE5DD</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#F3EFEB"></div><div class="info"><p class="name">Light Sheet</p><p class="role">信息块 / 摘要块</p><span class="hex">#F3EFEB</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#D0C7BB"></div><div class="info"><p class="name">Archive Border</p><p class="role">实线分隔 / 表格边框</p><span class="hex">#D0C7BB</span></div></div>
+      <div class="swatch dark"><div class="chip" style="background:#232222"></div><div class="info"><p class="name" style="color:var(--deep-dark)">Ink Black</p><p class="role">正文主墨色</p><span class="hex">#232222</span></div></div>
+    </div>
+
+    <h3 class="subhead">主调 · Archive Blue</h3>
+    <div class="swatches">
+      <div class="swatch brand"><div class="chip" style="background:#243851"></div><div class="info"><p class="name">Archive Blue</p><p class="role">主标题线 / 题签 / 重点数字</p><span class="hex">#243851</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#4D5B6D"></div><div class="info"><p class="name">Rule Blue</p><p class="role">第二道细线 / 次强调</p><span class="hex">#4D5B6D</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#D5DEE7"></div><div class="info"><p class="name">Tag Tint</p><p class="role">标签底色，继续用实色</p><span class="hex">#D5DEE7</span></div></div>
+      <div class="swatch"><div class="chip" style="background:#B6675E"></div><div class="info"><p class="name">Seal Red</p><p class="role">保留位，v1 默认不进正文</p><span class="hex">#B6675E</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">06 · Typography</p>
+      <h2 class="section-title">字体与层级</h2>
+      <p class="section-lede">视觉换代不等于重启字体系统。字体继续稳，层级继续清楚，变化交给颜色与线条。</p>
+    </div>
+
+    <div class="family-grid">
+      <div class="family serif">
+        <p class="glyph">紙 Aa</p>
+        <p class="role">Serif · 标题</p>
+        <p class="name">KingHwa_OldSong / Newsreader</p>
+        <p class="use">标题、引文、数字强调继续由 serif 承担。民国感来自题头与色调，不靠换一套更古旧的字体。</p>
+      </div>
+      <div class="family sans">
+        <p class="glyph">文 Aa</p>
+        <p class="role">Sans · 功能信息</p>
+        <p class="name">Source Han Sans / Inter</p>
+        <p class="use">眉题、meta、目录号、标签和说明文字继续用 sans，保持清晰和当代可读性。</p>
+      </div>
+      <div class="family mono">
+        <p class="glyph">&lt;/&gt;</p>
+        <p class="role">Mono · 构建信息</p>
+        <p class="name">JetBrains Mono</p>
+        <p class="use">用于命令、版本号、校验提示和局部代码，不进入正文视觉中心。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">07 · Signals</p>
+      <h2 class="section-title">新的视觉信号</h2>
+      <p class="section-lede">这次迁移只新增少量但明确的信号，不让每个组件都“复古起来”。</p>
+    </div>
+    <div class="comp-grid">
+      <div class="comp">
+        <h4>Double Rule</h4>
+        <p class="hint">brand + brand-light</p>
+        <div class="demo">
+          <span class="sample-section-title">章节标题 · Archive Heading</span>
+        </div>
+      </div>
+      <div class="comp">
+        <h4>Quote Rail</h4>
+        <p class="hint">double vertical rule</p>
+        <blockquote class="quote">不要把文档做成怀旧道具，要把它做成一份可信、清楚、能被归档的材料。</blockquote>
+      </div>
+      <div class="comp">
+        <h4>Tag Tint</h4>
+        <p class="hint">solid hex only</p>
+        <div class="demo" style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span class="tag calm">淡</span>
+          <span class="tag standard">默认</span>
+          <span class="tag brush">强一点</span>
+        </div>
+      </div>
+      <div class="comp">
+        <h4>Validation</h4>
+        <p class="hint">same build discipline</p>
+        <pre class="code">python3 plugins/kami-themes/skills/republican-manuscript/scripts/build.py --verify one-pager
+python3 plugins/kami-themes/skills/republican-manuscript/scripts/build.py --verify long-doc
+python3 plugins/kami-themes/skills/republican-manuscript/scripts/build.py --verify letter
+python3 plugins/kami-themes/skills/republican-manuscript/scripts/build.py --check</pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="section-num">08 · Notes</p>
+      <h2 class="section-title">迁移说明</h2>
+    </div>
+    <div class="pending-note">
+      新主题放到 plugins/kami-themes/skills/&lt;theme-name&gt;，再把预览与说明补到 apps/web。当前民国文稿版与民国报纸版都已作为中文 v1 主题存在；英文模板、简历和作品集仍不作为正式交付范围。
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="mark">
+      <svg width="56" height="56" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" aria-label="Kami mark">
+        <rect x="6" y="6" width="68" height="68" rx="10" fill="#F3EFEB" stroke="#243851" stroke-width="1.25"/>
+        <line x1="16" y1="25" x2="64" y2="25" stroke="#243851" stroke-width="1.25"/>
+        <line x1="16" y1="29" x2="64" y2="29" stroke="#4D5B6D" stroke-width="0.9"/>
+        <text x="40" y="56" font-family="KingHwa_OldSong, Georgia, serif" font-size="34" font-weight="500" fill="#232222" text-anchor="middle">紙</text>
+      </svg>
+      <div>
+        <p class="wm-name">Kami · 紙</p>
+        <p class="wm-sub">深蓝外框、旧纸内页、档案题签。</p>
+      </div>
+    </div>
+    <div class="colophon">
+      <div>Republican Manuscript Edition · Chinese V1</div>
+      <div style="margin-top:8px; color: var(--olive); font-family: var(--serif);">
+        版式骨架沿用 kami，时代气质交给旧纸与档案蓝。
+      </div>
+    </div>
+  </footer>
+
+</main>
+</body>
+</html>
