@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{LETTER_SUBJECT}}</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+
+    --paper-deep: #0a0a0b;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  body {
+    font-size: 8.8pt;
+    line-height:  1.54;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 13.5mm 15.5mm 14mm;
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 4.6mm;
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    left: 15.5mm;
+    right: 15.5mm;
+    pointer-events: none;
+  }
+
+  .page::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page::after {
+    bottom: 11.8mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.38;
+  }
+
+  .chrome,
+  .foot,
+  .kicker,
+  .sidebar-tag,
+  .evidence-label,
+  .recipient-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome,
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10mm;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .chrome-left,
+  .chrome-right,
+  .foot-left,
+  .foot-right {
+    display: flex;
+    align-items: baseline;
+    gap: 3.5mm;
+  }
+
+  .divider {
+    width: 8mm;
+    border-top: 0.45pt solid var(--rule-strong);
+    transform: translateY(-1.6pt);
+  }
+
+  .header-grid,
+  .subject-band,
+  .body-grid,
+  .closing {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.16fr 0.84fr;
+    gap: 8mm;
+  }
+
+  .hero-copy,
+  .sender-panel,
+  .subject-copy,
+  .recipient-box,
+  .letter-body,
+  .sidebar,
+  .closing-main,
+  .signature-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-copy,
+  .sender-panel,
+  .subject-copy,
+  .letter-body,
+  .closing-main,
+  .signature-panel {
+    gap: 2.2mm;
+  }
+
+  .kicker {
+    font-size: 7.5pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    color: var(--olive);
+  }
+
+  .hero-title,
+  .subject-title,
+  .sender-name,
+  .salutation,
+  .closing-mark,
+  .signature {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+
+  .hero-title {
+    font-size: 25pt;
+    line-height: 1.04;
+    letter-spacing: -0.3pt;
+  }
+
+  .hero-note,
+  .sidebar-copy,
+  .evidence-copy,
+  .signature-meta,
+  .attachments,
+  .postscript,
+  .sender-role,
+  .sender-contact,
+  .recipient-type,
+  .subject-meta {
+    font-size: 8pt;
+    line-height: 1.44;
+    color: var(--charcoal);
+  }
+
+  .hero-note,
+  .sender-panel,
+  .subject-band,
+  .letter-body,
+  .sidebar-card,
+  .closing-main,
+  .signature-panel {
+    padding-top: 2.8mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .sender-name {
+    font-size: 15pt;
+    line-height: 1.16;
+  }
+
+  .subject-title {
+    font-size: 17pt;
+    line-height: 1.16;
+  }
+
+  .recipient-box {
+    gap: 1.4mm;
+    padding-top: 0.8mm;
+  }
+
+  .recipient-label,
+  .sidebar-tag,
+  .evidence-label {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.15pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .recipient-name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 13pt;
+    line-height: 1.18;
+    font-weight: 500;
+  }
+
+  .letter-body p {
+    font-size: 8.5pt;
+    line-height: 1.5;
+    color: var(--dark-warm);
+    text-align: justify;
+  }
+
+  .salutation,
+  .closing-mark {
+    font-size: 11pt;
+    line-height: 1.32;
+  }
+
+  .sidebar {
+    gap: 3mm;
+  }
+
+  .sidebar-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8mm;
+  }
+
+  .evidence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8mm;
+  }
+
+  .evidence-item {
+    display: grid;
+    grid-template-columns: 8mm 1fr;
+    gap: 2.4mm;
+    padding-top: 1.4mm;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .signature {
+    font-size: 16pt;
+    line-height: 1.16;
+  }
+
+  .foot a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Guizang Magazine</span>
+      <span class="divider"></span>
+      <span>Formal Correspondence</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{DATE, e.g. April 18, 2026}}</span>
+    </div>
+  </div>
+
+  <section class="header-grid">
+    <div class="hero-copy">
+      <div class="kicker">Recommendation / Formal Letter</div>
+      <h1 class="hero-title">{{LETTER_SUBJECT}}</h1>
+      <div class="hero-note">{{One-sentence subject line: what this letter is about.}}</div>
+    </div>
+
+    <aside class="sender-panel">
+      <div class="sender-name">{{SENDER_NAME}}</div>
+      <div class="sender-role">{{SENDER_ADDRESS / DEPARTMENT / ORGANIZATION}}</div>
+      <div class="sender-contact">{{PHONE}}<br>contact in footer</div>
+    </aside>
+  </section>
+
+  <section class="subject-band">
+    <div class="subject-copy">
+      <div class="subject-title">{{One-sentence subject line: what this letter is about.}}</div>
+      <div class="subject-meta">editorial correspondence</div>
+    </div>
+
+    <div class="recipient-box">
+      <div class="recipient-label">To</div>
+      <div class="recipient-name">{{RECIPIENT_NAME_OR_TITLE}}</div>
+      <div class="recipient-type">{{RECIPIENT_ORG / DEPARTMENT}}</div>
+    </div>
+  </section>
+
+  <section class="body-grid">
+    <article class="letter-body">
+      <div class="salutation">{{Dear {{NAME}},}}</div>
+      <p>{{Paragraph 1: state the purpose. Why you are writing and the core intent.
+No preamble. Two sentences at most so the reader knows what you want from this letter.}}</p>
+      <p>{{Paragraph 2: elaborate. Background, reasoning, evidence. Use
+<span class="hl">brand-color emphasis</span> on the single most important point.}}</p>
+      <p>{{Paragraph 3: be specific. What you want the reader to do, by when,
+and how to reach you. Give the action a clear exit.}}</p>
+      <p>{{Paragraph 4 (optional): close. Express anticipation, gratitude, or a courteous sign-off line.}}</p>
+    </article>
+
+    <aside class="sidebar">
+      <section class="sidebar-card">
+        <div class="sidebar-tag">Evidence</div>
+        <div class="sidebar-copy">A strong recommendation reframes facts in the vocabulary the reader is using to decide.</div>
+        <div class="evidence-list">
+          <div class="evidence-item"><div class="evidence-label">01</div><div class="evidence-copy">clear working relationship</div></div>
+          <div class="evidence-item"><div class="evidence-label">02</div><div class="evidence-copy">specific achievements and judgment</div></div>
+          <div class="evidence-item"><div class="evidence-label">03</div><div class="evidence-copy">fit with the recipient's criteria</div></div>
+        </div>
+      </section>
+
+      <section class="sidebar-card">
+        <div class="sidebar-tag">Enclosures</div>
+        <div class="sidebar-copy">{{List — ① Attachment 1 · ② Attachment 2}}</div>
+      </section>
+    </aside>
+  </section>
+
+  <section class="closing">
+    <div class="closing-main">
+      <div class="closing-mark">{{Closing — "Best regards," / "Sincerely," / "Warm regards,"}}</div>
+      <div class="postscript">The close should leave the reader with a clear next step and a credible offer to follow up.</div>
+    </div>
+
+    <aside class="signature-panel">
+      <div class="signature">{{HANDWRITTEN_NAME_OR_SIGNATURE}}</div>
+      <div class="signature-meta">{{TITLE · DEPARTMENT}}<br>{{DATE (optional restatement)}}</div>
+      <div class="attachments">Reference this line only if the attachments materially support the decision.</div>
+    </aside>
+  </section>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>{{SENDER_NAME}}</span>
+      <span class="divider"></span>
+      <span>{{RECIPIENT_NAME_OR_TITLE}}</span>
+    </div>
+    <div class="foot-right">
+      <span>{{PHONE}}</span>
+      <span class="divider"></span>
+      <span><a href="mailto:{{EMAIL}}">{{EMAIL}}</a></span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

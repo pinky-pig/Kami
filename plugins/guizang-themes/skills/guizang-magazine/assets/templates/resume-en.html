@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{NAME}} · Resume</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+    --paper-deep: #0a0a0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 8.3pt;
+    line-height: 1.42;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12.2mm 14.8mm 12.8mm;
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page + .page {
+    break-before: page;
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    left: 14.8mm;
+    right: 14.8mm;
+    pointer-events: none;
+  }
+
+  .page::before {
+    top: 11.8mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page::after {
+    bottom: 10.8mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.35;
+  }
+
+  .chrome,
+  .page-no,
+  .section-tag,
+  .metric-label,
+  .pill-tag,
+  .mini-tag,
+  .project-label,
+  .skill-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8mm;
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 6.2mm;
+  }
+
+  .page-no {
+    position: absolute;
+    right: 14.8mm;
+    bottom: 11.8mm;
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 7mm;
+    align-items: end;
+    margin-bottom: 4.2mm;
+  }
+
+  .name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 27pt;
+    line-height: 1.02;
+    letter-spacing: -0.4pt;
+    font-weight: 500;
+  }
+
+  .alias {
+    font-size: 11pt;
+    color: var(--olive);
+    margin-left: 2.2mm;
+  }
+
+  .role {
+    margin-top: 1.6mm;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.8pt;
+    line-height: 1.32;
+    color: var(--charcoal);
+  }
+
+  .contact {
+    padding-top: 2.4mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.5pt;
+    line-height: 1.42;
+    color: var(--olive);
+  }
+
+  .contact a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .summary {
+    padding-top: 2.6mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 8.3pt;
+    line-height: 1.46;
+    color: var(--dark-warm);
+    margin-bottom: 3.2mm;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4mm;
+    margin-bottom: 4mm;
+  }
+
+  .metric {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .metric-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 15.2pt;
+    line-height: 1;
+    color: var(--brand);
+    margin-bottom: 0.9mm;
+  }
+
+  .metric-value .unit {
+    font-size: 8.8pt;
+  }
+
+  .metric-label {
+    font-size: 6.6pt;
+    line-height: 1.35;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .section {
+    margin-bottom: 3mm;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4mm;
+    margin-bottom: 2mm;
+  }
+
+  .section-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 12.4pt;
+    line-height: 1.12;
+    font-weight: 500;
+  }
+
+  .section-tag {
+    font-size: 6.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.05pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .timeline,
+  .convictions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .pillar,
+  .conviction {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .pill-tag,
+  .mini-tag,
+  .project-label,
+  .skill-label {
+    font-size: 6.4pt;
+    line-height: 1.35;
+    letter-spacing: 0.95pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .pill-title,
+  .project-name,
+  .os-name,
+  .impact-title,
+  .edu-name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+
+  .pill-title {
+    font-size: 10pt;
+    line-height: 1.16;
+    margin-bottom: 0.6mm;
+  }
+
+  .pill-copy,
+  .conviction p,
+  .project-copy,
+  .os-copy,
+  .impact-copy,
+  .skill-copy,
+  .edu-copy {
+    font-size: 7.5pt;
+    line-height: 1.38;
+    color: var(--charcoal);
+  }
+
+  .project {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    margin-bottom: 2.6mm;
+    break-inside: avoid;
+  }
+
+  .project-head {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4mm;
+    margin-bottom: 1.4mm;
+    align-items: baseline;
+  }
+
+  .project-name {
+    font-size: 10.6pt;
+    line-height: 1.14;
+  }
+
+  .project-meta {
+    text-align: right;
+    font-size: 7pt;
+    line-height: 1.36;
+    color: var(--stone);
+  }
+
+  .project-row,
+  .impact-row,
+  .skill-row,
+  .os-item,
+  .edu-row {
+    display: grid;
+    gap: 2.6mm;
+    padding: 1.4mm 0;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .project-row,
+  .skill-row {
+    grid-template-columns: 14mm 1fr;
+  }
+
+  .impact-row {
+    grid-template-columns: 16mm 1fr 18mm;
+  }
+
+  .os-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6mm 5mm;
+    margin-top: 1.6mm;
+  }
+
+  .os-item {
+    grid-template-columns: 1fr 14mm;
+    align-items: start;
+  }
+
+  .os-name {
+    font-size: 9pt;
+    line-height: 1.14;
+  }
+
+  .os-name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .os-star {
+    text-align: right;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9.6pt;
+    line-height: 1.08;
+    color: var(--brand);
+  }
+
+  .highlight {
+    margin-top: 1.4mm;
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.8pt;
+    line-height: 1.38;
+    color: var(--dark-warm);
+  }
+
+  .handle-strip {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.7pt;
+    line-height: 1.38;
+    color: var(--charcoal);
+    margin-bottom: 1.8mm;
+  }
+
+  .handle-strip a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .impact-grid,
+  .page-two-grid {
+    display: grid;
+    gap: 5mm;
+  }
+
+  .impact-grid {
+    grid-template-columns: 1.08fr 0.92fr;
+  }
+
+  .page-two-grid {
+    grid-template-columns: 1.02fr 0.98fr;
+  }
+
+  .impact-date,
+  .impact-side,
+  .edu-side {
+    font-size: 7pt;
+    line-height: 1.36;
+    color: var(--stone);
+    text-align: right;
+  }
+
+  .edu-row {
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: baseline;
+  }
+
+  .em-brand,
+  .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="chrome">
+    <span>Guizang Resume</span>
+    <span>Page 01</span>
+  </div>
+
+  <header class="hero">
+    <div>
+      <div class="name">{{NAME}}<span class="alias">{{ALIAS_OR_PREFERRED_NAME}}</span></div>
+      <div class="role">{{ROLE_TITLE — e.g. AI / Agent Engineer}}</div>
+    </div>
+    <div class="contact">
+      <a href="{{GITHUB_URL}}">github.com/{{GITHUB_ID}}</a><br>
+      <a href="{{X_URL}}">x.com/{{X_ID}}</a><br>
+      <a href="mailto:{{EMAIL}}">{{EMAIL}}</a><br>
+      {{CITY}}, {{COUNTRY_OR_REGION}}
+    </div>
+  </header>
+
+  <div class="summary">
+    {{~50 words. Structure: current role + seniority + tenure. Team composition (size, seniority mix, cross-functional collaborators). Long-term direction. Three to five core areas of depth.}}
+  </div>
+
+  <section class="metrics">
+    <div class="metric"><div class="metric-value">{{NUMBER}}<span class="unit">{{UNIT}}</span></div><div class="metric-label">{{LABEL}}</div></div>
+    <div class="metric"><div class="metric-value">{{NUMBER}}<span class="unit">{{UNIT}}</span></div><div class="metric-label">{{LABEL}}</div></div>
+    <div class="metric"><div class="metric-value">{{NUMBER}}<span class="unit">{{UNIT}}</span></div><div class="metric-label">{{LABEL}}</div></div>
+    <div class="metric"><div class="metric-value">{{NUMBER}}<span class="unit">{{UNIT}}</span></div><div class="metric-label">{{LABEL}}</div></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">Experience</div>
+      <div class="section-tag">{{START_DATE}} — Present · {{KEY_MILESTONE}}</div>
+    </div>
+    <div class="timeline">
+      <div class="pillar"><div class="pill-tag">{{YEAR}}</div><div class="pill-title">{{STAGE_TITLE}}</div><div class="pill-copy">{{One sentence on what this stage meant.}}</div></div>
+      <div class="pillar"><div class="pill-tag">{{YEAR}}</div><div class="pill-title">{{STAGE_TITLE}}</div><div class="pill-copy">{{One sentence on what this stage meant.}}</div></div>
+      <div class="pillar"><div class="pill-tag">{{YEAR}}</div><div class="pill-title">{{STAGE_TITLE}}</div><div class="pill-copy">{{One sentence on what this stage meant.}}</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">Selected Work</div>
+      <div class="section-tag">Role / Actions / Impact</div>
+    </div>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">{{PROJECT_NAME}} · {{PROJECT_TYPE}}</div>
+        <div class="project-meta">{{ROLE — e.g. tech lead}}</div>
+      </div>
+      <div class="project-row"><div class="project-label">Role</div><div class="project-copy">{{~40 words: what the project is, why it existed, what your seat at the table was.}}</div></div>
+      <div class="project-row"><div class="project-label">Actions</div><div class="project-copy">{{~55 words: technical approach, key decisions, execution path.}}</div></div>
+      <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">{{~65 words: numbers-first. Highlight <span class="hl">1-2 key figures</span>.}}</div></div>
+    </article>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">{{PROJECT_NAME}} · {{PROJECT_TYPE}}</div>
+        <div class="project-meta">{{ROLE}}</div>
+      </div>
+      <div class="project-row"><div class="project-label">Role</div><div class="project-copy">{{~40 words.}}</div></div>
+      <div class="project-row"><div class="project-label">Actions</div><div class="project-copy">{{~55 words.}}</div></div>
+      <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">{{~65 words, include <span class="hl">key figures</span>.}}</div></div>
+    </article>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">{{PROJECT_NAME}} · {{PROJECT_TYPE}}</div>
+        <div class="project-meta">{{ROLE}}</div>
+      </div>
+      <div class="project-row"><div class="project-label">Role</div><div class="project-copy">{{Project context and your seat.}}</div></div>
+      <div class="project-row"><div class="project-label">Actions</div><div class="project-copy">{{Execution path.}}</div></div>
+      <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">{{Quantifiable outcome with <span class="hl">key figures</span>.}}</div></div>
+    </article>
+  </section>
+
+  <div class="page-no">01 / 02</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <span>Open Source / Impact</span>
+    <span>Page 02</span>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">Open Source & Indie Work</div>
+      <div class="section-tag">{{TIME_RANGE}} · {{SUBTITLE}}</div>
+    </div>
+    <div class="summary">
+      <span class="hl">{{One-line positioning statement.}}</span> {{Short sketch of your indie developer identity: design instinct, solo end-to-end delivery, cross-language range, user reception.}} Cumulative GitHub: <span class="em-brand">{{STARS_TOTAL}} stars · {{FORKS_TOTAL}} forks · {{FOLLOWERS_TOTAL}} followers</span>.
+    </div>
+    <div class="os-grid">
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{PROJECT}}</a></div><div class="os-copy">{{Stack + core positioning + platform.}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{PROJECT}}</a></div><div class="os-copy">{{Description.}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{PROJECT}}</a></div><div class="os-copy">{{Description.}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{PROJECT}}</a></div><div class="os-copy">{{Description.}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{PROJECT}}</a></div><div class="os-copy">{{Description.}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{PROJECT}}</a></div><div class="os-copy">{{Description.}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+    </div>
+    <div class="highlight"><span class="em-brand">{{HIGHLIGHT}}</span> · {{A single anecdote that sets your work apart: the moment it went viral, the notable person who shared it, the community that formed around it.}}</div>
+  </section>
+
+  <div class="page-two-grid">
+    <div>
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">Judgment & Conviction</div>
+          <div class="section-tag">Calls</div>
+        </div>
+        <div class="convictions">
+          <div class="conviction"><div class="pill-tag">{{DATE}}</div><div class="pill-title">{{EVENT_TITLE}}</div><p>{{Specific call you made or action you took, and the downstream evidence that the judgment was right.}}</p></div>
+          <div class="conviction"><div class="pill-tag">{{DATE}}</div><div class="pill-title">{{EVENT_TITLE}}</div><p>{{Specific call or action.}}</p></div>
+          <div class="conviction"><div class="pill-tag">{{DATE}}</div><div class="pill-title">{{EVENT_TITLE}}</div><p>{{Specific call or action.}}</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">Public Impact</div>
+          <div class="section-tag">Signal</div>
+        </div>
+        <div class="handle-strip">{{PLATFORM}} · <a href="{{URL}}">@{{HANDLE}}</a> · {{FOLLOWERS}} followers · {{Blog / newsletter / other content product.}}</div>
+        <div class="impact-grid">
+          <div>
+            <div class="impact-row"><div class="mini-tag">{{DATE}}</div><div><div class="impact-title">{{ARTICLE_TITLE}}</div><div class="impact-copy">{{Views / likes / impact metric.}}</div></div><div class="impact-side">{{Views / likes.}}</div></div>
+            <div class="impact-row"><div class="mini-tag">{{DATE}}</div><div><div class="impact-title">{{ARTICLE_TITLE}}</div><div class="impact-copy">{{Views / likes / impact metric.}}</div></div><div class="impact-side">{{Views / likes.}}</div></div>
+          </div>
+          <div>
+            <div class="impact-row"><div class="mini-tag">{{DATE}}</div><div><div class="impact-title">{{TALK_TITLE}}</div><div class="impact-copy">{{HOST / VENUE}}</div></div><div class="impact-side">Talk</div></div>
+            <div class="impact-row"><div class="mini-tag">{{DATE}}</div><div><div class="impact-title">{{TALK_TITLE}}</div><div class="impact-copy">{{HOST / VENUE}}</div></div><div class="impact-side">Talk</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div>
+      <section class="section">
+        <div class="section-head">
+        <div class="section-title">Five Signals</div>
+        <div class="section-tag">Strengths</div>
+      </div>
+        <div class="skill-row"><div class="skill-label">{{SKILL_LABEL_1}}</div><div class="skill-copy">{{Description with at least <span class="em-brand">one emphasis</span>.}}</div></div>
+        <div class="skill-row"><div class="skill-label">{{SKILL_LABEL_2}}</div><div class="skill-copy">{{SKILL_COPY_2}}</div></div>
+        <div class="skill-row"><div class="skill-label">{{SKILL_LABEL_3}}</div><div class="skill-copy">{{SKILL_COPY_3}}</div></div>
+        <div class="skill-row"><div class="skill-label">{{SKILL_LABEL_4}}</div><div class="skill-copy">{{SKILL_COPY_4}}</div></div>
+        <div class="skill-row"><div class="skill-label">{{SKILL_LABEL_5}}</div><div class="skill-copy">{{SKILL_COPY_5}}</div></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">Education</div>
+          <div class="section-tag">{{DATE_RANGE}}</div>
+        </div>
+        <div class="edu-row">
+          <div><div class="edu-name">{{SCHOOL}} · {{COLLEGE}} · {{MAJOR}}</div><div class="edu-copy">{{One-line judgment-flavored note, e.g. "declined grad school, went straight to industry".}}</div></div>
+          <div class="edu-side">{{DATE_RANGE}}</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="page-no">02 / 02</div>
+</section>
+</body>
+</html>

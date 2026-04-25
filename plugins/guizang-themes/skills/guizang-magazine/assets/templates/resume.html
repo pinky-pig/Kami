@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{姓名}} · 简历</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+    --paper-deep: #0a0a0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 8.4pt;
+    line-height: 1.42;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12.2mm 14.8mm 12.8mm;
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page + .page {
+    break-before: page;
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    left: 14.8mm;
+    right: 14.8mm;
+    pointer-events: none;
+  }
+
+  .page::before {
+    top: 11.8mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page::after {
+    bottom: 10.8mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.35;
+  }
+
+  .chrome,
+  .page-no,
+  .kicker,
+  .section-tag,
+  .metric-label,
+  .pill-tag,
+  .mini-tag {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8mm;
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 6.2mm;
+  }
+
+  .page-no {
+    position: absolute;
+    right: 14.8mm;
+    bottom: 11.8mm;
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 7mm;
+    align-items: end;
+    margin-bottom: 4.2mm;
+  }
+
+  .name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 26pt;
+    line-height: 1.02;
+    letter-spacing: 0.2pt;
+    font-weight: 500;
+  }
+
+  .alias {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 12pt;
+    color: var(--olive);
+    margin-left: 2.2mm;
+  }
+
+  .role {
+    margin-top: 1.6mm;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.34;
+    color: var(--charcoal);
+  }
+
+  .contact {
+    padding-top: 2.4mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.6pt;
+    line-height: 1.42;
+    color: var(--olive);
+  }
+
+  .contact a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .summary {
+    padding-top: 2.6mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 8.4pt;
+    line-height: 1.48;
+    color: var(--dark-warm);
+    margin-bottom: 3.2mm;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4mm;
+    margin-bottom: 4mm;
+  }
+
+  .metric {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .metric-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 15.6pt;
+    line-height: 1;
+    color: var(--brand);
+    margin-bottom: 0.9mm;
+  }
+
+  .metric-value .unit {
+    font-size: 9.2pt;
+  }
+
+  .metric-label {
+    font-size: 6.6pt;
+    line-height: 1.35;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .section {
+    margin-bottom: 3mm;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4mm;
+    margin-bottom: 2mm;
+  }
+
+  .section-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 12.6pt;
+    line-height: 1.14;
+    font-weight: 500;
+  }
+
+  .section-tag {
+    font-size: 6.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.05pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .timeline,
+  .convictions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .pillar,
+  .conviction {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .pill-tag {
+    font-size: 6.5pt;
+    line-height: 1.35;
+    letter-spacing: 1.05pt;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 0.9mm;
+  }
+
+  .pill-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.2pt;
+    line-height: 1.18;
+    font-weight: 500;
+    margin-bottom: 0.6mm;
+  }
+
+  .pill-copy,
+  .conviction p,
+  .project-copy,
+  .os-copy,
+  .impact-copy,
+  .skill-copy,
+  .edu-copy {
+    font-size: 7.5pt;
+    line-height: 1.38;
+    color: var(--charcoal);
+  }
+
+  .project {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    margin-bottom: 2.6mm;
+    break-inside: avoid;
+  }
+
+  .project-head {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4mm;
+    margin-bottom: 1.4mm;
+    align-items: baseline;
+  }
+
+  .project-name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.8pt;
+    line-height: 1.16;
+    font-weight: 500;
+  }
+
+  .project-meta {
+    text-align: right;
+    font-size: 7.2pt;
+    line-height: 1.38;
+    color: var(--stone);
+  }
+
+  .project-rows,
+  .impact-list,
+  .skills {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-row,
+  .impact-row,
+  .skill-row,
+  .os-item,
+  .edu-row {
+    display: grid;
+    gap: 2.6mm;
+    padding: 1.4mm 0;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .project-row,
+  .skill-row {
+    grid-template-columns: 13mm 1fr;
+  }
+
+  .impact-row {
+    grid-template-columns: 16mm 1fr 18mm;
+  }
+
+  .os-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6mm 5mm;
+    margin-top: 1.6mm;
+  }
+
+  .os-item {
+    grid-template-columns: 1fr 14mm;
+    align-items: start;
+  }
+
+  .mini-tag {
+    font-size: 6.4pt;
+    line-height: 1.35;
+    letter-spacing: 0.95pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .project-label,
+  .skill-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.4pt;
+    line-height: 1.35;
+    letter-spacing: 0.95pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .os-name,
+  .impact-title,
+  .edu-name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9.2pt;
+    line-height: 1.16;
+    font-weight: 500;
+  }
+
+  .os-name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .os-star {
+    text-align: right;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9.8pt;
+    line-height: 1.08;
+    color: var(--brand);
+  }
+
+  .highlight {
+    margin-top: 1.4mm;
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.9pt;
+    line-height: 1.4;
+    color: var(--dark-warm);
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 5mm;
+  }
+
+  .page-two-grid {
+    display: grid;
+    grid-template-columns: 1.02fr 0.98fr;
+    gap: 5mm;
+  }
+
+  .handle-strip {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.8pt;
+    line-height: 1.4;
+    color: var(--charcoal);
+    margin-bottom: 1.8mm;
+  }
+
+  .handle-strip a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .impact-date,
+  .impact-side,
+  .edu-side {
+    font-size: 7pt;
+    line-height: 1.36;
+    color: var(--stone);
+    text-align: right;
+  }
+
+  .edu-row {
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: baseline;
+  }
+
+  .em-brand,
+  .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="chrome">
+    <span>Guizang Resume</span>
+    <span>Page 01</span>
+  </div>
+
+  <header class="hero">
+    <div>
+      <div class="name">{{姓名}}<span class="alias">{{别名/英文名}}</span></div>
+      <div class="role">{{岗位定位，如"AI / Agent 工程"}}</div>
+    </div>
+    <div class="contact">
+      <a href="{{GITHUB_URL}}">GitHub @{{GITHUB_ID}}</a><br>
+      <a href="{{X_URL}}">X @{{X_ID}}</a><br>
+      <a href="tel:{{PHONE}}">{{PHONE}}</a> · <a href="mailto:{{EMAIL}}">{{EMAIL}}</a><br>
+      {{年龄}} 岁 · {{城市}}
+    </div>
+  </header>
+
+  <div class="summary">
+    {{80 字以内。建议结构：现任职位 + 级别 + 时长。团队构成（人数、梯队、协作方）。长期演进方向。核心沉淀领域（4-6 个方向）。}}
+  </div>
+
+  <section class="metrics">
+    <div class="metric"><div class="metric-value">{{数字}}<span class="unit">{{单位}}</span></div><div class="metric-label">{{标签}}</div></div>
+    <div class="metric"><div class="metric-value">{{数字}}<span class="unit">{{单位}}</span></div><div class="metric-label">{{标签}}</div></div>
+    <div class="metric"><div class="metric-value">{{数字}}<span class="unit">{{单位}}</span></div><div class="metric-label">{{标签}}</div></div>
+    <div class="metric"><div class="metric-value">{{数字}}<span class="unit">{{单位}}</span></div><div class="metric-label">{{标签}}</div></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">工作经历</div>
+      <div class="section-tag">{{起始时间}} — 至今（{{关键里程碑}}）</div>
+    </div>
+    <div class="timeline">
+      <div class="pillar">
+        <div class="pill-tag">{{年份}}</div>
+        <div class="pill-title">{{阶段标题}}</div>
+        <div class="pill-copy">{{一句解释这一步的意义}}</div>
+      </div>
+      <div class="pillar">
+        <div class="pill-tag">{{年份}}</div>
+        <div class="pill-title">{{阶段标题}}</div>
+        <div class="pill-copy">{{一句解释这一步的意义}}</div>
+      </div>
+      <div class="pillar">
+        <div class="pill-tag">{{年份}}</div>
+        <div class="pill-title">{{阶段标题}}</div>
+        <div class="pill-copy">{{一句解释这一步的意义}}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">关键项目</div>
+      <div class="section-tag">Role / Moves / Impact</div>
+    </div>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">{{项目名}} · {{项目类型}}</div>
+        <div class="project-meta">{{角色定位，如"方向主导"}}</div>
+      </div>
+      <div class="project-rows">
+        <div class="project-row"><div class="project-label">Role</div><div class="project-copy">{{~60 字：项目是什么 + 为什么做 + 你的位置}}</div></div>
+        <div class="project-row"><div class="project-label">Moves</div><div class="project-copy">{{~80 字：技术方案 / 关键决策 / 执行路径}}</div></div>
+        <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">{{~100 字：数据为王。<span class="hl">关键数字</span> 高亮 1-2 处。}}</div></div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">{{项目名}} · {{项目类型}}</div>
+        <div class="project-meta">{{角色定位}}</div>
+      </div>
+      <div class="project-rows">
+        <div class="project-row"><div class="project-label">Role</div><div class="project-copy">{{~60 字}}</div></div>
+        <div class="project-row"><div class="project-label">Moves</div><div class="project-copy">{{~80 字}}</div></div>
+        <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">{{~100 字，含 <span class="hl">关键数字</span>}}</div></div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">{{项目名}} · {{项目类型}}</div>
+        <div class="project-meta">{{角色}}</div>
+      </div>
+      <div class="project-rows">
+        <div class="project-row"><div class="project-label">Role</div><div class="project-copy">{{项目背景和定位}}</div></div>
+        <div class="project-row"><div class="project-label">Moves</div><div class="project-copy">{{执行路径}}</div></div>
+        <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">{{可量化结果，含 <span class="hl">关键数字</span>}}</div></div>
+      </div>
+    </article>
+  </section>
+
+  <div class="page-no">01 / 02</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <span>Open Source / Impact</span>
+    <span>Page 02</span>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">开源项目 & 独立开发者</div>
+      <div class="section-tag">{{时间跨度}} · {{一句副标题}}</div>
+    </div>
+    <div class="summary">
+      <span class="hl">{{一句自我定位}}</span>，{{简述开发者身份：设计审美 / 独立完成流程 / 跨语言实战 / 用户反馈}}。GitHub 累计 <span class="em-brand">{{STARS_TOTAL}} stars · {{FORKS_TOTAL}} forks · {{FOLLOWERS_TOTAL}} followers</span>。
+    </div>
+    <div class="os-grid">
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{项目名}}</a></div><div class="os-copy">{{语言 + 核心定位 + 平台}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{项目名}}</a></div><div class="os-copy">{{描述}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{项目名}}</a></div><div class="os-copy">{{描述}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{项目名}}</a></div><div class="os-copy">{{描述}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{项目名}}</a></div><div class="os-copy">{{描述}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="{{URL}}">{{项目名}}</a></div><div class="os-copy">{{描述}}</div></div><div class="os-star">★ {{STARS}}</div></div>
+    </div>
+    <div class="highlight"><span class="em-brand">{{亮点 TAG}}</span> · {{这个项目的独特故事：开源时机 / 传播范围 / 知名人物推荐等}}</div>
+  </section>
+
+  <div class="page-two-grid">
+    <div>
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">AI 判断与行动</div>
+          <div class="section-tag">Convictions</div>
+        </div>
+        <div class="convictions">
+          <div class="conviction"><div class="pill-tag">{{时间}}</div><div class="pill-title">{{事件标题}}</div><p>{{具体做了什么判断或行动，为什么证明判断力}}</p></div>
+          <div class="conviction"><div class="pill-tag">{{时间}}</div><div class="pill-title">{{事件标题}}</div><p>{{具体做了什么判断或行动}}</p></div>
+          <div class="conviction"><div class="pill-tag">{{时间}}</div><div class="pill-title">{{事件标题}}</div><p>{{具体做了什么判断或行动}}</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">对外影响力</div>
+          <div class="section-tag">Public Signal</div>
+        </div>
+        <div class="handle-strip">{{平台}} · <a href="{{URL}}">@{{HANDLE}}</a> · {{粉丝数}} · {{博客 / 周刊 / 其他内容产品简介}}</div>
+        <div class="impact-grid">
+          <div class="impact-list">
+            <div class="impact-row"><div class="mini-tag">{{日期}}</div><div><div class="impact-title">{{文章标题}}</div><div class="impact-copy">{{浏览量 / 赞数 / 影响力指标}}</div></div><div class="impact-side">{{浏览量 / 赞数}}</div></div>
+            <div class="impact-row"><div class="mini-tag">{{日期}}</div><div><div class="impact-title">{{文章标题}}</div><div class="impact-copy">{{浏览量 / 赞数 / 影响力指标}}</div></div><div class="impact-side">{{浏览量 / 赞数}}</div></div>
+          </div>
+          <div class="impact-list">
+            <div class="impact-row"><div class="mini-tag">{{日期}}</div><div><div class="impact-title">{{演讲标题}}</div><div class="impact-copy">{{主办方 / 地点}}</div></div><div class="impact-side">Talk</div></div>
+            <div class="impact-row"><div class="mini-tag">{{日期}}</div><div><div class="impact-title">{{演讲标题}}</div><div class="impact-copy">{{主办方 / 地点}}</div></div><div class="impact-side">Talk</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div>
+      <section class="section">
+        <div class="section-head">
+        <div class="section-title">能力标签</div>
+        <div class="section-tag">Five Signals</div>
+      </div>
+      <div class="skills">
+        <div class="skill-row"><div class="skill-label">{{能力 1<br>标签}}</div><div class="skill-copy">{{描述。至少 <span class="em-brand">1 处强调</span>}}</div></div>
+        <div class="skill-row"><div class="skill-label">{{能力 2<br>标签}}</div><div class="skill-copy">{{能力 2 描述}}</div></div>
+        <div class="skill-row"><div class="skill-label">{{能力 3<br>标签}}</div><div class="skill-copy">{{能力 3 描述}}</div></div>
+        <div class="skill-row"><div class="skill-label">{{能力 4<br>标签}}</div><div class="skill-copy">{{能力 4 描述}}</div></div>
+        <div class="skill-row"><div class="skill-label">{{能力 5<br>标签}}</div><div class="skill-copy">{{能力 5 描述}}</div></div>
+      </div>
+    </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">教育</div>
+          <div class="section-tag">{{起止时间}}</div>
+        </div>
+        <div class="edu-row">
+          <div><div class="edu-name">{{学校}} · {{学院}} · {{专业}}</div><div class="edu-copy">{{一句判断性描述，如"放弃保研直接就业"}}</div></div>
+          <div class="edu-side">{{起止时间}}</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="page-no">02 / 02</div>
+</section>
+</body>
+</html>

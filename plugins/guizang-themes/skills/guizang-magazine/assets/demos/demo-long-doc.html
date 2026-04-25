@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     LONG DOCUMENT TEMPLATE · guizang magazine
+     多页 A4 白皮书 / 长文 / 年度总结
+     视觉：hero cover、chrome / foot、问题页、方法页、结论幕封
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>BriefOS 白皮书</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+
+    --paper-deep: #0a0a0b;
+    --paper-tint: #18181a;
+    --paper-dark: #14100f;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9.2pt;
+    line-height: 1.46;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 13mm 15.5mm 14mm;
+    break-after: page;
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page:last-child {
+    break-after: auto;
+  }
+
+  .page.light {
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    color: var(--near-black);
+  }
+
+  .page.dark {
+    background: linear-gradient(180deg, var(--brand) 0%, var(--paper-dark) 100%);
+    color: var(--parchment);
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .page.light::before,
+  .page.light::after {
+    left: 15.5mm;
+    right: 15.5mm;
+  }
+
+  .page.dark::before,
+  .page.dark::after {
+    left: 15.5mm;
+    right: 15.5mm;
+  }
+
+  .page.light::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page.light::after {
+    bottom: 11.5mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.35;
+  }
+
+  .page.dark::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--parchment);
+    opacity: 0.14;
+  }
+
+  .page.dark::after {
+    bottom: 11.5mm;
+    border-top: 0.45pt solid var(--paper-tint);
+    opacity: 0.18;
+  }
+
+  .chrome,
+  .foot,
+  .kicker,
+  .meta,
+  .card-tag,
+  .table-tag,
+  .page-no {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome,
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10mm;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+  }
+
+  .page.light .chrome,
+  .page.light .foot {
+    color: var(--stone);
+  }
+
+  .page.dark .chrome,
+  .page.dark .foot {
+    color: var(--paper-tint);
+  }
+
+  .chrome-left,
+  .chrome-right,
+  .foot-left,
+  .foot-right {
+    display: flex;
+    align-items: baseline;
+    gap: 3.5mm;
+  }
+
+  .divider {
+    width: 8mm;
+    border-top: 0.45pt solid currentColor;
+    transform: translateY(-1.6pt);
+    opacity: 0.65;
+  }
+
+  .cover-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.24fr 0.76fr;
+    gap: 8mm;
+    align-items: end;
+    margin-top: 18mm;
+    min-height: 205mm;
+  }
+
+  .cover-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+  }
+
+  .kicker {
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.7pt;
+    text-transform: uppercase;
+    opacity: 0.88;
+  }
+
+  .cover-title,
+  .section-title,
+  .quote-line,
+  .conclusion-line {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+
+  .cover-title {
+    font-size: 34pt;
+    line-height: 1.08;
+    letter-spacing: 0.14pt;
+  }
+
+  .cover-sub {
+    max-width: 114mm;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11.2pt;
+    line-height: 1.48;
+  }
+
+  .cover-note {
+    max-width: 116mm;
+    margin-top: 10mm;
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+    font-size: 8.8pt;
+    line-height: 1.48;
+  }
+
+  .cover-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2.8mm;
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .meta-block {
+    padding-top: 2.4mm;
+    border-top: 0.45pt solid currentColor;
+    border-color: inherit;
+  }
+
+  .meta-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.9pt;
+    line-height: 1.35;
+    letter-spacing: 1.3pt;
+    text-transform: uppercase;
+    margin-bottom: 0.9mm;
+    opacity: 0.82;
+  }
+
+  .meta-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 14pt;
+    line-height: 1.22;
+    font-weight: 500;
+  }
+
+  .meta-note {
+    font-size: 8pt;
+    line-height: 1.42;
+    margin-top: 0.8mm;
+    opacity: 0.88;
+  }
+
+  .page-no {
+    position: absolute;
+    right: 15.5mm;
+    bottom: 14.3mm;
+    font-size: 6.9pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+  }
+
+  .summary-grid,
+  .analysis-grid,
+  .method-grid,
+  .action-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 7mm;
+    margin-top: 11mm;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1.16fr 0.84fr;
+  }
+
+  .method-grid,
+  .action-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .analysis-grid {
+    grid-template-columns: 0.94fr 1.06fr;
+  }
+
+  .section-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2mm;
+  }
+
+  .section-title {
+    font-size: 24pt;
+    line-height: 1.1;
+  }
+
+  .section-intro {
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+    font-size: 9.1pt;
+    line-height: 1.5;
+  }
+
+  .big-lead {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11.4pt;
+    line-height: 1.52;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .stat-card,
+  .pillar-card,
+  .essay-card {
+    padding-top: 2.8mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .card-tag {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    margin-bottom: 1.4mm;
+    opacity: 0.82;
+  }
+
+  .card-copy,
+  .essay-card p,
+  .action-copy,
+  .appendix-copy,
+  .code-copy {
+    font-size: 8.5pt;
+    line-height: 1.46;
+  }
+
+  .questions,
+  .comparison,
+  .rowlines {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .question-row,
+  .comparison-row,
+  .rowline {
+    display: grid;
+    gap: 3mm;
+    padding: 2.4mm 0;
+    border-top: 0.45pt solid currentColor;
+  }
+
+  .question-row {
+    grid-template-columns: 10mm 1fr;
+  }
+
+  .comparison-row {
+    grid-template-columns: 28mm 1fr 1fr 26mm;
+  }
+
+  .rowline {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .table-tag {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    opacity: 0.82;
+  }
+
+  .question-copy,
+  .rowline-copy {
+    font-size: 8.5pt;
+    line-height: 1.44;
+  }
+
+  .comparison-head {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.15pt;
+    text-transform: uppercase;
+    opacity: 0.82;
+  }
+
+  .comparison-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 13.4pt;
+    line-height: 1.08;
+    font-weight: 500;
+  }
+
+  .comparison-gap {
+    font-size: 7.8pt;
+    line-height: 1.38;
+  }
+
+  .quote-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .quote-line {
+    font-size: 15pt;
+    line-height: 1.32;
+  }
+
+  .quote-meta {
+    font-size: 7.2pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+  }
+
+  pre.code-copy {
+    padding: 3mm;
+    background: var(--paper-tint);
+    color: var(--dark-warm);
+    white-space: pre-wrap;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .page.dark pre.code-copy {
+    background: var(--paper-tint);
+    color: var(--near-black);
+  }
+
+  .highlight-note {
+    padding-top: 2.6mm;
+    border-top: 1pt solid currentColor;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.8pt;
+    line-height: 1.4;
+  }
+
+  .conclusion-wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    min-height: 236mm;
+    gap: 10mm;
+  }
+
+  .conclusion-line {
+    max-width: 150mm;
+    font-size: 31pt;
+    line-height: 1.08;
+  }
+
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5mm;
+  }
+
+  .pillar-index {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    margin-bottom: 1.2mm;
+    opacity: 0.82;
+  }
+
+  .pillar-card p {
+    font-size: 8.4pt;
+    line-height: 1.44;
+    margin-top: 1.6mm;
+  }
+
+  .action-copy,
+  .appendix-copy {
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .appendix-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+  }
+
+  .hl {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 0.45pt;
+    text-underline-offset: 1.4pt;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>WHITE PAPER · EDITORIAL AI</span>
+      <span class="divider"></span>
+      <span>产品说明书</span>
+    </div>
+    <div class="chrome-right">
+      <span>INTERNAL DEMO</span>
+    </div>
+  </div>
+
+  <div class="cover-grid">
+    <div class="cover-copy">
+      <div class="kicker">AI Document Operating System</div>
+      <h1 class="cover-title">BriefOS：<br>把原始素材变成交付文档</h1>
+      <p class="cover-sub">一套给 AI 团队、研究团队与内容团队使用的统一文档系统。</p>
+      <div class="cover-note">这份白皮书回答三个问题：为什么 deck 之外还需要文档系统、哪些视觉语法可以跨 HTML/PDF/PPT 复用，以及如何把交付验证纳入默认流程。</div>
+    </div>
+
+    <aside class="cover-side">
+      <div class="meta-block">
+        <div class="meta-label">Team</div>
+        <div class="meta-value">Paperlane AI</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Project</div>
+        <div class="meta-value">BriefOS / Editorial Systems</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Edition</div>
+        <div class="meta-value">V0.9</div>
+        <div class="meta-note">2026.04</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Prepared By</div>
+        <div class="meta-note">Paperlane Design Engineering<br>Paperlane AI<br>6 pages</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Paperlane Design Engineering</span>
+      <span class="divider"></span>
+      <span>Paperlane AI</span>
+    </div>
+    <div class="foot-right">
+      <span>Cover Story</span>
+    </div>
+  </div>
+  <div class="page-no">01 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Executive Overview</span>
+      <span class="divider"></span>
+      <span>BriefOS / Editorial Systems</span>
+    </div>
+    <div class="chrome-right">
+      <span>Act I</span>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="section-stack">
+      <div class="kicker">Opening Thesis</div>
+      <h2 class="section-title">为什么这份文档值得读</h2>
+      <div class="big-lead">如果团队已经有 deck、研究记录和客户材料，却仍然要为每次交付重新排版，那么问题不在内容生产，而在缺少一套 <span class="hl">统一的文档操作系统</span>。BriefOS 的目标，是把素材到交付的最后一公里变成模板化流程。</div>
+      <div class="card-grid">
+        <article class="stat-card">
+          <div class="card-tag">Takeaway 01</div>
+          <div class="card-copy">首批 system 覆盖 6 类交付，减少重复排版工作</div>
+        </article>
+        <article class="stat-card">
+          <div class="card-tag">Takeaway 02</div>
+          <div class="card-copy">统一模板后，单次交付准备时间可缩短约 40%</div>
+        </article>
+        <article class="stat-card">
+          <div class="card-tag">Takeaway 03</div>
+          <div class="card-copy">下一阶段价值不在更多模板，而在可验证的复用能力</div>
+        </article>
+      </div>
+    </div>
+
+    <div class="section-stack">
+      <div class="kicker">Reader Brief</div>
+      <div class="section-intro">现在的问题不是内容不足，而是输出不稳定。管理层需要的是能被快速复用、快速判断、快速发布的交付格式，因此应先统一文档系统，再扩大内容生产。</div>
+      <div class="questions">
+        <div class="question-row">
+          <div class="table-tag">Q1</div>
+          <div class="question-copy">问题一：哪些交付类型必须共享同一套骨架？<br>问题二：哪些主题语法能跨 HTML / PDF / PPT 复用？<br>问题三：怎样把页数、字体和占位符校验变成默认动作？</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>产品说明书</span>
+      <span class="divider"></span>
+      <span>Overview</span>
+    </div>
+    <div class="foot-right">
+      <span>INTERNAL DEMO</span>
+    </div>
+  </div>
+  <div class="page-no">02 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Problem Frame</span>
+      <span class="divider"></span>
+      <span>Act II</span>
+    </div>
+    <div class="chrome-right">
+      <span>BriefOS / Editorial Systems</span>
+    </div>
+  </div>
+
+  <div class="analysis-grid">
+    <div class="section-stack">
+      <div class="kicker">Chapter 01</div>
+      <h2 class="section-title">问题是怎么形成的</h2>
+      <div class="section-intro">这一章回答一个基础问题：为什么有了 deck 和知识库以后，团队仍然会在交付阶段反复返工。</div>
+      <div class="card-copy">过去 8 周里，团队累计生成了 34 份研究摘要、11 套 slides、6 份客户方案和 9 封正式函件。素材已经足够丰富，但最终输出仍然分散在不同风格、不同页数和不同命名体系里。</div>
+      <div class="quote-block">
+        <div class="quote-line">团队真正缺的不是新的内容生产工具，而是一套能把已有判断稳定落地的交付系统。</div>
+        <div class="quote-meta">内部复盘 · 2026.04</div>
+      </div>
+    </div>
+
+    <div class="section-stack">
+      <div class="section-intro">最直接的问题，是每次需要导出 PDF 或发送正式文档时，都要重新定义标题层级、正文样式、元信息位置和附件结构。结果是同一份判断在不同交付里长得像不同项目。</div>
+      <div class="comparison">
+        <div class="comparison-row">
+          <div class="comparison-head">交付类型</div>
+          <div>
+            <div class="comparison-head">Now</div>
+            <div class="comparison-value">6 类</div>
+          </div>
+          <div>
+            <div class="comparison-head">Target</div>
+            <div class="comparison-value">1 套骨架</div>
+          </div>
+          <div class="comparison-gap">风格未统一</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-head">产出时间</div>
+          <div>
+            <div class="comparison-head">Now</div>
+            <div class="comparison-value">2-3 天</div>
+          </div>
+          <div>
+            <div class="comparison-head">Target</div>
+            <div class="comparison-value">半天内</div>
+          </div>
+          <div class="comparison-gap">验证未前置</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Chapter 01</span>
+      <span class="divider"></span>
+      <span>Status</span>
+    </div>
+    <div class="foot-right">
+      <span>AI Document Operating System</span>
+    </div>
+  </div>
+  <div class="page-no">03 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Method</span>
+      <span class="divider"></span>
+      <span>Act III</span>
+    </div>
+    <div class="chrome-right">
+      <span>Paperlane AI</span>
+    </div>
+  </div>
+
+  <div class="method-grid">
+    <div class="section-stack">
+      <div class="kicker">Chapter 02</div>
+      <h2 class="section-title">方法与发现</h2>
+      <div class="section-intro">我们从过去两个月的实际交付出发，梳理了哪些部分应该模板化，哪些部分必须交给内容判断。</div>
+      <div class="card-copy">方法包括：回看 22 份真实交付件、拆分其中的标题/正文/元信息层级，统计哪些内容每次都重复出现，以及哪些返工来自结构不稳定而不是内容质量。</div>
+      <pre class="code-copy">document_type: one-pager | long-doc | letter | slides
+theme_preset: ink-classic | indigo | forest | kraft | dune
+validation: page-count + fonts + placeholders</pre>
+      <div class="highlight-note">先决定交付类型和主题预设，再开始写内容；不要把排版决定留到最后十分钟。</div>
+    </div>
+
+    <div class="section-stack">
+      <article class="essay-card">
+        <div class="card-tag">Finding 01</div>
+        <h3 class="meta-value">视觉语法必须跨载体</h3>
+        <p>我们发现 80% 以上的交付返工都发生在最后的样式收束阶段，而不是在内容判断阶段。只要标题、规则线、mono 元信息和配色语义能跨 HTML / PDF / PPT 保持一致，返工比例就会明显下降。</p>
+      </article>
+      <article class="essay-card">
+        <div class="card-tag">Finding 02</div>
+        <h3 class="meta-value">验证必须先于导出</h3>
+        <p>另一类常见问题来自“看起来差不多”的假稳定：页数超了、字体 fallback 了、占位符没清掉。这些问题如果不在构建时阻断，最终会变成交付风险。</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Method</span>
+      <span class="divider"></span>
+      <span>Template Logic</span>
+    </div>
+    <div class="foot-right">
+      <span>V0.9</span>
+    </div>
+  </div>
+  <div class="page-no">04 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Conclusions</span>
+      <span class="divider"></span>
+      <span>Act IV</span>
+    </div>
+    <div class="chrome-right">
+      <span>2026.04</span>
+    </div>
+  </div>
+
+  <div class="conclusion-wrap">
+    <div class="kicker">Closing Frame</div>
+    <div class="conclusion-line">先统一交付语言，再扩大内容规模。</div>
+    <div class="pillar-grid">
+      <article class="pillar-card">
+        <div class="pillar-index">Conclusion 01</div>
+        <div class="meta-value">应该把 one-pager、white paper、letter、slides 视为同一系统中的不同出口</div>
+      </article>
+      <article class="pillar-card">
+        <div class="pillar-index">Conclusion 02</div>
+        <div class="meta-value">视觉系统应由 preset 控制，而不是每次临时给 hex</div>
+      </article>
+      <article class="pillar-card">
+        <div class="pillar-index">Conclusion 03</div>
+        <div class="meta-value">验证链路必须跟模板一同交付，而不是交给使用者自己猜</div>
+      </article>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Conclusion Spread</span>
+    </div>
+    <div class="foot-right">
+      <span>Paperlane AI</span>
+    </div>
+  </div>
+  <div class="page-no">05 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Action</span>
+      <span class="divider"></span>
+      <span>Appendix</span>
+    </div>
+    <div class="chrome-right">
+      <span>Paperlane Design Engineering</span>
+    </div>
+  </div>
+
+  <div class="action-grid">
+    <div class="section-stack">
+      <div class="kicker">Next Move</div>
+      <h2 class="section-title">从结论到动作</h2>
+      <div class="action-copy">第一阶段只保留 3 个高频文档样式和 1 套 deck；第二阶段再补简历、作品集和英文适配；每次新增模板都必须同步 demo、verify source 和 examples。</div>
+      <div class="highlight-note">从下周一开始，所有新方案和正式函件统一从 BriefOS 模板启动，不再允许从空白文档临时拼版。</div>
+    </div>
+
+    <div class="section-stack">
+      <div class="kicker">Appendix</div>
+      <div class="appendix-copy">
+        <div class="card-copy">附录建议包含：主题预设说明、组件清单、构建命令、校验规则，以及最近 10 份交付的复盘结果。</div>
+        <div class="rowlines">
+          <div class="rowline">
+            <div class="table-tag">Team</div>
+            <div class="rowline-copy">Paperlane AI</div>
+          </div>
+          <div class="rowline">
+            <div class="table-tag">Project</div>
+            <div class="rowline-copy">BriefOS / Editorial Systems</div>
+          </div>
+          <div class="rowline">
+            <div class="table-tag">Edition</div>
+            <div class="rowline-copy">V0.9 · 2026.04</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Paperlane AI</span>
+      <span class="divider"></span>
+      <span>Actionable Ending</span>
+    </div>
+    <div class="foot-right">
+      <span>INTERNAL DEMO</span>
+    </div>
+  </div>
+  <div class="page-no">06 / 06</div>
+</section>
+</body>
+</html>

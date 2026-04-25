@@ -1,0 +1,23 @@
+{
+  "name": "guizang-themes",
+  "description": "Guizang-inspired magazine and electronic-ink document theme skills for AI-assisted HTML, PDF, and PPTX generation.",
+  "version": "0.1.0",
+  "author": {
+    "name": "pinky-pig"
+  },
+  "homepage": "https://github.com/pinky-pig/kami",
+  "repository": "https://github.com/pinky-pig/kami",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "documents",
+    "themes",
+    "guizang",
+    "magazine",
+    "editorial",
+    "pdf",
+    "slides",
+    "pptx",
+    "html"
+  ]
+}

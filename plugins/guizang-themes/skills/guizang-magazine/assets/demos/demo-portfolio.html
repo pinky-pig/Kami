@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>周既白 · 作品集</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+    --paper-deep: #0a0a0b;
+    --paper-tint: #18181a;
+    --paper-dark: #14100f;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9pt;
+    line-height: 1.46;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 13mm 15.5mm 14mm;
+    break-after: page;
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page:last-child {
+    break-after: auto;
+  }
+
+  .page.light {
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    color: var(--near-black);
+  }
+
+  .page.dark {
+    background: linear-gradient(180deg, var(--brand) 0%, var(--paper-dark) 100%);
+    color: var(--parchment);
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    left: 15.5mm;
+    right: 15.5mm;
+    pointer-events: none;
+  }
+
+  .page.light::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page.light::after {
+    bottom: 11.8mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.35;
+  }
+
+  .page.dark::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--parchment);
+    opacity: 0.14;
+  }
+
+  .page.dark::after {
+    bottom: 11.8mm;
+    border-top: 0.45pt solid var(--paper-tint);
+    opacity: 0.18;
+  }
+
+  .chrome,
+  .foot,
+  .kicker,
+  .meta,
+  .tag,
+  .work-year {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome,
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10mm;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+  }
+
+  .page.light .chrome,
+  .page.light .foot {
+    color: var(--stone);
+  }
+
+  .page.dark .chrome,
+  .page.dark .foot {
+    color: var(--paper-tint);
+  }
+
+  .divider {
+    width: 8mm;
+    border-top: 0.45pt solid currentColor;
+    transform: translateY(-1.6pt);
+    opacity: 0.7;
+  }
+
+  .cover-grid,
+  .about-grid,
+  .case-grid,
+  .contact-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 8mm;
+  }
+
+  .cover-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: end;
+    min-height: 228mm;
+    margin-top: 16mm;
+  }
+
+  .about-grid,
+  .case-grid {
+    grid-template-columns: 1fr 1fr;
+    margin-top: 12mm;
+  }
+
+  .contact-grid {
+    align-content: center;
+    min-height: 232mm;
+    margin-top: 8mm;
+  }
+
+  .kicker {
+    font-size: 7.5pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    opacity: 0.88;
+  }
+
+  .display,
+  .section-title,
+  .case-title,
+  .contact-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+
+  .display {
+    font-size: 36pt;
+    line-height: 1.04;
+    letter-spacing: 0.2pt;
+  }
+
+  .display-sub,
+  .about-lead,
+  .contact-line,
+  .case-sub {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .display-sub {
+    max-width: 115mm;
+    font-size: 11.2pt;
+    line-height: 1.48;
+  }
+
+  .cover-meta,
+  .about-copy,
+  .case-copy,
+  .work-desc,
+  .contact-copy {
+    font-size: 8.5pt;
+    line-height: 1.46;
+  }
+
+  .cover-side,
+  .about-block,
+  .case-copy-block,
+  .works,
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+  }
+
+  .cover-side,
+  .about-block,
+  .case-copy-block,
+  .works,
+  .contact-list {
+    padding-top: 2.8mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .meta-block,
+  .case-stat,
+  .work-row {
+    padding-top: 1.8mm;
+    border-top: 0.45pt solid currentColor;
+  }
+
+  .meta-label,
+  .case-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.15pt;
+    text-transform: uppercase;
+    opacity: 0.84;
+    margin-bottom: 0.8mm;
+  }
+
+  .meta-value,
+  .case-metric {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 14pt;
+    line-height: 1.16;
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-size: 24pt;
+    line-height: 1.08;
+  }
+
+  .about-lead {
+    font-size: 11pt;
+    line-height: 1.5;
+    margin-top: 3mm;
+  }
+
+  .case-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4mm;
+    margin-bottom: 2.2mm;
+  }
+
+  .case-title {
+    font-size: 20pt;
+    line-height: 1.08;
+  }
+
+  .case-index {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    color: inherit;
+  }
+
+  .case-sub {
+    font-size: 10.4pt;
+    line-height: 1.44;
+    margin-bottom: 2mm;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.6mm;
+    margin-bottom: 2mm;
+  }
+
+  .tag {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    padding: 1mm 2mm;
+    border: 0.45pt solid currentColor;
+  }
+
+  .visual {
+    display: grid;
+    place-items: center;
+    min-height: 118mm;
+    border: 0.45pt solid currentColor;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    opacity: 0.78;
+  }
+
+  .visual.double {
+    min-height: 78mm;
+  }
+
+  .visual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3mm;
+  }
+
+  .case-copy-block h3,
+  .about-block h3 {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.8pt;
+    line-height: 1.16;
+    font-weight: 500;
+  }
+
+  .case-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+    margin-top: 2mm;
+  }
+
+  .work-row {
+    display: grid;
+    grid-template-columns: 16mm 1fr 26mm;
+    gap: 4mm;
+    align-items: start;
+  }
+
+  .work-year {
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.05pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .work-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10pt;
+    line-height: 1.16;
+    font-weight: 500;
+  }
+
+  .work-link {
+    text-align: right;
+    font-size: 7pt;
+    line-height: 1.35;
+    color: var(--stone);
+    text-transform: uppercase;
+  }
+
+  .contact-title {
+    font-size: 34pt;
+    line-height: 1.06;
+  }
+
+  .contact-copy {
+    max-width: 118mm;
+    color: inherit;
+  }
+
+  .contact-row {
+    display: grid;
+    grid-template-columns: 22mm 1fr;
+    gap: 4mm;
+    padding: 1.8mm 0;
+    border-top: 0.45pt solid currentColor;
+  }
+
+  .contact-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.05pt;
+    text-transform: uppercase;
+    opacity: 0.82;
+  }
+
+  .contact-row a {
+    color: inherit;
+    text-decoration: none;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="chrome">
+    <span>Selected Works 2023–2026</span>
+    <span>Cover</span>
+  </div>
+
+  <div class="cover-grid">
+    <div>
+      <div class="kicker">Design Engineer</div>
+      <div class="display">周既白<br>Portfolio</div>
+      <div class="display-sub">围绕 AI 交付、设计工程与出版式界面所做的一组系统化作品。</div>
+    </div>
+
+    <aside class="cover-side">
+      <div class="meta-block">
+        <div class="meta-label">Role</div>
+        <div class="meta-value">Design Engineer</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Location</div>
+        <div class="meta-value">上海</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Contact</div>
+        <div class="cover-meta">noah@paperlane.ai<br>paperlane.ai / @noahzhou</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <span>Guizang Portfolio Edition</span>
+    <span>01 / 06</span>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <span>About</span>
+    <span>02 / 06</span>
+  </div>
+
+  <div class="about-grid">
+    <div>
+      <div class="kicker">Positioning</div>
+      <div class="section-title">把感觉做成系统，把系统做成交付。</div>
+      <div class="about-lead">我关心那些看似分散、最后却必须一起成立的东西：内容、界面、输出格式、阅读节奏和最终交付质量。</div>
+    </div>
+    <div class="about-block">
+      <h3>经历</h3>
+      <div class="about-copy">过去几年主要在设计系统、内容工具与 AI 产品之间来回切换，逐渐把关注点放到更完整的交付链路上。</div>
+      <h3>关注</h3>
+      <div class="about-copy">现在更在意一套主题能否跨 HTML、PDF、PPTX 成立，以及它是否真的能减轻团队最后一公里的返工。</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <span>Case Study</span>
+    <span>03 / 06</span>
+  </div>
+
+  <div class="case-head">
+    <div>
+      <div class="case-index">AI Document System</div>
+      <div class="case-title">BriefOS</div>
+    </div>
+    <div class="case-index">2025.09 — 2026.04</div>
+  </div>
+  <div class="case-sub">把研究素材、正式文档和 deck 收束到同一套主题与脚手架里。</div>
+  <div class="tag-row">
+    <span class="tag">Theme System</span>
+    <span class="tag">HTML / PDF / PPTX</span>
+    <span class="tag">Verification</span>
+  </div>
+
+  <div class="case-grid">
+    <div class="visual">Editorial Surface · Theme System</div>
+    <div class="case-copy-block">
+      <h3>Context</h3>
+      <div class="case-copy">团队已经有大量研究与 deck，但在正式交付阶段仍要频繁返工。这个项目服务的是既写内容又要发布的人。</div>
+      <h3>Approach</h3>
+      <div class="case-copy">先拆出 chrome、hero、rowline、pillar 等稳定语法，再把它们移植到不同输出格式中，同时保留 build / verify 管线。</div>
+      <h3>Outcome</h3>
+      <div class="case-copy">沉淀出 <span class="hl">6 类交付出口</span>，并把 demo、模板、验证规则一起打包交付。</div>
+      <div class="case-stats">
+        <div class="case-stat"><div class="case-label">AI Tools</div><div class="case-metric">48%</div></div>
+        <div class="case-stat"><div class="case-label">Editorial</div><div class="case-metric">6</div></div>
+        <div class="case-stat"><div class="case-label">System</div><div class="case-metric">14K</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <span>Case Study</span>
+    <span>04 / 06</span>
+  </div>
+
+  <div class="case-head">
+    <div>
+      <div class="case-index">Research Workspace</div>
+      <div class="case-title">Signal Desk</div>
+    </div>
+    <div class="case-index">2025.05 — 2025.12</div>
+  </div>
+  <div class="case-sub">把资料、判断与行动统一到一张研究工作台里。</div>
+  <div class="tag-row">
+    <span class="tag">Dashboards</span>
+    <span class="tag">Motion</span>
+  </div>
+
+  <div class="case-grid">
+    <div class="visual-grid">
+      <div class="visual double">Signal Layer</div>
+      <div class="visual double">Delivery Layer</div>
+    </div>
+    <div class="case-copy-block">
+      <h3>Background</h3>
+      <div class="case-copy">一个把资料、判断与下一步行动放到同一界面中的研究工作台。</div>
+      <h3>Method</h3>
+      <div class="case-copy">用更清晰的层级和更少的装饰，把界面注意力集中到判断本身。</div>
+      <h3>Result</h3>
+      <div class="case-copy">形成了一组后来被迁移到正式交付模板里的视觉语法。</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <span>Selected Works</span>
+    <span>05 / 06</span>
+  </div>
+
+  <div class="works">
+    <div class="section-title">更多作品</div>
+    <div class="work-row">
+      <div class="work-year">2025</div>
+      <div><div class="work-title">Atlas Notes</div><div class="work-desc">一套围绕交付系统展开的长期实践。</div></div>
+      <div class="work-link">Live / 2026</div>
+    </div>
+    <div class="work-row">
+      <div class="work-year">2024</div>
+      <div><div class="work-title">Signal Atlas</div><div class="work-desc">把研究工作流转换为统一界面。</div></div>
+      <div class="work-link">Private Beta</div>
+    </div>
+    <div class="work-row">
+      <div class="work-year">2023</div>
+      <div><div class="work-title">MonoScene</div><div class="work-desc">围绕主题与组件的连续实验。</div></div>
+      <div class="work-link">In Progress</div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <span>Contact</span>
+    <span>06 / 06</span>
+  </div>
+
+  <div class="contact-grid">
+    <div class="kicker">Let's Talk</div>
+    <div class="contact-title">如果你也在做设计工程、AI 产品或内容交付系统，欢迎交流。</div>
+    <div class="contact-copy">把最后一页做成一个明确的邀请，而不是简单的名片堆叠。</div>
+    <div class="contact-list">
+      <div class="contact-row"><div class="contact-label">Email</div><div><a href="mailto:noah@paperlane.ai">noah@paperlane.ai</a></div></div>
+      <div class="contact-row"><div class="contact-label">Phone</div><div>+86 138 5555 0199</div></div>
+      <div class="contact-row"><div class="contact-label">Website</div><div><a href="https://paperlane.ai">https://paperlane.ai</a></div></div>
+      <div class="contact-row"><div class="contact-label">X</div><div><a href="https://paperlane.ai">@noahzhou</a></div></div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

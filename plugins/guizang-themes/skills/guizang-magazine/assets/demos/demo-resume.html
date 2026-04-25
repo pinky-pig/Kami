@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>周既白 · 简历</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+    --paper-deep: #0a0a0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 8.4pt;
+    line-height: 1.42;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12.2mm 14.8mm 12.8mm;
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page + .page {
+    break-before: page;
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    left: 14.8mm;
+    right: 14.8mm;
+    pointer-events: none;
+  }
+
+  .page::before {
+    top: 11.8mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page::after {
+    bottom: 10.8mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.35;
+  }
+
+  .chrome,
+  .page-no,
+  .kicker,
+  .section-tag,
+  .metric-label,
+  .pill-tag,
+  .mini-tag {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8mm;
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 6.2mm;
+  }
+
+  .page-no {
+    position: absolute;
+    right: 14.8mm;
+    bottom: 11.8mm;
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 7mm;
+    align-items: end;
+    margin-bottom: 4.2mm;
+  }
+
+  .name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 26pt;
+    line-height: 1.02;
+    letter-spacing: 0.2pt;
+    font-weight: 500;
+  }
+
+  .alias {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 12pt;
+    color: var(--olive);
+    margin-left: 2.2mm;
+  }
+
+  .role {
+    margin-top: 1.6mm;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.34;
+    color: var(--charcoal);
+  }
+
+  .contact {
+    padding-top: 2.4mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.6pt;
+    line-height: 1.42;
+    color: var(--olive);
+  }
+
+  .contact a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .summary {
+    padding-top: 2.6mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 8.4pt;
+    line-height: 1.48;
+    color: var(--dark-warm);
+    margin-bottom: 3.2mm;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4mm;
+    margin-bottom: 4mm;
+  }
+
+  .metric {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .metric-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 15.6pt;
+    line-height: 1;
+    color: var(--brand);
+    margin-bottom: 0.9mm;
+  }
+
+  .metric-value .unit {
+    font-size: 9.2pt;
+  }
+
+  .metric-label {
+    font-size: 6.6pt;
+    line-height: 1.35;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .section {
+    margin-bottom: 3mm;
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4mm;
+    margin-bottom: 2mm;
+  }
+
+  .section-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 12.6pt;
+    line-height: 1.14;
+    font-weight: 500;
+  }
+
+  .section-tag {
+    font-size: 6.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.05pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .timeline,
+  .convictions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .pillar,
+  .conviction {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .pill-tag {
+    font-size: 6.5pt;
+    line-height: 1.35;
+    letter-spacing: 1.05pt;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 0.9mm;
+  }
+
+  .pill-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.2pt;
+    line-height: 1.18;
+    font-weight: 500;
+    margin-bottom: 0.6mm;
+  }
+
+  .pill-copy,
+  .conviction p,
+  .project-copy,
+  .os-copy,
+  .impact-copy,
+  .skill-copy,
+  .edu-copy {
+    font-size: 7.5pt;
+    line-height: 1.38;
+    color: var(--charcoal);
+  }
+
+  .project {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    margin-bottom: 2.6mm;
+    break-inside: avoid;
+  }
+
+  .project-head {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4mm;
+    margin-bottom: 1.4mm;
+    align-items: baseline;
+  }
+
+  .project-name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.8pt;
+    line-height: 1.16;
+    font-weight: 500;
+  }
+
+  .project-meta {
+    text-align: right;
+    font-size: 7.2pt;
+    line-height: 1.38;
+    color: var(--stone);
+  }
+
+  .project-rows,
+  .impact-list,
+  .skills {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-row,
+  .impact-row,
+  .skill-row,
+  .os-item,
+  .edu-row {
+    display: grid;
+    gap: 2.6mm;
+    padding: 1.4mm 0;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .project-row,
+  .skill-row {
+    grid-template-columns: 13mm 1fr;
+  }
+
+  .impact-row {
+    grid-template-columns: 16mm 1fr 18mm;
+  }
+
+  .os-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6mm 5mm;
+    margin-top: 1.6mm;
+  }
+
+  .os-item {
+    grid-template-columns: 1fr 14mm;
+    align-items: start;
+  }
+
+  .mini-tag {
+    font-size: 6.4pt;
+    line-height: 1.35;
+    letter-spacing: 0.95pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .project-label,
+  .skill-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.4pt;
+    line-height: 1.35;
+    letter-spacing: 0.95pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .os-name,
+  .impact-title,
+  .edu-name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9.2pt;
+    line-height: 1.16;
+    font-weight: 500;
+  }
+
+  .os-name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .os-star {
+    text-align: right;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9.8pt;
+    line-height: 1.08;
+    color: var(--brand);
+  }
+
+  .highlight {
+    margin-top: 1.4mm;
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.9pt;
+    line-height: 1.4;
+    color: var(--dark-warm);
+  }
+
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 5mm;
+  }
+
+  .page-two-grid {
+    display: grid;
+    grid-template-columns: 1.02fr 0.98fr;
+    gap: 5mm;
+  }
+
+  .handle-strip {
+    padding-top: 2mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 7.8pt;
+    line-height: 1.4;
+    color: var(--charcoal);
+    margin-bottom: 1.8mm;
+  }
+
+  .handle-strip a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .impact-date,
+  .impact-side,
+  .edu-side {
+    font-size: 7pt;
+    line-height: 1.36;
+    color: var(--stone);
+    text-align: right;
+  }
+
+  .edu-row {
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: baseline;
+  }
+
+  .em-brand,
+  .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="chrome">
+    <span>Guizang Resume</span>
+    <span>Page 01</span>
+  </div>
+
+  <header class="hero">
+    <div>
+      <div class="name">周既白<span class="alias">Noah Zhou</span></div>
+      <div class="role">AI / Agent 设计工程</div>
+    </div>
+    <div class="contact">
+      <a href="https://github.com/noahzhou">GitHub @noahzhou</a><br>
+      <a href="https://x.com/noahzhou">X @noahzhou</a><br>
+      <a href="tel:+86 138 5555 0199">+86 138 5555 0199</a> · <a href="mailto:noah@paperlane.ai">noah@paperlane.ai</a><br>
+      29 岁 · 上海
+    </div>
+  </header>
+
+  <div class="summary">
+    Paperlane AI 的设计工程负责人，长期把研究、内容与工程交付收束成统一系统。核心方向包括主题系统、AI 文档、deck 语言、验证链路与产品叙事。
+  </div>
+
+  <section class="metrics">
+    <div class="metric"><div class="metric-value">12<span class="unit">年</span></div><div class="metric-label">设计工程经验</div></div>
+    <div class="metric"><div class="metric-value">6<span class="unit">类</span></div><div class="metric-label">交付出口</div></div>
+    <div class="metric"><div class="metric-value">40+<span class="unit">个</span></div><div class="metric-label">主导项目</div></div>
+    <div class="metric"><div class="metric-value">3<span class="unit">条</span></div><div class="metric-label">长期主题</div></div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">工作经历</div>
+      <div class="section-tag">2021.06 — 至今（从设计系统走到 AI 交付系统）</div>
+    </div>
+    <div class="timeline">
+      <div class="pillar">
+        <div class="pill-tag">2018</div>
+        <div class="pill-title">设计系统起步</div>
+        <div class="pill-copy">从界面与内容设计出发，建立对结构和信息密度的直觉。</div>
+      </div>
+      <div class="pillar">
+        <div class="pill-tag">2021</div>
+        <div class="pill-title">产品与工程合流</div>
+        <div class="pill-copy">开始把设计判断落到交付规范与组件语言上。</div>
+      </div>
+      <div class="pillar">
+        <div class="pill-tag">2024</div>
+        <div class="pill-title">AI 交付系统化</div>
+        <div class="pill-copy">把 AI 文档、PPT 与验证链路收束成统一主题系统。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">关键项目</div>
+      <div class="section-tag">Role / Moves / Impact</div>
+    </div>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">BriefOS · AI 文档系统</div>
+        <div class="project-meta">方向主导</div>
+      </div>
+      <div class="project-rows">
+        <div class="project-row"><div class="project-label">Role</div><div class="project-copy">把分散的 deck、memo 和 white paper 收束到一个多出口技能中，由我负责方向、组件和最终交付语言。</div></div>
+        <div class="project-row"><div class="project-label">Moves</div><div class="project-copy">重建模板层、统一字体层级、重新设计 chrome 与 hero 节奏，并把 build / verify 纳入默认动作。</div></div>
+        <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">在 <span class="hl">6 类出口</span> 上建立统一样式语言，让正式交付准备时间从 2-3 天压到半天内。</div></div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">Signal Desk · 研究工作台</div>
+        <div class="project-meta">设计工程主导</div>
+      </div>
+      <div class="project-rows">
+        <div class="project-row"><div class="project-label">Role</div><div class="project-copy">负责研究工作台与交付界面的整体结构和主题系统。</div></div>
+        <div class="project-row"><div class="project-label">Moves</div><div class="project-copy">把高频页面抽象成 rowline、stat、pillar 等组件，并在 PDF / PPT 中同步实现。</div></div>
+        <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">沉淀出 <span class="hl">20+</span> 个可复用版式片段，支持多个项目并行使用。</div></div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="project-head">
+        <div class="project-name">Paperlane Studio · 设计工程平台</div>
+        <div class="project-meta">独立负责</div>
+      </div>
+      <div class="project-rows">
+        <div class="project-row"><div class="project-label">Role</div><div class="project-copy">为内部 AI 产品建立统一的视觉与交付语言。</div></div>
+        <div class="project-row"><div class="project-label">Moves</div><div class="project-copy">从需求梳理、视觉实验到构建脚本全部端到端推进。</div></div>
+        <div class="project-row"><div class="project-label">Impact</div><div class="project-copy">输出稳定支撑 <span class="hl">40+</span> 份内部与外部正式文档。</div></div>
+      </div>
+    </article>
+  </section>
+
+  <div class="page-no">01 / 02</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <span>Open Source / Impact</span>
+    <span>Page 02</span>
+  </div>
+
+  <section class="section">
+    <div class="section-head">
+      <div class="section-title">开源项目 & 独立开发者</div>
+      <div class="section-tag">2023 — 2026 · 独立开发与产品叙事</div>
+    </div>
+    <div class="summary">
+      <span class="hl">我更像一个把判断落成系统的人</span>，从视觉、模板、脚本到导出全部独立完成，习惯在真实使用里校验主题是否成立。GitHub 累计 <span class="em-brand">14.3K stars · 1.9K forks · 18K followers</span>。
+    </div>
+    <div class="os-grid">
+      <div class="os-item"><div><div class="os-name"><a href="https://github.com/paperlane/atlas-docs">Atlas Docs</a></div><div class="os-copy">TypeScript · AI document runtime · GitHub</div></div><div class="os-star">★ 4.8K</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="https://github.com/paperlane/promptscope">PromptScope</a></div><div class="os-copy">面向研究与交付团队的长文操作系统。</div></div><div class="os-star">★ 3.2K</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="https://github.com/paperlane/patternlab">PatternLab</a></div><div class="os-copy">把 prompt、资料和结论压进统一工作台。</div></div><div class="os-star">★ 2.4K</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="https://github.com/paperlane/northwind-notes">Northwind Notes</a></div><div class="os-copy">用于跨语言风格演练的组件仓库。</div></div><div class="os-star">★ 1.8K</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="https://github.com/paperlane/monoscene">MonoScene</a></div><div class="os-copy">轻量的现场记录与摘要产品。</div></div><div class="os-star">★ 1.2K</div></div>
+      <div class="os-item"><div><div class="os-name"><a href="https://github.com/paperlane/fieldbook-ai">Fieldbook AI</a></div><div class="os-copy">给演示稿和白皮书使用的视觉实验库。</div></div><div class="os-star">★ 860</div></div>
+    </div>
+    <div class="highlight"><span class="em-brand">Featured</span> · 在公开发布后一周内进入多个设计工程社区的主题讨论，并被连续转发到团队内部知识库。</div>
+  </section>
+
+  <div class="page-two-grid">
+    <div>
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">AI 判断与行动</div>
+          <div class="section-tag">Convictions</div>
+        </div>
+        <div class="convictions">
+          <div class="conviction"><div class="pill-tag">2026.03</div><div class="pill-title">提前押注文档交付</div><p>在项目尚未成型时就判断正式文档会成为团队瓶颈，因此优先做交付系统而不是继续堆零散样张。</p></div>
+          <div class="conviction"><div class="pill-tag">2025.12</div><div class="pill-title">重写主题系统</div><p>决定把 deck 之外的正式交付统一收口到同一个主题 skill 中。</p></div>
+          <div class="conviction"><div class="pill-tag">2025.08</div><div class="pill-title">把验证前置进构建</div><p>主动放弃旧的套壳式做法，回到主题原始语法重新构图。</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">对外影响力</div>
+          <div class="section-tag">Public Signal</div>
+        </div>
+        <div class="handle-strip">X / Newsletter · <a href="https://paperlane.ai">@noahzhou</a> · 18K followers · 持续写 AI 交付、设计工程与个人产品方法。</div>
+        <div class="impact-grid">
+          <div class="impact-list">
+            <div class="impact-row"><div class="mini-tag">2026.04</div><div><div class="impact-title">把 AI 写作变成交付系统</div><div class="impact-copy">累计阅读 52K，带来 11 个真实咨询线索。</div></div><div class="impact-side">52K / 1.8K</div></div>
+            <div class="impact-row"><div class="mini-tag">2026.03</div><div><div class="impact-title">为什么主题不是调色板</div><div class="impact-copy">被多个设计工程团队转发，形成内部讨论串。</div></div><div class="impact-side">31K / 1.1K</div></div>
+          </div>
+          <div class="impact-list">
+            <div class="impact-row"><div class="mini-tag">2025.11</div><div><div class="impact-title">Designing AI Deliverables</div><div class="impact-copy">Shanghai Design Week / 上海</div></div><div class="impact-side">Talk</div></div>
+            <div class="impact-row"><div class="mini-tag">2025.10</div><div><div class="impact-title">From Prompt To Proof</div><div class="impact-copy">Product Makers Salon / 杭州</div></div><div class="impact-side">Talk</div></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div>
+      <section class="section">
+        <div class="section-head">
+        <div class="section-title">能力标签</div>
+        <div class="section-tag">Five Signals</div>
+      </div>
+      <div class="skills">
+        <div class="skill-row"><div class="skill-label">结构判断</div><div class="skill-copy">能够把抽象需求压成稳定骨架，并用 <span class="em-brand">可验证的结构</span> 说服团队。</div></div>
+        <div class="skill-row"><div class="skill-label">系统设计</div><div class="skill-copy">擅长把主题、组件和导出链路放进同一套语言里，而不是让视觉和工程各自漂移。</div></div>
+        <div class="skill-row"><div class="skill-label">设计工程</div><div class="skill-copy">可以把排版、模板、脚本和验证一起推进，让设计判断真正落到可发布的产物上。</div></div>
+        <div class="skill-row"><div class="skill-label">独立交付</div><div class="skill-copy">从需求收束、结构搭建到最终导出都能独立完成，并在关键处主动承担取舍责任。</div></div>
+        <div class="skill-row"><div class="skill-label">长期主题</div><div class="skill-copy">长期沉淀 editorial 界面、文档阅读节奏与主题系统，让项目之间形成可复用的审美方法论。</div></div>
+      </div>
+    </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div class="section-title">教育</div>
+          <div class="section-tag">2013 — 2017</div>
+        </div>
+        <div class="edu-row">
+          <div><div class="edu-name">同济大学 · 设计创意学院 · 视觉传达</div><div class="edu-copy">毕业后直接进入产品与设计工程一线，而不是继续学术路径。</div></div>
+          <div class="edu-side">2013 — 2017</div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="page-no">02 / 02</div>
+</section>
+</body>
+</html>

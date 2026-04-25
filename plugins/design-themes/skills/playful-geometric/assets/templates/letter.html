@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{函件标题}}</title>
+<style>
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter-600.woff2") format("woff2"); font-weight: 700; font-style: normal; }
+  @page { size: A4; margin: 0; background: #FFFDF5; }
+  :root { --cream:#FFFDF5; --ink:#1E293B; --violet:#8B5CF6; --pink:#F472B6; --yellow:#FBBF24; --mint:#34D399; --text:#334155; --line:#E2E8F0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    color: var(--ink);
+    background: radial-gradient(#1E293B 0.55pt, transparent 0.65pt) 0 0 / 8mm 8mm, var(--cream);
+    font-family: "Outfit", "Plus Jakarta Sans", "Inter", "Source Han Sans SC", system-ui, sans-serif;
+  }
+  .page { position: relative; min-height: 297mm; padding: 12mm; overflow: hidden; }
+  .sun { position: absolute; width: 68mm; height: 68mm; border-radius: 999px; background: var(--yellow); right: -16mm; top: 18mm; z-index: 0; }
+  .pill { position: absolute; width: 55mm; height: 18mm; border-radius: 999px; background: var(--pink); left: 12mm; bottom: 24mm; transform: rotate(-12deg); box-shadow: 5pt 5pt 0 var(--ink); z-index: 0; }
+  .content { position: relative; z-index: 1; }
+  .header {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 8mm;
+    margin-bottom: 7mm;
+  }
+  .title-card, .sender, .subject, .letter-body, .evidence {
+    border: 2pt solid var(--ink);
+    background: #FFFFFF;
+    box-shadow: 6pt 6pt 0 var(--ink);
+  }
+  .title-card {
+    padding: 8mm;
+    border-radius: 24pt 24pt 24pt 0;
+  }
+  .sender {
+    padding: 7mm;
+    border-radius: 999px 24pt 24pt 24pt;
+    background: var(--mint);
+  }
+  .label {
+    display: inline-block;
+    padding: 2mm 4mm;
+    border: 2pt solid var(--ink);
+    border-radius: 999px;
+    background: var(--yellow);
+    font-size: 7pt;
+    font-weight: 800;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    box-shadow: 3pt 3pt 0 var(--ink);
+    margin-bottom: 5mm;
+  }
+  h1 {
+    font-size: 38pt;
+    line-height: 0.95;
+    letter-spacing: -0.8pt;
+    font-weight: 800;
+  }
+  .sender h2 { font-size: 20pt; line-height: 1.05; margin-bottom: 3mm; }
+  .sender p, .subject p, .letter-body p, .evidence li { font-size: 9.5pt; line-height: 1.55; color: var(--text); }
+  .subject {
+    display: grid;
+    grid-template-columns: 38mm 1fr;
+    margin-bottom: 7mm;
+    border-radius: 18pt;
+    overflow: hidden;
+  }
+  .subject .left { background: var(--violet); color: #FFFFFF; padding: 6mm; }
+  .subject .right { padding: 6mm; }
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 66mm;
+    gap: 8mm;
+  }
+  .letter-body {
+    min-height: 143mm;
+    padding: 8mm;
+    border-radius: 24pt;
+  }
+  .letter-body p { margin-bottom: 4mm; }
+  .drop {
+    display: inline-block;
+    font-size: 34pt;
+    line-height: 0.75;
+    font-weight: 800;
+    color: var(--pink);
+    padding-right: 2pt;
+    vertical-align: text-top;
+  }
+  .closing {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8mm;
+    margin-top: 5mm;
+    padding-top: 5mm;
+    border-top: 2pt dashed var(--ink);
+  }
+  .signature {
+    text-align: right;
+    font-size: 18pt;
+    font-weight: 800;
+  }
+  .evidence {
+    padding: 7mm;
+    border-radius: 28pt 28pt 0 28pt;
+    background: var(--violet);
+    color: #FFFFFF;
+    transform: rotate(1deg);
+  }
+  .evidence h2 { font-size: 23pt; line-height: 1.05; margin-bottom: 5mm; }
+  .evidence ul { list-style: none; display: grid; gap: 4mm; }
+  .evidence li {
+    color: #FFFFFF;
+    padding: 4mm;
+    border: 2pt solid var(--ink);
+    border-radius: 16pt;
+    background: #A78BFA;
+  }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7mm;
+    font-size: 7pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    color: #64748B;
+    font-weight: 800;
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="sun"></div>
+  <div class="pill"></div>
+  <div class="content">
+    <header class="header">
+      <section class="title-card">
+        <div class="label">Letter Sticker</div>
+        <h1>{{推荐信 / 正式函件标题}}</h1>
+      </section>
+      <aside class="sender">
+        <h2>{{寄件人姓名 / 机构}}</h2>
+        <p>{{身份 / 部门 / 城市}}<br>{{电话}} · {{EMAIL}}<br>{{日期}}</p>
+      </aside>
+    </header>
+
+    <section class="subject">
+      <div class="left"><strong>SUBJECT</strong></div>
+      <div class="right"><p>{{关于推荐 / 说明 / 申请事项的一句话标题。致：{{收件人 / 委员会 / 单位}}。}}</p></div>
+    </section>
+
+    <section class="main">
+      <article class="letter-body">
+        <p><span class="drop">{{嗨}}</span>{{第一段：说明写信目的和与被推荐人的关系，第一句直接给出推荐结论。}}</p>
+        <p>{{第二段：写清推荐理由。使用具体项目、成果、数字和观察，不只写“优秀”。}}</p>
+        <p>{{第三段：结合申请场景说明为什么匹配，把对方关心的标准和被推荐人的经历连接起来。}}</p>
+        <p>{{第四段：明确推荐结论，并提供后续联系出口。}}</p>
+        <div class="closing">
+          <div>{{此致　敬礼 / 顺颂商祺}}<br>{{附言：如需进一步了解，我愿意补充说明。}}</div>
+          <div class="signature">{{签名}}<br><span style="font-size:8pt;font-weight:700;color:#64748B">{{职位 · 单位}}<br>{{日期复写}}</span></div>
+        </div>
+      </article>
+      <aside class="evidence">
+        <div class="label">Proof Pops</div>
+        <h2>{{三条可核验事实}}</h2>
+        <ul>
+          <li>{{证据 1：项目 / 成果}}</li>
+          <li>{{证据 2：能力 / 品质}}</li>
+          <li>{{证据 3：影响 / 评价}}</li>
+        </ul>
+      </aside>
+    </section>
+
+    <footer class="footer"><span>Playful Geometric Letter</span><span>Kami · 1 / 1</span></footer>
+  </div>
+</main>
+</body>
+</html>

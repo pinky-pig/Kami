@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     LONG DOCUMENT TEMPLATE · guizang magazine
+     多页 A4 白皮书 / 长文 / 年度总结
+     视觉：hero cover、chrome / foot、问题页、方法页、结论幕封
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{文档标题}}</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+
+    --paper-deep: #0a0a0b;
+    --paper-tint: #18181a;
+    --paper-dark: #14100f;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9.2pt;
+    line-height: 1.46;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 13mm 15.5mm 14mm;
+    break-after: page;
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page:last-child {
+    break-after: auto;
+  }
+
+  .page.light {
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    color: var(--near-black);
+  }
+
+  .page.dark {
+    background: linear-gradient(180deg, var(--brand) 0%, var(--paper-dark) 100%);
+    color: var(--parchment);
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .page.light::before,
+  .page.light::after {
+    left: 15.5mm;
+    right: 15.5mm;
+  }
+
+  .page.dark::before,
+  .page.dark::after {
+    left: 15.5mm;
+    right: 15.5mm;
+  }
+
+  .page.light::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page.light::after {
+    bottom: 11.5mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.35;
+  }
+
+  .page.dark::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--parchment);
+    opacity: 0.14;
+  }
+
+  .page.dark::after {
+    bottom: 11.5mm;
+    border-top: 0.45pt solid var(--paper-tint);
+    opacity: 0.18;
+  }
+
+  .chrome,
+  .foot,
+  .kicker,
+  .meta,
+  .card-tag,
+  .table-tag,
+  .page-no {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome,
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10mm;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+  }
+
+  .page.light .chrome,
+  .page.light .foot {
+    color: var(--stone);
+  }
+
+  .page.dark .chrome,
+  .page.dark .foot {
+    color: var(--paper-tint);
+  }
+
+  .chrome-left,
+  .chrome-right,
+  .foot-left,
+  .foot-right {
+    display: flex;
+    align-items: baseline;
+    gap: 3.5mm;
+  }
+
+  .divider {
+    width: 8mm;
+    border-top: 0.45pt solid currentColor;
+    transform: translateY(-1.6pt);
+    opacity: 0.65;
+  }
+
+  .cover-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.24fr 0.76fr;
+    gap: 8mm;
+    align-items: end;
+    margin-top: 18mm;
+    min-height: 205mm;
+  }
+
+  .cover-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+  }
+
+  .kicker {
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.7pt;
+    text-transform: uppercase;
+    opacity: 0.88;
+  }
+
+  .cover-title,
+  .section-title,
+  .quote-line,
+  .conclusion-line {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+
+  .cover-title {
+    font-size: 34pt;
+    line-height: 1.08;
+    letter-spacing: 0.14pt;
+  }
+
+  .cover-sub {
+    max-width: 114mm;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11.2pt;
+    line-height: 1.48;
+  }
+
+  .cover-note {
+    max-width: 116mm;
+    margin-top: 10mm;
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+    font-size: 8.8pt;
+    line-height: 1.48;
+  }
+
+  .cover-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2.8mm;
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .meta-block {
+    padding-top: 2.4mm;
+    border-top: 0.45pt solid currentColor;
+    border-color: inherit;
+  }
+
+  .meta-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.9pt;
+    line-height: 1.35;
+    letter-spacing: 1.3pt;
+    text-transform: uppercase;
+    margin-bottom: 0.9mm;
+    opacity: 0.82;
+  }
+
+  .meta-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 14pt;
+    line-height: 1.22;
+    font-weight: 500;
+  }
+
+  .meta-note {
+    font-size: 8pt;
+    line-height: 1.42;
+    margin-top: 0.8mm;
+    opacity: 0.88;
+  }
+
+  .page-no {
+    position: absolute;
+    right: 15.5mm;
+    bottom: 14.3mm;
+    font-size: 6.9pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+  }
+
+  .summary-grid,
+  .analysis-grid,
+  .method-grid,
+  .action-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 7mm;
+    margin-top: 11mm;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1.16fr 0.84fr;
+  }
+
+  .method-grid,
+  .action-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .analysis-grid {
+    grid-template-columns: 0.94fr 1.06fr;
+  }
+
+  .section-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 3.2mm;
+  }
+
+  .section-title {
+    font-size: 24pt;
+    line-height: 1.1;
+  }
+
+  .section-intro {
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+    font-size: 9.1pt;
+    line-height: 1.5;
+  }
+
+  .big-lead {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11.4pt;
+    line-height: 1.52;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .stat-card,
+  .pillar-card,
+  .essay-card {
+    padding-top: 2.8mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .card-tag {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    margin-bottom: 1.4mm;
+    opacity: 0.82;
+  }
+
+  .card-copy,
+  .essay-card p,
+  .action-copy,
+  .appendix-copy,
+  .code-copy {
+    font-size: 8.5pt;
+    line-height: 1.46;
+  }
+
+  .questions,
+  .comparison,
+  .rowlines {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .question-row,
+  .comparison-row,
+  .rowline {
+    display: grid;
+    gap: 3mm;
+    padding: 2.4mm 0;
+    border-top: 0.45pt solid currentColor;
+  }
+
+  .question-row {
+    grid-template-columns: 10mm 1fr;
+  }
+
+  .comparison-row {
+    grid-template-columns: 28mm 1fr 1fr 26mm;
+  }
+
+  .rowline {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .table-tag {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    opacity: 0.82;
+  }
+
+  .question-copy,
+  .rowline-copy {
+    font-size: 8.5pt;
+    line-height: 1.44;
+  }
+
+  .comparison-head {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.15pt;
+    text-transform: uppercase;
+    opacity: 0.82;
+  }
+
+  .comparison-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 13.4pt;
+    line-height: 1.08;
+    font-weight: 500;
+  }
+
+  .comparison-gap {
+    font-size: 7.8pt;
+    line-height: 1.38;
+  }
+
+  .quote-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .quote-line {
+    font-size: 15pt;
+    line-height: 1.32;
+  }
+
+  .quote-meta {
+    font-size: 7.2pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+  }
+
+  pre.code-copy {
+    padding: 3mm;
+    background: var(--paper-tint);
+    color: var(--dark-warm);
+    white-space: pre-wrap;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .page.dark pre.code-copy {
+    background: var(--paper-tint);
+    color: var(--near-black);
+  }
+
+  .highlight-note {
+    padding-top: 2.6mm;
+    border-top: 1pt solid currentColor;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.8pt;
+    line-height: 1.4;
+  }
+
+  .conclusion-wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    min-height: 236mm;
+    gap: 10mm;
+  }
+
+  .conclusion-line {
+    max-width: 150mm;
+    font-size: 31pt;
+    line-height: 1.08;
+  }
+
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 5mm;
+  }
+
+  .pillar-index {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    margin-bottom: 1.2mm;
+    opacity: 0.82;
+  }
+
+  .pillar-card p {
+    font-size: 8.4pt;
+    line-height: 1.44;
+    margin-top: 1.6mm;
+  }
+
+  .action-copy,
+  .appendix-copy {
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .appendix-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+  }
+
+  .hl {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 0.45pt;
+    text-underline-offset: 1.4pt;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>{{WHITE PAPER · INTERNAL EDITION}}</span>
+      <span class="divider"></span>
+      <span>{{文档分类}}</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{公开级别 / 内部公开版}}</span>
+    </div>
+  </div>
+
+  <div class="cover-grid">
+    <div class="cover-copy">
+      <div class="kicker">{{Archive Knowledge System}}</div>
+      <h1 class="cover-title">{{文档主标题<br>可以两行}}</h1>
+      <p class="cover-sub">{{副标题：一句话说清这份白皮书解决什么问题、为谁而写。}}</p>
+      <div class="cover-note">{{封面注记：本文档聚焦哪几个问题，读者读完能获得什么判断。}}</div>
+    </div>
+
+    <aside class="cover-side">
+      <div class="meta-block">
+        <div class="meta-label">Team</div>
+        <div class="meta-value">{{团队 / 部门}}</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Project</div>
+        <div class="meta-value">{{专题 / 项目}}</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Edition</div>
+        <div class="meta-value">{{V1.0}}</div>
+        <div class="meta-note">{{2026.04}}</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Prepared By</div>
+        <div class="meta-note">{{作者 / 团队}}<br>{{发布方 / 机构}}<br>{{示意页数}} pages</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>{{作者 / 团队}}</span>
+      <span class="divider"></span>
+      <span>{{发布方 / 机构}}</span>
+    </div>
+    <div class="foot-right">
+      <span>Cover Story</span>
+    </div>
+  </div>
+  <div class="page-no">01 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Executive Overview</span>
+      <span class="divider"></span>
+      <span>{{专题 / 项目}}</span>
+    </div>
+    <div class="chrome-right">
+      <span>Act I</span>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="section-stack">
+      <div class="kicker">Opening Thesis</div>
+      <h2 class="section-title">为什么这份文档值得读</h2>
+      <div class="big-lead">{{一段 2-3 句话的大论点开场。用 <span class="hl">关键词高亮</span> 抓住读者注意力，让读者读这一段就理解整份文档。}}</div>
+      <div class="card-grid">
+        <article class="stat-card">
+          <div class="card-tag">Takeaway 01</div>
+          <div class="card-copy">{{Takeaway 1：一句话，可量化}}</div>
+        </article>
+        <article class="stat-card">
+          <div class="card-tag">Takeaway 02</div>
+          <div class="card-copy">{{Takeaway 2：有数据的洞察}}</div>
+        </article>
+        <article class="stat-card">
+          <div class="card-tag">Takeaway 03</div>
+          <div class="card-copy">{{Takeaway 3：对未来的判断}}</div>
+        </article>
+      </div>
+    </div>
+
+    <div class="section-stack">
+      <div class="kicker">Reader Brief</div>
+      <div class="section-intro">{{用一段话说明为什么现在需要这份文档，以及决策者读完以后应该采取什么行动。}}</div>
+      <div class="questions">
+        <div class="question-row">
+          <div class="table-tag">Q1</div>
+          <div class="question-copy">{{列出 3 个核心问题：范围、方法、交付标准。}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>{{文档分类}}</span>
+      <span class="divider"></span>
+      <span>Overview</span>
+    </div>
+    <div class="foot-right">
+      <span>{{公开级别 / 内部公开版}}</span>
+    </div>
+  </div>
+  <div class="page-no">02 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Problem Frame</span>
+      <span class="divider"></span>
+      <span>Act II</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{专题 / 项目}}</span>
+    </div>
+  </div>
+
+  <div class="analysis-grid">
+    <div class="section-stack">
+      <div class="kicker">Chapter 01</div>
+      <h2 class="section-title">问题是怎么形成的</h2>
+      <div class="section-intro">{{章节导语：这一章要解决什么问题，为什么重要。}}</div>
+      <div class="card-copy">{{3-5 行段落，铺陈当前状况。用 <span class="hl">具体数据</span> 而不是形容词。}}</div>
+      <div class="quote-block">
+        <div class="quote-line">{{一段重要引用或核心观察。和正文语气略有不同，给读者呼吸节奏。}}</div>
+        <div class="quote-meta">{{来源 / 人物}} · {{日期}}</div>
+      </div>
+    </div>
+
+    <div class="section-stack">
+      <div class="section-intro">{{陈述具体问题，说明它如何影响交付、效率或判断质量。}}</div>
+      <div class="comparison">
+        <div class="comparison-row">
+          <div class="comparison-head">{{维度 1}}</div>
+          <div>
+            <div class="comparison-head">Now</div>
+            <div class="comparison-value">{{数据}}</div>
+          </div>
+          <div>
+            <div class="comparison-head">Target</div>
+            <div class="comparison-value">{{数据}}</div>
+          </div>
+          <div class="comparison-gap">{{差距}}</div>
+        </div>
+        <div class="comparison-row">
+          <div class="comparison-head">{{维度 2}}</div>
+          <div>
+            <div class="comparison-head">Now</div>
+            <div class="comparison-value">{{数据}}</div>
+          </div>
+          <div>
+            <div class="comparison-head">Target</div>
+            <div class="comparison-value">{{数据}}</div>
+          </div>
+          <div class="comparison-gap">{{差距}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Chapter 01</span>
+      <span class="divider"></span>
+      <span>Status</span>
+    </div>
+    <div class="foot-right">
+      <span>{{Archive Knowledge System}}</span>
+    </div>
+  </div>
+  <div class="page-no">03 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Method</span>
+      <span class="divider"></span>
+      <span>Act III</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{团队 / 部门}}</span>
+    </div>
+  </div>
+
+  <div class="method-grid">
+    <div class="section-stack">
+      <div class="kicker">Chapter 02</div>
+      <h2 class="section-title">方法与发现</h2>
+      <div class="section-intro">{{章节导语：说明研究方法和最重要的发现。}}</div>
+      <div class="card-copy">{{描述资料来源、访谈范围、样本口径或分析方法。}}</div>
+      <pre class="code-copy">{{如需代码或规则示例，放在这里；不需要时删除整个 pre。}}</pre>
+      <div class="highlight-note">{{对执行者最重要的一句提醒。}}</div>
+    </div>
+
+    <div class="section-stack">
+      <article class="essay-card">
+        <div class="card-tag">Finding 01</div>
+        <h3 class="meta-value">{{标题}}</h3>
+        <p>{{一段论述，包含 <span class="hl">具体数字 / 具体比例</span>。}}</p>
+      </article>
+      <article class="essay-card">
+        <div class="card-tag">Finding 02</div>
+        <h3 class="meta-value">{{标题}}</h3>
+        <p>{{一段论述，说明原因和影响。}}</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Method</span>
+      <span class="divider"></span>
+      <span>Template Logic</span>
+    </div>
+    <div class="foot-right">
+      <span>{{V1.0}}</span>
+    </div>
+  </div>
+  <div class="page-no">04 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Conclusions</span>
+      <span class="divider"></span>
+      <span>Act IV</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{2026.04}}</span>
+    </div>
+  </div>
+
+  <div class="conclusion-wrap">
+    <div class="kicker">Closing Frame</div>
+    <div class="conclusion-line">{{一句话总结结论，下面展开建议。}}</div>
+    <div class="pillar-grid">
+      <article class="pillar-card">
+        <div class="pillar-index">Conclusion 01</div>
+        <div class="meta-value">{{结论 1}}</div>
+      </article>
+      <article class="pillar-card">
+        <div class="pillar-index">Conclusion 02</div>
+        <div class="meta-value">{{结论 2}}</div>
+      </article>
+      <article class="pillar-card">
+        <div class="pillar-index">Conclusion 03</div>
+        <div class="meta-value">{{结论 3}}</div>
+      </article>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Conclusion Spread</span>
+    </div>
+    <div class="foot-right">
+      <span>{{发布方 / 机构}}</span>
+    </div>
+  </div>
+  <div class="page-no">05 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Action</span>
+      <span class="divider"></span>
+      <span>Appendix</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{作者 / 团队}}</span>
+    </div>
+  </div>
+
+  <div class="action-grid">
+    <div class="section-stack">
+      <div class="kicker">Next Move</div>
+      <h2 class="section-title">从结论到动作</h2>
+      <div class="action-copy">{{基于结论的具体可执行建议。}}</div>
+      <div class="highlight-note">{{如果读者要做一件事，是什么？具体到可以周一早上就开始行动。}}</div>
+    </div>
+
+    <div class="section-stack">
+      <div class="kicker">Appendix</div>
+      <div class="appendix-copy">
+        <div class="card-copy">{{附录摘要或参考资料说明。}}</div>
+        <div class="rowlines">
+          <div class="rowline">
+            <div class="table-tag">Team</div>
+            <div class="rowline-copy">{{团队 / 部门}}</div>
+          </div>
+          <div class="rowline">
+            <div class="table-tag">Project</div>
+            <div class="rowline-copy">{{专题 / 项目}}</div>
+          </div>
+          <div class="rowline">
+            <div class="table-tag">Edition</div>
+            <div class="rowline-copy">{{V1.0}} · {{2026.04}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>{{发布方 / 机构}}</span>
+      <span class="divider"></span>
+      <span>Actionable Ending</span>
+    </div>
+    <div class="foot-right">
+      <span>{{公开级别 / 内部公开版}}</span>
+    </div>
+  </div>
+  <div class="page-no">06 / 06</div>
+</section>
+</body>
+</html>

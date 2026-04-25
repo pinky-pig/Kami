@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{文档标题}}</title>
+<style>
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter-600.woff2") format("woff2"); font-weight: 700; font-style: normal; }
+  @page { size: A4; margin: 0; background: #FFFDF5; }
+  :root {
+    --cream: #FFFDF5;
+    --ink: #1E293B;
+    --muted: #F1F5F9;
+    --line: #E2E8F0;
+    --violet: #8B5CF6;
+    --pink: #F472B6;
+    --yellow: #FBBF24;
+    --mint: #34D399;
+    --text: #334155;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    color: var(--ink);
+    background:
+      radial-gradient(#1E293B 0.55pt, transparent 0.65pt) 0 0 / 8mm 8mm,
+      var(--cream);
+    font-family: "Outfit", "Plus Jakarta Sans", "Inter", "Source Han Sans SC", system-ui, sans-serif;
+  }
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12mm;
+    overflow: hidden;
+  }
+  .blob, .dot, .triangle, .stripe {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .blob {
+    width: 72mm;
+    height: 72mm;
+    border-radius: 999px;
+    background: var(--yellow);
+    right: -18mm;
+    top: 18mm;
+  }
+  .dot {
+    width: 20mm;
+    height: 20mm;
+    border-radius: 999px;
+    background: var(--pink);
+    left: 11mm;
+    bottom: 28mm;
+    box-shadow: 5mm 5mm 0 var(--ink);
+  }
+  .triangle {
+    width: 0;
+    height: 0;
+    border-left: 12mm solid transparent;
+    border-right: 12mm solid transparent;
+    border-bottom: 22mm solid var(--mint);
+    left: 158mm;
+    bottom: 20mm;
+    transform: rotate(-18deg);
+  }
+  .stripe {
+    width: 42mm;
+    height: 22mm;
+    left: 18mm;
+    top: 20mm;
+    border-radius: 20mm 20mm 20mm 0;
+    background: repeating-linear-gradient(135deg, var(--violet) 0 3pt, transparent 3pt 7pt);
+    opacity: 0.28;
+  }
+  .content { position: relative; z-index: 1; }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.18fr 0.82fr;
+    gap: 8mm;
+    align-items: stretch;
+    margin-bottom: 7mm;
+  }
+  .headline {
+    min-height: 92mm;
+    padding: 8mm;
+    border: 2pt solid var(--ink);
+    border-radius: 22pt 22pt 22pt 0;
+    background: #FFFFFF;
+    box-shadow: 6pt 6pt 0 var(--violet);
+  }
+  .eyebrow, .label, .footer {
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+  }
+  .eyebrow {
+    display: inline-block;
+    padding: 2.5mm 4mm;
+    border: 2pt solid var(--ink);
+    border-radius: 999px;
+    background: var(--yellow);
+    margin-bottom: 6mm;
+    box-shadow: 3pt 3pt 0 var(--ink);
+  }
+  h1 {
+    font-size: 42pt;
+    line-height: 0.92;
+    letter-spacing: -1pt;
+    font-weight: 800;
+    max-width: 118mm;
+  }
+  .subtitle {
+    margin-top: 5mm;
+    max-width: 106mm;
+    font-size: 12pt;
+    line-height: 1.45;
+    color: var(--text);
+  }
+  .side-stack {
+    display: grid;
+    gap: 5mm;
+  }
+  .bubble {
+    padding: 6mm;
+    border: 2pt solid var(--ink);
+    border-radius: 24pt;
+    background: var(--mint);
+    box-shadow: 5pt 5pt 0 var(--ink);
+  }
+  .bubble:nth-child(2) {
+    background: var(--pink);
+    border-radius: 24pt 24pt 0 24pt;
+    transform: rotate(1.5deg);
+  }
+  .bubble h2 {
+    font-size: 18pt;
+    line-height: 1.05;
+    margin-bottom: 3mm;
+  }
+  .bubble p {
+    font-size: 9.3pt;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5mm;
+    margin-bottom: 7mm;
+  }
+  .metric {
+    min-height: 33mm;
+    padding: 5mm;
+    border: 2pt solid var(--ink);
+    border-radius: 18pt;
+    background: #FFFFFF;
+    box-shadow: 4pt 4pt 0 var(--line);
+  }
+  .metric:nth-child(2) { box-shadow: 4pt 4pt 0 var(--pink); }
+  .metric:nth-child(3) { box-shadow: 4pt 4pt 0 var(--yellow); }
+  .metric:nth-child(4) { box-shadow: 4pt 4pt 0 var(--mint); }
+  .sticker-face { position: relative; z-index: 1; }
+  .num {
+    font-size: 24pt;
+    line-height: 0.9;
+    font-weight: 800;
+  }
+  .metric p {
+    margin-top: 3mm;
+    font-size: 8pt;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .body-grid {
+    display: grid;
+    grid-template-columns: 5fr 4fr 3fr;
+    gap: 6mm;
+  }
+  .card {
+    position: relative;
+    padding: 7mm;
+    border: 2pt solid var(--ink);
+    border-radius: 22pt;
+    background: #FFFFFF;
+    box-shadow: 6pt 6pt 0 var(--ink);
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    width: 14mm;
+    height: 14mm;
+    border: 2pt solid var(--ink);
+    border-radius: 999px;
+    background: var(--yellow);
+    top: -7mm;
+    right: 9mm;
+  }
+  .card h2 {
+    font-size: 21pt;
+    line-height: 1.05;
+    margin-bottom: 4mm;
+  }
+  .card p, .card li {
+    font-size: 9.4pt;
+    line-height: 1.52;
+    color: var(--text);
+  }
+  .card ul { list-style: none; display: grid; gap: 3mm; }
+  .card li::before {
+    content: "●";
+    color: var(--violet);
+    margin-right: 2mm;
+  }
+  .mini {
+    background:
+      repeating-linear-gradient(45deg, rgba(139,92,246,0.12) 0 4pt, transparent 4pt 8pt),
+      #FFFFFF;
+  }
+  .cta {
+    background: var(--violet);
+    color: #FFFFFF;
+    border-radius: 999px;
+    box-shadow: 5pt 5pt 0 var(--ink);
+  }
+  .cta p, .cta h2 { color: #FFFFFF; }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7mm;
+    color: #64748B;
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="blob"></div>
+  <div class="dot"></div>
+  <div class="triangle"></div>
+  <div class="stripe"></div>
+  <div class="content">
+    <section class="hero">
+      <article class="headline">
+        <div class="eyebrow">{{PLAYFUL GEOMETRIC / PROJECT BRIEF}}</div>
+        <div class="sticker-face">
+          <h1>{{文档主标题，像贴纸海报一样直接、明亮、有节奏}}</h1>
+          <p class="subtitle">{{一句副标题：清楚说明这份一页纸的判断、对象和下一步。}}</p>
+        </div>
+      </article>
+      <aside class="side-stack">
+        <div class="bubble"><h2>{{Friendly Note}}</h2><p>{{项目 / 公司 / 主题名称}}<br>{{版本 / 日期 / 分类}}</p></div>
+        <div class="bubble"><h2>{{What changed?}}</h2><p>{{一句话说明最重要的变化或机会。}}</p></div>
+      </aside>
+    </section>
+
+    <section class="metrics">
+      <div class="metric"><div class="num">{{数字}}</div><p>{{指标说明}}</p></div>
+      <div class="metric"><div class="num">{{数字}}</div><p>{{指标说明}}</p></div>
+      <div class="metric"><div class="num">{{数字}}</div><p>{{指标说明}}</p></div>
+    </section>
+
+    <section class="body-grid">
+      <article class="card">
+        <div class="label">Main Story</div>
+        <h2>{{核心论点}}</h2>
+        <p>{{80-120 字正文导语。内容区稳定、清晰，但周围用圆形、贴纸阴影和几何形状表达趣味。}}</p>
+      </article>
+      <article class="card mini">
+        <div class="label">Checklist</div>
+        <h2>{{关键事项}}</h2>
+        <ul>
+          <li>{{事实 / 判断 1}}</li>
+          <li>{{事实 / 判断 2}}</li>
+          <li>{{下一步行动}}</li>
+        </ul>
+      </article>
+      <aside class="card cta">
+        <div class="label">Next Move</div>
+        <h2>{{行动标题}}</h2>
+        <p>{{责任人、时间和交付物。}}</p>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>{{Playful Geometric Edition}}</span>
+      <span>{{Kami Demo · 1 / 1}}</span>
+    </footer>
+  </div>
+</main>
+</body>
+</html>

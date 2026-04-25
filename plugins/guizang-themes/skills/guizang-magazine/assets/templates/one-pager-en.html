@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{DOC_TITLE}}</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+
+    --paper-deep: #0a0a0b;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  body {
+    font-size: 8.8pt;
+    line-height:  1.54;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 13.5mm 15.5mm 14mm;
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 4.8mm;
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    left: 15.5mm;
+    right: 15.5mm;
+    pointer-events: none;
+  }
+
+  .page::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page::after {
+    bottom: 11.8mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.38;
+  }
+
+  .chrome,
+  .foot,
+  .kicker,
+  .issue-label,
+  .section-tag,
+  .stat-label,
+  .step-mark {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome,
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10mm;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .chrome-left,
+  .chrome-right,
+  .foot-left,
+  .foot-right {
+    display: flex;
+    align-items: baseline;
+    gap: 3.5mm;
+  }
+
+  .divider {
+    width: 8mm;
+    border-top: 0.45pt solid var(--rule-strong);
+    transform: translateY(-1.6pt);
+  }
+
+  .hero {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 8mm;
+    align-items: end;
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+  }
+
+  .kicker {
+    font-size: 7.5pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    color: var(--olive);
+  }
+
+  .headline,
+  .issue-title,
+  .editorial-title,
+  .timeline-title,
+  .callout-title,
+  .callout-quote {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+
+  .headline {
+    font-size: 28pt;
+    line-height: 1.04;
+    letter-spacing: -0.3pt;
+  }
+
+  .subhead {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.44;
+    color: var(--charcoal);
+  }
+
+  .issue-box,
+  .lead,
+  .editorial-block,
+  .timeline,
+  .callout {
+    padding-top: 2.8mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .issue-label,
+  .section-tag,
+  .stat-label,
+  .step-mark {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.15pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .issue-title {
+    font-size: 15.5pt;
+    line-height: 1.16;
+  }
+
+  .issue-meta,
+  .editorial-copy,
+  .bullet-copy,
+  .stat-note,
+  .step-copy,
+  .callout-copy,
+  .milestone {
+    font-size: 8.1pt;
+    line-height: 1.44;
+    color: var(--charcoal);
+  }
+
+  .lead {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.4pt;
+    line-height: 1.5;
+    color: var(--dark-warm);
+  }
+
+  .stat-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .stat-card {
+    min-height: 23mm;
+    padding-top: 2.2mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .stat-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 18.5pt;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--brand);
+    margin-bottom: 1.1mm;
+  }
+
+  .story-grid,
+  .bottom-band {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 7mm;
+  }
+
+  .story-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bottom-band {
+    grid-template-columns: 1.12fr 0.88fr;
+  }
+
+  .editorial-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+  }
+
+  .editorial-head,
+  .timeline-head,
+  .callout-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3mm;
+  }
+
+  .editorial-title {
+    font-size: 14pt;
+    line-height: 1.16;
+  }
+
+  .editorial-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6mm;
+  }
+
+  .editorial-list li {
+    display: grid;
+    grid-template-columns: 4mm 1fr;
+    gap: 2mm;
+  }
+
+  .bullet {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.8pt;
+    line-height: 1.35;
+    color: var(--stone);
+    padding-top: 0.4mm;
+  }
+
+  .timeline-title,
+  .callout-title {
+    font-size: 12.6pt;
+    line-height: 1.16;
+  }
+
+  .timeline-track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+    margin-top: 2.3mm;
+  }
+
+  .step {
+    padding-top: 1.8mm;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .step-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.2pt;
+    line-height: 1.18;
+    font-weight: 500;
+    margin-bottom: 0.7mm;
+  }
+
+  .callout {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+  }
+
+  .callout-quote {
+    font-size: 12.5pt;
+    line-height: 1.3;
+  }
+
+  .milestones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6mm 4mm;
+  }
+
+  .milestone {
+    padding-top: 1.4mm;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Guizang Magazine</span>
+      <span class="divider"></span>
+      <span>One Pager</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{CONFIDENTIALITY — internal / public / draft}}</span>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="kicker">{{EYEBROW — e.g. Proposal / Report / Exec Summary}}</div>
+      <h1 class="headline">{{Document headline — verb-led, fits in two lines, bookish.}}</h1>
+      <p class="subhead">{{One-line subtitle or the single sharpest claim.}}</p>
+    </div>
+
+    <aside class="issue-box">
+      <div class="issue-label">Prepared By</div>
+      <div class="issue-title">{{AUTHOR}}</div>
+      <div class="issue-meta">{{YYYY.MM.DD}}<br>{{VERSION / STATUS}}</div>
+    </aside>
+  </section>
+
+  <section class="lead">
+    {{~30-40 words. The one paragraph that sets the whole document's tone. Use <span class="hl">brand-color emphasis</span> on the sharpest claim or number. Everything below is in service of this.}}
+  </section>
+
+  <section class="stat-grid">
+    <article class="stat-card">
+      <div class="stat-label">{{LABEL}}</div>
+      <div class="stat-value">{{NUMBER}}</div>
+      <div class="stat-note">time window</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">{{LABEL}}</div>
+      <div class="stat-value">{{NUMBER}}</div>
+      <div class="stat-note">delivery scope</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">{{LABEL}}</div>
+      <div class="stat-value">{{NUMBER}}</div>
+      <div class="stat-note">reuse potential</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">{{LABEL}}</div>
+      <div class="stat-value">{{NUMBER}}</div>
+      <div class="stat-note">system outputs</div>
+    </article>
+  </section>
+
+  <section class="story-grid">
+    <article class="editorial-block">
+      <div class="editorial-head">
+        <h2 class="editorial-title">{{Section one}}</h2>
+        <div class="section-tag">Argument</div>
+      </div>
+      <p class="editorial-copy">{{One or two sentences expanding the claim.}}</p>
+      <ul class="editorial-list">
+        <li><span class="bullet">01</span><span class="bullet-copy">{{Short bullet: a data point, observation, or judgment.}}</span></li>
+        <li><span class="bullet">02</span><span class="bullet-copy">{{Short bullet with <span class="hl">key figure</span>.}}</span></li>
+        <li><span class="bullet">03</span><span class="bullet-copy">{{Short bullet.}}</span></li>
+      </ul>
+    </article>
+
+    <article class="editorial-block">
+      <div class="editorial-head">
+        <h2 class="editorial-title">{{Section two}}</h2>
+        <div class="section-tag">Execution</div>
+      </div>
+      <p class="editorial-copy">{{One or two sentences.}}</p>
+      <ul class="editorial-list">
+        <li><span class="bullet">01</span><span class="bullet-copy">{{Short bullet.}}</span></li>
+        <li><span class="bullet">02</span><span class="bullet-copy">{{Short bullet.}}</span></li>
+        <li><span class="bullet">03</span><span class="bullet-copy">{{Short bullet.}}</span></li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="bottom-band">
+    <article class="timeline">
+      <div class="timeline-head">
+        <h2 class="timeline-title">Roadmap</h2>
+        <div class="section-tag">Timeline</div>
+      </div>
+      <div class="timeline-track">
+        <div class="step">
+          <div class="step-mark">01</div>
+          <div class="step-title">{{STAGE_TITLE}}</div>
+          <div class="step-copy">{{One-line explanation.}}</div>
+        </div>
+        <div class="step">
+          <div class="step-mark">02</div>
+          <div class="step-title">{{STAGE_TITLE}}</div>
+          <div class="step-copy">{{One-line explanation.}}</div>
+        </div>
+        <div class="step">
+          <div class="step-mark">03</div>
+          <div class="step-title">{{STAGE_TITLE}}</div>
+          <div class="step-copy">{{One-line explanation.}}</div>
+        </div>
+      </div>
+    </article>
+
+    <aside class="callout">
+      <div class="callout-head">
+        <h2 class="callout-title">Critical Note</h2>
+        <div class="section-tag">Takeaway</div>
+      </div>
+      <div class="callout-quote">{{Key quote / critical note / the single takeaway that must not be missed.}}</div>
+      <div class="milestones">
+        <div class="milestone">stable export chain</div>
+        <div class="milestone">consistent editorial signal</div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Guizang Magazine</span>
+      <span class="divider"></span>
+      <span>Editorial One Pager</span>
+    </div>
+    <div class="foot-right">
+      <span>{{PAGE / CONTACT}}</span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

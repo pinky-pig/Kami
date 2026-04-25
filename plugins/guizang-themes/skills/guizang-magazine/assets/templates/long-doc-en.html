@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{DOC_TITLE}}</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+
+    --paper-deep: #0a0a0b;
+    --paper-tint: #18181a;
+    --paper-dark: #14100f;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 9pt;
+    line-height: 1.46;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 13mm 15.5mm 14mm;
+    break-after: page;
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page:last-child {
+    break-after: auto;
+  }
+
+  .page.light {
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    color: var(--near-black);
+  }
+
+  .page.dark {
+    background: linear-gradient(180deg, var(--brand) 0%, var(--paper-dark) 100%);
+    color: var(--parchment);
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    left: 15.5mm;
+    right: 15.5mm;
+    pointer-events: none;
+  }
+
+  .page.light::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page.light::after {
+    bottom: 11.8mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.35;
+  }
+
+  .page.dark::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--parchment);
+    opacity: 0.14;
+  }
+
+  .page.dark::after {
+    bottom: 11.8mm;
+    border-top: 0.45pt solid var(--paper-tint);
+    opacity: 0.18;
+  }
+
+  .chrome,
+  .foot,
+  .kicker,
+  .meta,
+  .card-tag,
+  .table-tag,
+  .page-no {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome,
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10mm;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+  }
+
+  .page.light .chrome,
+  .page.light .foot {
+    color: var(--stone);
+  }
+
+  .page.dark .chrome,
+  .page.dark .foot {
+    color: var(--paper-tint);
+  }
+
+  .chrome-left,
+  .chrome-right,
+  .foot-left,
+  .foot-right {
+    display: flex;
+    align-items: baseline;
+    gap: 3.5mm;
+  }
+
+  .divider {
+    width: 8mm;
+    border-top: 0.45pt solid currentColor;
+    transform: translateY(-1.6pt);
+    opacity: 0.7;
+  }
+
+  .cover-grid,
+  .summary-grid,
+  .analysis-grid,
+  .method-grid,
+  .action-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 7mm;
+    margin-top: 11mm;
+  }
+
+  .cover-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: end;
+    margin-top: 18mm;
+    min-height: 205mm;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1.16fr 0.84fr;
+  }
+
+  .analysis-grid {
+    grid-template-columns: 0.94fr 1.06fr;
+  }
+
+  .method-grid,
+  .action-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cover-copy,
+  .section-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+  }
+
+  .kicker {
+    font-size: 7.5pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    opacity: 0.88;
+  }
+
+  .cover-title,
+  .section-title,
+  .quote-line,
+  .conclusion-line,
+  .meta-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+
+  .cover-title {
+    font-size: 34pt;
+    line-height: 1.04;
+    letter-spacing: -0.5pt;
+  }
+
+  .cover-sub,
+  .big-lead,
+  .highlight-note {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .cover-sub {
+    max-width: 116mm;
+    font-size: 11.1pt;
+    line-height: 1.46;
+  }
+
+  .cover-note,
+  .section-intro,
+  .card-copy,
+  .question-copy,
+  .rowline-copy,
+  .comparison-gap,
+  .quote-meta,
+  .action-copy,
+  .appendix-copy,
+  .code-copy,
+  .essay-card p,
+  .pillar-card p {
+    font-size: 8.4pt;
+    line-height: 1.44;
+  }
+
+  .cover-note,
+  .section-intro,
+  .action-copy,
+  .appendix-copy {
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .cover-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2.8mm;
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .meta-block,
+  .stat-card,
+  .essay-card,
+  .pillar-card {
+    padding-top: 2.6mm;
+    border-top: 0.45pt solid currentColor;
+  }
+
+  .meta-label,
+  .card-tag,
+  .table-tag,
+  .comparison-head,
+  .pillar-index {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.15pt;
+    text-transform: uppercase;
+    opacity: 0.84;
+  }
+
+  .meta-value {
+    font-size: 14pt;
+    line-height: 1.18;
+  }
+
+  .meta-note {
+    font-size: 8pt;
+    line-height: 1.42;
+    margin-top: 0.7mm;
+    opacity: 0.88;
+  }
+
+  .page-no {
+    position: absolute;
+    right: 15.5mm;
+    bottom: 14.3mm;
+    font-size: 6.9pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+  }
+
+  .section-title {
+    font-size: 24pt;
+    line-height: 1.08;
+  }
+
+  .big-lead {
+    font-size: 11.2pt;
+    line-height: 1.5;
+  }
+
+  .card-grid,
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .questions,
+  .comparison,
+  .rowlines {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .question-row,
+  .comparison-row,
+  .rowline {
+    display: grid;
+    gap: 3mm;
+    padding: 2.3mm 0;
+    border-top: 0.45pt solid currentColor;
+  }
+
+  .question-row {
+    grid-template-columns: 10mm 1fr;
+  }
+
+  .comparison-row {
+    grid-template-columns: 28mm 1fr 1fr 26mm;
+  }
+
+  .rowline {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .comparison-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 13.4pt;
+    line-height: 1.08;
+    font-weight: 500;
+  }
+
+  .quote-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+    padding-top: 3mm;
+    border-top: 1pt solid currentColor;
+  }
+
+  .quote-line {
+    font-size: 14.8pt;
+    line-height: 1.28;
+  }
+
+  pre.code-copy {
+    padding: 3mm;
+    background: var(--paper-tint);
+    color: var(--dark-warm);
+    white-space: pre-wrap;
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .conclusion-wrap {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    min-height: 236mm;
+    gap: 10mm;
+  }
+
+  .conclusion-line {
+    max-width: 150mm;
+    font-size: 31pt;
+    line-height: 1.05;
+  }
+
+  .hl {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 0.45pt;
+    text-underline-offset: 1.4pt;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>{{EYEBROW — e.g. Technical Report / Annual Review / White Paper}}</span>
+      <span class="divider"></span>
+      <span>Cover Story</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{PUBLISHER / ORGANIZATION}}</span>
+    </div>
+  </div>
+
+  <div class="cover-grid">
+    <div class="cover-copy">
+      <div class="kicker">{{AUTHOR / TEAM}}</div>
+      <h1 class="cover-title">{{Document title<br>can span two lines}}</h1>
+      <p class="cover-sub">{{One-line subtitle — what this is and who it's for.}}</p>
+      <div class="cover-note">{{Two or three sentences opening the whole thesis. Use <span class="hl">brand-color emphasis</span> to grab attention on the sharpest claim. A reader of only this paragraph should understand what the document argues.}}</div>
+    </div>
+
+    <aside class="cover-side">
+      <div class="meta-block">
+        <div class="meta-label">Author</div>
+        <div class="meta-value">{{AUTHOR / TEAM}}</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Edition</div>
+        <div class="meta-value">{{Version 1.0}}</div>
+        <div class="meta-note">{{YYYY.MM}}</div>
+      </div>
+      <div class="meta-block">
+        <div class="meta-label">Publisher</div>
+        <div class="meta-value">{{PUBLISHER / ORGANIZATION}}</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Cover Story</span>
+    </div>
+    <div class="foot-right">
+      <span>01 / 06</span>
+    </div>
+  </div>
+  <div class="page-no">01 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Executive Overview</span>
+      <span class="divider"></span>
+      <span>{{AUTHOR / TEAM}}</span>
+    </div>
+    <div class="chrome-right">
+      <span>Act I</span>
+    </div>
+  </div>
+
+  <div class="summary-grid">
+    <div class="section-stack">
+      <div class="kicker">Opening Thesis</div>
+      <h2 class="section-title">Why this document matters now</h2>
+      <div class="big-lead">{{Two or three sentences opening the whole thesis. Use <span class="hl">brand-color emphasis</span> to grab attention on the sharpest claim. A reader of only this paragraph should understand what the document argues.}}</div>
+      <div class="card-grid">
+        <article class="stat-card"><div class="card-tag">Takeaway 01</div><div class="card-copy">{{Takeaway 1 — a quantified conclusion in one line.}}</div></article>
+        <article class="stat-card"><div class="card-tag">Takeaway 02</div><div class="card-copy">{{Takeaway 2 — an insight backed by data.}}</div></article>
+        <article class="stat-card"><div class="card-tag">Takeaway 03</div><div class="card-copy">{{Takeaway 3 — a forward-looking judgment.}}</div></article>
+      </div>
+    </div>
+
+    <div class="section-stack">
+      <div class="kicker">Reader Check</div>
+      <div class="section-intro">{{List the three core questions as actual questions — so the reader can decide in ten seconds whether to read on.}}</div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Overview</span>
+      <span class="divider"></span>
+      <span>{{PUBLISHER / ORGANIZATION}}</span>
+    </div>
+    <div class="foot-right">
+      <span>02 / 06</span>
+    </div>
+  </div>
+  <div class="page-no">02 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Problem Frame</span>
+      <span class="divider"></span>
+      <span>Act II</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{PUBLISHER / ORGANIZATION}}</span>
+    </div>
+  </div>
+
+  <div class="analysis-grid">
+    <div class="section-stack">
+      <div class="kicker">Chapter 01</div>
+      <h2 class="section-title">Status and friction</h2>
+      <div class="section-intro">{{Chapter intro — what this chapter is solving, why it matters. One or two sentences.}}</div>
+      <div class="card-copy">{{Three to five lines describing the status quo. Use <span class="hl">specific figures</span> rather than adjectives.}}</div>
+      <div class="quote-block">
+        <div class="quote-line">{{State the problem specifically. Use a callout to emphasize a key observation:}}</div>
+      </div>
+    </div>
+
+    <div class="section-stack">
+      <div class="comparison">
+        <div class="comparison-row">
+          <div class="table-tag">{{DIMENSION_1}}</div>
+          <div>
+            <div class="comparison-head">Now</div>
+            <div class="comparison-value">{{VAL}}</div>
+          </div>
+          <div>
+            <div class="comparison-head">Target</div>
+            <div class="comparison-value">{{VAL}}</div>
+          </div>
+          <div class="comparison-gap">{{GAP}}</div>
+        </div>
+        <div class="comparison-row">
+          <div class="table-tag">{{DIMENSION_2}}</div>
+          <div>
+            <div class="comparison-head">Now</div>
+            <div class="comparison-value">{{VAL}}</div>
+          </div>
+          <div>
+            <div class="comparison-head">Target</div>
+            <div class="comparison-value">{{VAL}}</div>
+          </div>
+          <div class="comparison-gap">{{GAP}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Problem Frame</span>
+    </div>
+    <div class="foot-right">
+      <span>03 / 06</span>
+    </div>
+  </div>
+  <div class="page-no">03 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Method</span>
+      <span class="divider"></span>
+      <span>Act III</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{AUTHOR / TEAM}}</span>
+    </div>
+  </div>
+
+  <div class="method-grid">
+    <div class="section-stack">
+      <div class="kicker">Chapter 02</div>
+      <h2 class="section-title">Method and evidence</h2>
+      <div class="section-intro">{{Chapter intro.}}</div>
+      <div class="card-copy">Method sketch and implementation notes.</div>
+      <pre class="code-copy">{{Describe the methodology. Code or formula examples welcome:}}</pre>
+      <div class="quote-block">
+        <div class="quote-line">{{A quoted passage — user interview, expert perspective, or cited source.}}</div>
+        <div class="quote-meta">{{SOURCE / PERSON}} · {{DATE}}</div>
+      </div>
+    </div>
+
+    <div class="section-stack">
+      <article class="essay-card">
+        <div class="card-tag">Finding 01</div>
+        <div class="meta-value">{{TITLE}}</div>
+        <p>{{A paragraph with data: <span class="hl">specific numbers or ratios</span>.}}</p>
+      </article>
+      <article class="essay-card">
+        <div class="card-tag">Finding 02</div>
+        <div class="meta-value">{{TITLE}}</div>
+        <p>{{A paragraph.}}</p>
+      </article>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Method</span>
+      <span class="divider"></span>
+      <span>{{Version 1.0}}</span>
+    </div>
+    <div class="foot-right">
+      <span>04 / 06</span>
+    </div>
+  </div>
+  <div class="page-no">04 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Conclusions</span>
+      <span class="divider"></span>
+      <span>Act IV</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{YYYY.MM}}</span>
+    </div>
+  </div>
+
+  <div class="conclusion-wrap">
+    <div class="kicker">Closing Frame</div>
+    <div class="conclusion-line">{{Chapter intro — a one-line summary of the conclusion, then the recommendations below.}}</div>
+    <div class="pillar-grid">
+      <article class="pillar-card"><div class="pillar-index">Conclusion 01</div><div class="meta-value">{{Conclusion 1.}}</div></article>
+      <article class="pillar-card"><div class="pillar-index">Conclusion 02</div><div class="meta-value">{{Conclusion 2.}}</div></article>
+      <article class="pillar-card"><div class="pillar-index">Conclusion 03</div><div class="meta-value">{{Conclusion 3.}}</div></article>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Conclusion Spread</span>
+    </div>
+    <div class="foot-right">
+      <span>05 / 06</span>
+    </div>
+  </div>
+  <div class="page-no">05 / 06</div>
+</section>
+
+<section class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Action & Appendix</span>
+      <span class="divider"></span>
+      <span>{{DOC_TITLE}}</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{PUBLISHER / ORGANIZATION}}</span>
+    </div>
+  </div>
+
+  <div class="action-grid">
+    <div class="section-stack">
+      <div class="kicker">Recommendations</div>
+      <h2 class="section-title">What to do next</h2>
+      <div class="action-copy">{{Concrete, executable recommendations tied to the conclusions.}}</div>
+      <div class="big-lead">{{If the reader does one thing, what is it? Specific enough to start Monday morning.}}</div>
+    </div>
+
+    <div class="section-stack">
+      <div class="kicker">Appendix</div>
+      <div class="appendix-copy">{{Acknowledgement paragraph.}}</div>
+      <div class="rowlines">
+        <div class="rowline">
+          <div class="table-tag">{{Reference 1}}</div>
+          <div class="rowline-copy">{{Reference 2}}</div>
+        </div>
+        <div class="rowline">
+          <div class="table-tag">{{TERM}}</div>
+          <div class="rowline-copy">{{definition}}</div>
+        </div>
+        <div class="rowline">
+          <div class="table-tag">{{TERM}}</div>
+          <div class="rowline-copy">{{definition}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>Appendix</span>
+      <span class="divider"></span>
+      <span>{{AUTHOR / TEAM}}</span>
+    </div>
+    <div class="foot-right">
+      <span>06 / 06</span>
+    </div>
+  </div>
+  <div class="page-no">06 / 06</div>
+</section>
+</body>
+</html>

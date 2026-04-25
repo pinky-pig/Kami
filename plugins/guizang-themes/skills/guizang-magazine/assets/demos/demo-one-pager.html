@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     ONE-PAGER TEMPLATE · guizang magazine
+     单页 A4 方案 / 项目提案 / 执行摘要
+     视觉：magazine chrome、hero 标题、stat spread、editorial blocks
+     目标：页数必须 == 1
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>BriefOS · 把研究素材变成交付文档</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+
+    --paper-deep: #0a0a0b;
+    --paper-tint: #18181a;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  body {
+    font-size: 9pt;
+    line-height:  1.54;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 13.5mm 15.5mm 14mm;
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 4.8mm;
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .page::before {
+    inset: 8mm 11mm 9mm;
+    border-top: 1pt solid var(--brand);
+    border-bottom: 0.45pt solid var(--rule);
+    opacity: 0.2;
+  }
+
+  .page::after {
+    left: 15.5mm;
+    right: 15.5mm;
+    top: 21.5mm;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .chrome,
+  .foot,
+  .kicker,
+  .issue-label,
+  .section-tag,
+  .stat-label,
+  .step-mark {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome,
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10mm;
+    font-size: 7.1pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .chrome-left,
+  .chrome-right,
+  .foot-left,
+  .foot-right {
+    display: flex;
+    align-items: baseline;
+    gap: 3.5mm;
+  }
+
+  .chrome-divider,
+  .foot-divider {
+    width: 8mm;
+    border-top: 0.45pt solid var(--rule-strong);
+    transform: translateY(-1.6pt);
+  }
+
+  .hero {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.28fr 0.72fr;
+    gap: 8mm;
+    align-items: end;
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+  }
+
+  .kicker {
+    font-size: 7.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.65pt;
+    text-transform: uppercase;
+    color: var(--olive);
+  }
+
+  .headline {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 27pt;
+    line-height: 1.08;
+    letter-spacing: 0.12pt;
+    font-weight: 500;
+  }
+
+  .subhead {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.46;
+    color: var(--charcoal);
+  }
+
+  .issue-box {
+    align-self: start;
+    padding-top: 3mm;
+    border-top: 1pt solid var(--brand);
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+  }
+
+  .issue-label {
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .issue-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 15.5pt;
+    line-height: 1.18;
+    font-weight: 500;
+  }
+
+  .issue-meta {
+    font-size: 7.2pt;
+    line-height: 1.48;
+    color: var(--olive);
+  }
+
+  .lead {
+    position: relative;
+    z-index: 1;
+    max-width: 164mm;
+    padding-top: 3mm;
+    border-top: 1pt solid var(--brand);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.3pt;
+    line-height: 1.52;
+    color: var(--dark-warm);
+  }
+
+  .stat-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4mm;
+  }
+
+  .stat-card {
+    min-height: 24mm;
+    padding-top: 2.4mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .stat-label {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 1.4mm;
+  }
+
+  .stat-value {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 18.5pt;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--brand);
+    margin-bottom: 1.2mm;
+  }
+
+  .stat-note {
+    font-size: 8.2pt;
+    line-height: 1.4;
+    color: var(--charcoal);
+  }
+
+  .story-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7mm;
+    align-content: start;
+  }
+
+  .editorial-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+    padding-top: 2.8mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .editorial-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3mm;
+  }
+
+  .editorial-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 14pt;
+    line-height: 1.18;
+    font-weight: 500;
+  }
+
+  .section-tag {
+    flex-shrink: 0;
+    font-size: 6.9pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .editorial-copy {
+    font-size: 8.7pt;
+    line-height: 1.48;
+    color: var(--charcoal);
+  }
+
+  .editorial-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6mm;
+  }
+
+  .editorial-list li {
+    display: grid;
+    grid-template-columns: 4mm 1fr;
+    gap: 2mm;
+    align-items: start;
+  }
+
+  .bullet {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.9pt;
+    line-height: 1.35;
+    color: var(--stone);
+    padding-top: 0.5mm;
+  }
+
+  .bullet-copy {
+    font-size: 8.5pt;
+    line-height: 1.46;
+    color: var(--dark-warm);
+  }
+
+  .bottom-band {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.18fr 0.82fr;
+    gap: 7mm;
+    align-items: start;
+  }
+
+  .timeline,
+  .callout {
+    padding-top: 2.8mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .timeline-head,
+  .callout-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 3mm;
+  }
+
+  .timeline-title,
+  .callout-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 12.8pt;
+    line-height: 1.18;
+    font-weight: 500;
+  }
+
+  .timeline-track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+    margin-top: 2.4mm;
+  }
+
+  .step {
+    padding-top: 1.8mm;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .step-mark {
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 1mm;
+  }
+
+  .step-title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 10.3pt;
+    line-height: 1.2;
+    font-weight: 500;
+    margin-bottom: 0.8mm;
+  }
+
+  .step-copy {
+    font-size: 8pt;
+    line-height: 1.42;
+    color: var(--charcoal);
+  }
+
+  .callout {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2mm;
+  }
+
+  .callout-quote {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 12.8pt;
+    line-height: 1.34;
+    color: var(--near-black);
+  }
+
+  .callout-copy {
+    font-size: 8.1pt;
+    line-height: 1.44;
+    color: var(--charcoal);
+  }
+
+  .milestones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6mm 4mm;
+  }
+
+  .milestone {
+    padding-top: 1.4mm;
+    border-top: 0.45pt solid var(--rule);
+    font-size: 7.9pt;
+    line-height: 1.4;
+    color: var(--dark-warm);
+  }
+
+  .foot {
+    padding-top: 1mm;
+  }
+
+  .foot-left .title {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    text-transform: none;
+    letter-spacing: 0.2pt;
+    color: var(--olive);
+  }
+
+  .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Guizang Magazine</span>
+      <span class="chrome-divider"></span>
+      <span>One Pager</span>
+    </div>
+    <div class="chrome-right">
+      <span>INTERNAL DEMO / PAPERLANE AI</span>
+    </div>
+  </div>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="kicker">EDITORIAL SYSTEM BRIEF</div>
+      <h1 class="headline">把研究素材
+变成交付文档</h1>
+      <p class="subhead">一个面向 AI 团队的文档系统提案</p>
+    </div>
+
+    <aside class="issue-box">
+      <div class="issue-label">Filed Under</div>
+      <div class="issue-title">Paperlane AI · BriefOS</div>
+      <div class="issue-meta">
+        版本：Demo / V0.9<br>
+        日期：2026.04.24<br>
+        分类：产品方案
+      </div>
+    </aside>
+  </section>
+
+  <section class="lead">
+    我们要解决的不是写得更快，而是把分散的研究、访谈和 deck，稳定地收束成 <span class="hl">可发布、可验证、可复用</span> 的 HTML / PDF / PPT 交付件。
+  </section>
+
+  <section class="stat-grid">
+    <article class="stat-card">
+      <div class="stat-label">搭建周期</div>
+      <div class="stat-value">3 周</div>
+      <div class="stat-note">核心时间窗口</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">交付覆盖</div>
+      <div class="stat-value">6 类</div>
+      <div class="stat-note">结构覆盖范围</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">可复用骨架</div>
+      <div class="stat-value">92%</div>
+      <div class="stat-note">复用效率提升</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">统一主题系统</div>
+      <div class="stat-value">1 套</div>
+      <div class="stat-note">统一主题出口</div>
+    </article>
+  </section>
+
+  <section class="story-grid">
+    <article class="editorial-block">
+      <div class="editorial-head">
+        <h2 class="editorial-title">为什么现在做</h2>
+        <div class="section-tag">Why Now</div>
+      </div>
+      <p class="editorial-copy">团队已经有研究、汇报和演示材料，但缺少统一的文档落点。结果是每次交付都在重新排版、重新命名、重新审稿。</p>
+      <ul class="editorial-list">
+        <li>
+          <span class="bullet">01</span>
+          <span class="bullet-copy">输入已经足够多，真正缺的是稳定的输出骨架</span>
+        </li>
+        <li>
+          <span class="bullet">02</span>
+          <span class="bullet-copy">同一批素材需要复用到 <span class="hl">方案、白皮书、信件、Slides</span></span>
+        </li>
+        <li>
+          <span class="bullet">03</span>
+          <span class="bullet-copy">没有统一模板时，审美、页数和可读性都会持续漂移</span>
+        </li>
+      </ul>
+    </article>
+
+    <article class="editorial-block">
+      <div class="editorial-head">
+        <h2 class="editorial-title">怎么落地</h2>
+        <div class="section-tag">How It Ships</div>
+      </div>
+      <p class="editorial-copy">BriefOS 把模板、主题和构建脚本放在同一个 skill 里，让内容团队只需要关心判断和证据。</p>
+      <ul class="editorial-list">
+        <li>
+          <span class="bullet">01</span>
+          <span class="bullet-copy">先判断文档类型，再进入固定模板</span>
+        </li>
+        <li>
+          <span class="bullet">02</span>
+          <span class="bullet-copy">主题预设统一控制标题、正文和元信息气质</span>
+        </li>
+        <li>
+          <span class="bullet">03</span>
+          <span class="bullet-copy">构建脚本负责页数、字体和占位符校验</span>
+        </li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="bottom-band">
+    <article class="timeline">
+      <div class="timeline-head">
+        <h2 class="timeline-title">Roadmap</h2>
+        <div class="section-tag">Editorial Flow</div>
+      </div>
+      <div class="timeline-track">
+        <div class="step">
+          <div class="step-mark">W1</div>
+          <div class="step-title">模板定型</div>
+          <div class="step-copy">完成 one-pager / long-doc / letter / slides 四类骨架</div>
+        </div>
+        <div class="step">
+          <div class="step-mark">W2</div>
+          <div class="step-title">内容迁移</div>
+          <div class="step-copy">把研究摘要、客户案例和内部 memo 接入同一主题系统</div>
+        </div>
+        <div class="step">
+          <div class="step-mark">W3</div>
+          <div class="step-title">验证发布</div>
+          <div class="step-copy">生成 demo bundle，并给团队开放可复用交付链路</div>
+        </div>
+      </div>
+    </article>
+
+    <aside class="callout">
+      <div class="callout-head">
+        <h2 class="callout-title">首批交付 / Demo Bundle</h2>
+        <div class="section-tag">Takeaway</div>
+      </div>
+      <div class="callout-quote">真正稀缺的不是写作速度，而是把判断稳定地包装成交付件。</div>
+      <div class="callout-copy">当素材可以稳定落到统一模板里，团队才真正开始积累可复用的方法论，而不是一次性的排版劳动。</div>
+      <div class="milestones">
+        <div class="milestone">一页项目方案：给管理层快速读</div>
+        <div class="milestone">白皮书：沉淀判断、方法与证据</div>
+        <div class="milestone">推荐信：正式沟通的固定结构</div>
+        <div class="milestone">Slides：延续同一套 editorial 视觉</div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span class="title">Guizang Magazine · Editorial Delivery System</span>
+    </div>
+    <div class="foot-right">
+      <span class="foot-divider"></span>
+      <span>01 / hello@paperlane.ai</span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

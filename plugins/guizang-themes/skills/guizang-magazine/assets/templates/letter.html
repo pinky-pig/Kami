@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     LETTER TEMPLATE · guizang magazine
+     A4 正式信件 / 推荐信 / 推荐函 / 备忘录 / 说明函
+     视觉：editorial correspondence、chrome、subject block、evidence sidebar
+     目标：页数必须 == 1
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{信件主题}}</title>
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Inter";
+    src: url("../fonts/Inter-500.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #050506;
+  }
+
+  :root {
+    --parchment:  #14100f;
+    --ivory:      #18181a;
+    --brand:      #f1efea;
+    --near-black: #f1efea;
+    --dark-warm:  #e8e5de;
+    --charcoal:   #d6d0c6;
+    --olive:      #c7beb0;
+    --stone:      #8e877f;
+
+    --paper-deep: #0a0a0b;
+    --paper-tint: #18181a;
+    --rule:       #403b37;
+    --rule-strong:#68635f;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: #050506;
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  body {
+    font-size: 8.9pt;
+    line-height:  1.54;
+  }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 13.5mm 15.5mm 14mm;
+    background: linear-gradient(180deg, #1b1716 0%, #120f0e 100%);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 4.6mm;
+    overflow: hidden;
+    border: 0.65pt solid #403b37;
+    box-shadow: inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+  }
+
+  .page::before,
+  .page::after {
+    content: "";
+    position: absolute;
+    left: 15.5mm;
+    right: 15.5mm;
+    pointer-events: none;
+  }
+
+  .page::before {
+    top: 12.5mm;
+    border-top: 1pt solid var(--brand);
+    opacity: 0.22;
+  }
+
+  .page::after {
+    bottom: 11.8mm;
+    border-top: 0.45pt solid var(--rule);
+    opacity: 0.38;
+  }
+
+  .chrome,
+  .foot,
+  .kicker,
+  .meta,
+  .sidebar-tag,
+  .evidence-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+  }
+
+  .chrome,
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10mm;
+    font-size: 7pt;
+    line-height: 1.35;
+    letter-spacing: 1.25pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .chrome-left,
+  .chrome-right,
+  .foot-left,
+  .foot-right {
+    display: flex;
+    align-items: baseline;
+    gap: 3.4mm;
+  }
+
+  .divider {
+    width: 8mm;
+    border-top: 0.45pt solid var(--rule-strong);
+    transform: translateY(-1.6pt);
+  }
+
+  .header-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.18fr 0.82fr;
+    gap: 8mm;
+    align-items: end;
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+  }
+
+  .kicker {
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.65pt;
+    text-transform: uppercase;
+    color: var(--olive);
+  }
+
+  .hero-title,
+  .subject-title,
+  .sender-name,
+  .closing-mark {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+  }
+
+  .hero-title {
+    font-size: 25pt;
+    line-height: 1.08;
+    letter-spacing: 0.12pt;
+  }
+
+  .hero-note {
+    max-width: 116mm;
+    padding-top: 3mm;
+    border-top: 1pt solid var(--brand);
+    font-size: 8.7pt;
+    line-height: 1.48;
+    color: var(--charcoal);
+  }
+
+  .sender-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2mm;
+    padding-top: 3mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .sender-name {
+    font-size: 15pt;
+    line-height: 1.18;
+  }
+
+  .sender-role,
+  .sender-contact {
+    font-size: 8pt;
+    line-height: 1.44;
+    color: var(--olive);
+  }
+
+  .sender-contact a,
+  .sidebar-copy a,
+  .foot a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .subject-band {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 8mm;
+    padding-top: 3mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .subject-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8mm;
+  }
+
+  .subject-title {
+    font-size: 17pt;
+    line-height: 1.18;
+  }
+
+  .subject-meta {
+    font-size: 7.4pt;
+    line-height: 1.42;
+    color: var(--stone);
+    letter-spacing: 0.4pt;
+  }
+
+  .recipient-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4mm;
+    padding-top: 1mm;
+  }
+
+  .recipient-label {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .recipient-name {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 13pt;
+    line-height: 1.22;
+    font-weight: 500;
+  }
+
+  .recipient-type {
+    font-size: 8.2pt;
+    line-height: 1.42;
+    color: var(--olive);
+  }
+
+  .body-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.16fr 0.84fr;
+    gap: 8mm;
+    align-items: start;
+  }
+
+  .letter-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4mm;
+    padding-top: 2.8mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .salutation {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.36;
+    font-weight: 500;
+  }
+
+  .letter-body p {
+    font-size: 8.6pt;
+    line-height: 1.5;
+    color: var(--dark-warm);
+    text-align: justify;
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 3mm;
+  }
+
+  .sidebar-card {
+    padding-top: 2.8mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .sidebar-tag {
+    font-size: 6.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    color: var(--stone);
+    margin-bottom: 1.2mm;
+  }
+
+  .sidebar-copy {
+    font-size: 8.1pt;
+    line-height: 1.46;
+    color: var(--charcoal);
+  }
+
+  .evidence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8mm;
+    margin-top: 1.4mm;
+  }
+
+  .evidence-item {
+    display: grid;
+    grid-template-columns: 8mm 1fr;
+    gap: 2.4mm;
+    padding-top: 1.4mm;
+    border-top: 0.45pt solid var(--rule);
+  }
+
+  .evidence-label {
+    font-size: 6.7pt;
+    line-height: 1.35;
+    letter-spacing: 1.15pt;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+
+  .evidence-copy {
+    font-size: 8pt;
+    line-height: 1.42;
+    color: var(--dark-warm);
+  }
+
+  .closing {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1.16fr 0.84fr;
+    gap: 8mm;
+    align-items: end;
+  }
+
+  .closing-main {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8mm;
+    padding-top: 2.8mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .closing-mark {
+    font-size: 11pt;
+    line-height: 1.3;
+  }
+
+  .postscript {
+    font-size: 8pt;
+    line-height: 1.42;
+    color: var(--olive);
+  }
+
+  .signature-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2mm;
+    padding-top: 2.8mm;
+    border-top: 1pt solid var(--brand);
+  }
+
+  .signature {
+    font-family: "TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif;
+    font-size: 16pt;
+    line-height: 1.18;
+    font-weight: 500;
+  }
+
+  .signature-meta,
+  .attachments {
+    font-size: 8pt;
+    line-height: 1.44;
+    color: var(--charcoal);
+  }
+
+  .foot {
+    padding-top: 1mm;
+  }
+
+  .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+  @media screen {
+    html, body {
+      width: auto;
+      min-height: 100%;
+      background: #050506;
+    }
+    body {
+      padding: 28px 0;
+    }
+    .page {
+      margin: 0 auto 28px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62), 0 0 0 1px rgba(241, 239, 234, 0.18), inset 0 0 0 0.45pt rgba(241, 239, 234, 0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="chrome">
+    <div class="chrome-left">
+      <span>Guizang Magazine</span>
+      <span class="divider"></span>
+      <span>{{Filed Letter / Recommendation Letter}}</span>
+    </div>
+    <div class="chrome-right">
+      <span>{{2026 年 4 月 21 日}}</span>
+    </div>
+  </div>
+
+  <section class="header-grid">
+    <div class="hero-copy">
+      <div class="kicker">{{Filed Letter / Recommendation Letter}}</div>
+      <h1 class="hero-title">{{推荐信 / 正式函件<br>一句短标题}}</h1>
+      <div class="hero-note">{{关于推荐 / 说明 / 申请事项的一句话标题}}</div>
+    </div>
+
+    <aside class="sender-panel">
+      <div class="sender-name">{{寄件人姓名 / 机构}}</div>
+      <div class="sender-role">{{寄件人身份 / 部门 / 城市}}</div>
+      <div class="sender-contact">{{电话}}<br>联系信息见页脚</div>
+    </aside>
+  </section>
+
+  <section class="subject-band">
+    <div class="subject-copy">
+      <div class="subject-title">{{信件主题}}</div>
+      <div class="subject-meta">{{推荐信 / 内部说明函 / 正式信件}}</div>
+    </div>
+
+    <div class="recipient-box">
+      <div class="recipient-label">To</div>
+      <div class="recipient-name">{{收件人 / 委员会 / 单位}}</div>
+      <div class="recipient-type">{{关于推荐 / 说明 / 申请事项的一句话标题}}</div>
+    </div>
+  </section>
+
+  <section class="body-grid">
+    <article class="letter-body">
+      <div class="salutation">{{尊敬的 XX 委员会 / 负责人：}}</div>
+      <p>{{第一段：说明写信目的和与被推荐人的关系。例如“我谨以 XX 身份推荐 XX 申请 XX 项目”。}}</p>
+      <p>{{第二段：写清推荐理由。用具体事实支撑，不只写“优秀”。可用 <span class="hl">关键能力 / 关键成果</span> 高亮。}}</p>
+      <p>{{第三段：结合申请场景说明为什么匹配。把对方关心的标准和被推荐人的经历连接起来。}}</p>
+      <p>{{第四段：明确推荐结论，并提供后续联系出口。}}</p>
+    </article>
+
+    <aside class="sidebar">
+      <section class="sidebar-card">
+        <div class="sidebar-tag">Evidence</div>
+        <div class="sidebar-copy">推荐不是结论本身，而是把可验证的事实按对方关心的标准重新排列。</div>
+        <div class="evidence-list">
+          <div class="evidence-item">
+            <div class="evidence-label">01</div>
+            <div class="evidence-copy">{{证据 1：项目 / 成果}}</div>
+          </div>
+          <div class="evidence-item">
+            <div class="evidence-label">02</div>
+            <div class="evidence-copy">{{证据 2：能力 / 品质}}</div>
+          </div>
+          <div class="evidence-item">
+            <div class="evidence-label">03</div>
+            <div class="evidence-copy">{{证据 3：影响 / 评价}}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sidebar-card">
+        <div class="sidebar-tag">Reach Back</div>
+        <div class="sidebar-copy">
+          如需进一步沟通，可通过页脚中的联系方式联系寄件人，并索取更多材料或背景说明。
+        </div>
+      </section>
+    </aside>
+  </section>
+
+  <section class="closing">
+    <div class="closing-main">
+      <div class="closing-mark">{{此致　敬礼 / 顺颂商祺}}</div>
+      <div class="postscript">{{附言：如需进一步了解，我愿意补充说明。}}</div>
+    </div>
+
+    <aside class="signature-panel">
+      <div class="signature">{{签名}}</div>
+      <div class="signature-meta">{{职位 · 单位}}<br>{{日期复写}}</div>
+      <div class="attachments">{{附件清单：① 简历 ② 成果材料 ③ 其他证明；无附件可删除本行}}</div>
+    </aside>
+  </section>
+
+  <div class="foot">
+    <div class="foot-left">
+      <span>{{寄件人姓名 / 机构}}</span>
+      <span class="divider"></span>
+      <span>{{收件人 / 委员会 / 单位}}</span>
+    </div>
+    <div class="foot-right">
+      <span>{{电话}}</span>
+      <span class="divider"></span>
+      <span><a href="mailto:{{EMAIL}}">{{EMAIL}}</a></span>
+    </div>
+  </div>
+</main>
+</body>
+</html>

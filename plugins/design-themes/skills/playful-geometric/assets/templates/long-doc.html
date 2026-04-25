@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{长文标题}}</title>
+<style>
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter-600.woff2") format("woff2"); font-weight: 700; font-style: normal; }
+  @page { size: A4; margin: 0; background: #FFFDF5; }
+  :root { --cream:#FFFDF5; --ink:#1E293B; --violet:#8B5CF6; --pink:#F472B6; --yellow:#FBBF24; --mint:#34D399; --text:#334155; --line:#E2E8F0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 210mm;
+    margin: 0 auto;
+    color: var(--ink);
+    background: radial-gradient(#1E293B 0.55pt, transparent 0.65pt) 0 0 / 8mm 8mm, var(--cream);
+    font-family: "Outfit", "Plus Jakarta Sans", "Inter", "Source Han Sans SC", system-ui, sans-serif;
+  }
+  .page {
+    position: relative;
+    min-height: 297mm;
+    padding: 12mm;
+    overflow: hidden;
+    break-after: page;
+  }
+  .page:last-child { break-after: auto; }
+  .shape { position: absolute; z-index: 0; pointer-events: none; }
+  .circle { width: 76mm; height: 76mm; border-radius: 999px; background: var(--yellow); right: -18mm; top: 18mm; }
+  .bean { width: 58mm; height: 22mm; border-radius: 999px 999px 999px 0; background: var(--pink); left: 14mm; bottom: 28mm; transform: rotate(-10deg); box-shadow: 6pt 6pt 0 var(--ink); }
+  .tri { width:0; height:0; border-left:14mm solid transparent; border-right:14mm solid transparent; border-bottom:24mm solid var(--mint); right: 25mm; bottom: 24mm; transform: rotate(16deg); }
+  .content { position: relative; z-index: 1; }
+  .label {
+    display: inline-block;
+    padding: 2mm 4mm;
+    border: 2pt solid var(--ink);
+    border-radius: 999px;
+    background: var(--yellow);
+    box-shadow: 3pt 3pt 0 var(--ink);
+    font-size: 7pt;
+    font-weight: 800;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    margin-bottom: 5mm;
+  }
+  .cover {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 8mm;
+    align-items: stretch;
+    min-height: 244mm;
+  }
+  .cover-main {
+    padding: 9mm;
+    border: 2pt solid var(--ink);
+    border-radius: 32pt 32pt 32pt 0;
+    background: #FFFFFF;
+    box-shadow: 8pt 8pt 0 var(--violet);
+  }
+  .cover-main h1 {
+    font-size: 52pt;
+    line-height: 0.9;
+    letter-spacing: -1.3pt;
+    font-weight: 800;
+    margin-bottom: 7mm;
+  }
+  .deck {
+    font-size: 13pt;
+    line-height: 1.45;
+    max-width: 118mm;
+    color: var(--text);
+  }
+  .cover-side { display: grid; gap: 5mm; }
+  .sticker {
+    padding: 6mm;
+    border: 2pt solid var(--ink);
+    border-radius: 24pt;
+    background: var(--mint);
+    box-shadow: 5pt 5pt 0 var(--ink);
+  }
+  .sticker:nth-child(2) { background: var(--pink); transform: rotate(1.5deg); }
+  .sticker:nth-child(3) { background: var(--yellow); border-radius: 24pt 24pt 0 24pt; }
+  .sticker h2 { font-size: 20pt; line-height: 1.05; margin-bottom: 3mm; }
+  .sticker p, .body p, .sidebar p, .sidebar li { font-size: 9.4pt; line-height: 1.55; color: var(--text); }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8mm;
+    font-size: 7pt;
+    font-weight: 800;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    color: #64748B;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7mm;
+  }
+  .toc-item {
+    min-height: 54mm;
+    padding: 7mm;
+    border: 2pt solid var(--ink);
+    border-radius: 24pt;
+    background: #FFFFFF;
+    box-shadow: 6pt 6pt 0 var(--line);
+  }
+  .toc-item:nth-child(2) { box-shadow: 6pt 6pt 0 var(--pink); transform: rotate(1deg); }
+  .toc-item:nth-child(3) { box-shadow: 6pt 6pt 0 var(--yellow); transform: rotate(-1deg); }
+  .toc-item:nth-child(4) { box-shadow: 6pt 6pt 0 var(--mint); }
+  .num {
+    width: 18mm;
+    height: 18mm;
+    display: grid;
+    place-items: center;
+    border: 2pt solid var(--ink);
+    border-radius: 999px;
+    background: var(--violet);
+    color: #FFFFFF;
+    font-size: 18pt;
+    font-weight: 800;
+    margin-bottom: 6mm;
+  }
+  .toc-title { font-size: 24pt; line-height: 1.05; font-weight: 800; }
+  .article {
+    display: grid;
+    grid-template-columns: 1fr 66mm;
+    gap: 8mm;
+  }
+  .body, .sidebar {
+    min-height: 221mm;
+    padding: 8mm;
+    border: 2pt solid var(--ink);
+    background: #FFFFFF;
+    box-shadow: 7pt 7pt 0 var(--ink);
+  }
+  .body { border-radius: 28pt 28pt 28pt 0; }
+  .sidebar {
+    border-radius: 28pt 28pt 0 28pt;
+    background: var(--violet);
+    color: #FFFFFF;
+    transform: rotate(1deg);
+  }
+  .body h2 {
+    font-size: 38pt;
+    line-height: 0.92;
+    letter-spacing: -0.8pt;
+    margin-bottom: 6mm;
+  }
+  .lede {
+    padding: 5mm;
+    border: 2pt solid var(--ink);
+    border-radius: 18pt;
+    background: var(--yellow);
+    box-shadow: 4pt 4pt 0 var(--ink);
+    margin-bottom: 5mm;
+    font-weight: 700;
+  }
+  .sidebar h3 { font-size: 25pt; line-height: 1.05; margin-bottom: 5mm; color: #FFFFFF; }
+  .sidebar p, .sidebar li { color: #FFFFFF; }
+  .sidebar ul { list-style: none; display: grid; gap: 4mm; }
+  .sidebar li {
+    padding: 4mm;
+    border: 2pt solid var(--ink);
+    border-radius: 16pt;
+    background: #A78BFA;
+  }
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 3mm;
+    margin-top: 5mm;
+    font-size: 8.4pt;
+  }
+  th, td {
+    padding: 3mm;
+    border: 2pt solid var(--ink);
+    background: #FFFFFF;
+  }
+  th {
+    background: var(--mint);
+    font-weight: 800;
+  }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7mm;
+    font-size: 7pt;
+    font-weight: 800;
+    color: #64748B;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="shape circle"></div><div class="shape bean"></div><div class="shape tri"></div>
+  <div class="content cover">
+    <article class="cover-main">
+      <div class="label">Playful Report</div>
+      <h1>{{文档主标题<br>可以两行}}</h1>
+      <p class="deck">{{Deck：一句话说明这份白皮书解决什么问题、为谁而写、最重要的判断是什么。}}</p>
+    </article>
+    <aside class="cover-side">
+      <div class="sticker"><h2>{{Desk}}</h2><p>{{团队 / 部门}}</p></div>
+      <div class="sticker"><h2>{{Edition}}</h2><p>{{V1.0}}<br>{{2026.04}}</p></div>
+      <div class="sticker"><h2>{{Scope}}</h2><p>{{封面注记：本文档聚焦哪几个问题，读者读完能获得什么判断。}}</p></div>
+    </aside>
+  </div>
+</section>
+
+<section class="page">
+  <div class="content">
+    <div class="topbar"><span>Playful Geometric</span><span>Contents · 02</span></div>
+    <div class="toc-grid">
+      <div class="toc-item"><div class="num">1</div><div class="toc-title">执行摘要</div></div>
+      <div class="toc-item"><div class="num">2</div><div class="toc-title">背景与问题定义</div></div>
+      <div class="toc-item"><div class="num">3</div><div class="toc-title">方法与发现</div></div>
+      <div class="toc-item"><div class="num">4</div><div class="toc-title">结论与建议</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="page">
+  <div class="content">
+    <div class="topbar"><span>Section 01</span><span>03 / Report</span></div>
+    <main class="article">
+      <article class="body">
+        <div class="label">Main Story</div>
+        <h2>执行摘要</h2>
+        <p class="lede">{{一段 2-3 句话的大论点开场。稳定可读，但用贴纸感和几何层次表达主题。}}</p>
+        <p>{{用一段话说明为什么现在需要这份文档，以及决策者读完以后应该采取什么行动。}}</p>
+        <p>{{继续展开关键判断。用具体数据、可验证事实和真实限制，不使用空泛行业黑话。}}</p>
+        <table>
+          <thead><tr><th>维度</th><th>观察</th><th>行动</th></tr></thead>
+          <tbody><tr><td>{{维度}}</td><td>{{发现}}</td><td>{{建议}}</td></tr></tbody>
+        </table>
+      </article>
+      <aside class="sidebar">
+        <div class="label">Proof Pops</div>
+        <h3>{{本文档回答的问题}}</h3>
+        <ul><li>{{问题 1}}</li><li>{{问题 2}}</li><li>{{问题 3}}</li></ul>
+      </aside>
+    </main>
+    <footer class="footer"><span>Stable Grid, Wild Decoration</span><span>03</span></footer>
+  </div>
+</section>
+</body>
+</html>
