@@ -1,649 +1,176 @@
 <!DOCTYPE html>
-<!-- ==================================================================
-     ONE-PAGER TEMPLATE · neo-brutalism
-     单页 A4 方案 / 项目提案 / 执行摘要
-     视觉：黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴
-     目标：页数必须 == 1
-     ================================================================== -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <title>{{文档标题}}</title>
 <style>
-  @font-face {
-    font-family: "KingHwa_OldSong";
-    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
-    font-weight: 500;
-    font-style: normal;
-  }
-
-  @page {
-    size: A4;
-    margin: 0;
-    background: #000000;
-  }
-
-  :root {
-    --parchment:  #FFFDF5;
-    --ivory:      #FFFFFF;
-    --brand:      #000000;
-    --near-black: #000000;
-    --dark-warm:  #000000;
-    --charcoal:   #171717;
-    --olive:      #1F1F1F;
-    --stone:      #000000;
-
-    --frame-blue: #000000;
-    --blue-soft:  #000000;
-    --paper-wash: #FFFDF5;
-    --paper-deep: #FFD93D;
-    --rule:       #000000;
-    --rule-solid: #000000;
-    --panel-fill: #FFFFFF;
-    --tag-bg:     #FFD93D;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html,
-  body {
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter-600.woff2") format("woff2"); font-weight: 900; font-style: normal; }
+  @page { size: A4; margin: 0; background: #FFFDF5; }
+  :root { --cream:#FFFDF5; --black:#000000; --red:#FF6B6B; --yellow:#FFD93D; --violet:#C4B5FD; --white:#FFFFFF; }
+  * { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+  html, body {
     width: 210mm;
     min-height: 297mm;
     margin: 0 auto;
-    background: var(--frame-blue);
-    color: var(--near-black);
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
-  }
-
-  body {
-    padding: 10.5mm;
-    margin: 0 auto;
-  }
-
-  .folio {
-    position: relative;
-    min-height: 276mm;
-    padding: 13.5mm 13mm 10.5mm;
+    color: var(--black);
     background:
-      url("../images/paper-overlay.png") center / 72mm auto repeat,
-      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
-    overflow: hidden;
-  }
-
-  .folio::before,
-  .folio::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .folio::before {
-    inset: 6mm;
-    border: 1pt solid var(--frame-blue);
-  }
-
-  .folio::after {
-    inset: 8.5mm;
-    border: 0.45pt solid var(--blue-soft);
-  }
-
-  .sheet-content {
-    position: relative;
-    z-index: 1;
-  }
-
-  .header {
-    display: grid;
-    grid-template-columns: 1.5fr 0.92fr;
-    gap: 10pt;
-    margin-bottom: 9pt;
-  }
-
-  .title-plaque {
-    position: relative;
-    min-height: 84pt;
-    padding: 11pt 14pt 12pt;
-    background: var(--frame-blue);
-    color: var(--ivory);
-  }
-
-  .title-plaque::before,
-  .title-plaque::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .title-plaque::before {
-    inset: 6pt;
-    border: 0.85pt solid #FFFFFF;
-  }
-
-  .title-plaque::after {
-    inset: 9pt;
-    border: 0.4pt solid #FFD93D;
-  }
-
-  .eyebrow,
-  .section-head .en,
-  .timeline .kicker,
-  .remark .label,
-  .footer {
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
-  }
-
-  .eyebrow {
-    font-size: 8pt;
-    line-height: 1.35;
-    letter-spacing: 1.8pt;
-    text-transform: uppercase;
-    margin-bottom: 7pt;
-    color: #FFD93D;
-  }
-
-  h1 {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 23.5pt;
-    line-height: 1.14;
-    letter-spacing: 0.6pt;
-    font-weight: 500;
-    margin-bottom: 6pt;
-  }
-
-  .subtitle {
-    font-size: 9.4pt;
-    line-height: 1.4;
-    color: #FFFFFF;
-  }
-
-  .side-card {
-    border: 1pt solid var(--frame-blue);
-    padding: 9pt 10pt 8pt;
-    background: var(--panel-fill);
-  }
-
-  .side-label {
-    font-size: 7.6pt;
-    line-height: 1.35;
-    letter-spacing: 1.4pt;
-    text-transform: uppercase;
-    color: var(--frame-blue);
-    margin-bottom: 8pt;
-  }
-
-  .side-title {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 13pt;
-    line-height: 1.25;
-    font-weight: 500;
-    margin-bottom: 7pt;
-  }
-
-  .side-meta {
-    font-size: 8.1pt;
-    line-height: 1.55;
-    color: var(--stone);
-  }
-
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 7pt;
-    margin-bottom: 9pt;
-  }
-
-  .metric {
-    min-height: 52pt;
-    border: 0.9pt solid var(--frame-blue);
-    padding: 8pt 7pt 7pt;
-    background: var(--panel-fill);
-    break-inside: avoid;
-  }
-
-  .metric-value {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 18.5pt;
-    line-height: 1;
-    color: var(--frame-blue);
-    font-weight: 500;
-    margin-bottom: 5pt;
-  }
-
-  .metric-label {
-    font-size: 8pt;
-    line-height: 1.35;
-    color: var(--dark-warm);
-  }
-
-  .lead-panel {
-    position: relative;
-    border: 1pt solid var(--frame-blue);
-    padding: 10pt 12pt 10pt 16pt;
-    margin-bottom: 8pt;
-    background: var(--ivory);
-  }
-
-  .lead-panel::before {
-    content: "";
-    position: absolute;
-    left: 7pt;
-    top: 11pt;
-    bottom: 11pt;
-    width: 3pt;
-    background: var(--frame-blue);
-  }
-
-  .lead-panel p {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 10.9pt;
-    line-height: 1.5;
-    color: var(--near-black);
-  }
-
-  .hl {
-    color: var(--frame-blue);
-    font-weight: 500;
-  }
-
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8pt;
-    margin-bottom: 8pt;
-  }
-
-  .section-card {
-    border: 0.95pt solid var(--frame-blue);
-    padding: 0 10pt 8pt;
-    background: var(--ivory);
-    break-inside: avoid;
-  }
-
-  .section-head {
-    margin: -1pt -10pt 7pt;
-    padding: 6pt 10pt 5pt;
-    background: var(--frame-blue);
-    color: var(--ivory);
-  }
-
-  .section-head .cn {
-    display: block;
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 12pt;
-    line-height: 1.1;
-    font-weight: 500;
-    margin-bottom: 3pt;
-  }
-
-  .section-head .en {
-    display: block;
-    font-size: 7.4pt;
-    line-height: 1.35;
-    letter-spacing: 1.5pt;
-    text-transform: uppercase;
-    color: #FFD93D;
-  }
-
-  .section-card p,
-  .section-card li {
-    font-size: 8.55pt;
-    line-height: 1.46;
-    color: var(--dark-warm);
-  }
-
-  .section-card p {
-    margin-bottom: 6pt;
-  }
-
-  ul.dash {
-    list-style: none;
-  }
-
-  ul.dash li {
-    position: relative;
-    padding-left: 11pt;
-    margin-bottom: 4pt;
-  }
-
-  ul.dash li::before {
-    content: "-";
-    position: absolute;
-    left: 0;
-    color: var(--frame-blue);
-  }
-
-  .timeline {
-    border: 1pt solid var(--frame-blue);
-    margin-bottom: 8pt;
-    background: var(--ivory);
-  }
-
-  .timeline-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 6pt 10pt 5pt;
-    background: var(--frame-blue);
-    color: var(--ivory);
-  }
-
-  .timeline-title .cn {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 12pt;
-    line-height: 1.1;
-    font-weight: 500;
-  }
-
-  .timeline-title .en {
-    font-size: 7.4pt;
-    line-height: 1.35;
-    letter-spacing: 1.5pt;
-    text-transform: uppercase;
-    color: #FFD93D;
-  }
-
-  .timeline-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8pt;
-    padding: 8pt 10pt 10pt;
-  }
-
-  .tl-step {
-    border: 0.45pt solid var(--rule-solid);
-    padding: 7pt 8pt;
-    break-inside: avoid;
-  }
-
-  .tl-year {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 11pt;
-    line-height: 1.2;
-    color: var(--frame-blue);
-    font-weight: 500;
-    margin-bottom: 4pt;
-  }
-
-  .tl-head {
-    font-size: 8.7pt;
-    line-height: 1.35;
-    color: var(--near-black);
-    font-weight: 600;
-    margin-bottom: 3pt;
-  }
-
-  .tl-body {
-    font-size: 8pt;
-    line-height: 1.4;
-    color: var(--stone);
-  }
-
-  .bottom-grid {
-    display: grid;
-    grid-template-columns: 1.28fr 0.92fr;
-    gap: 8pt;
-    margin-bottom: 8pt;
-  }
-
-  .compact-list {
-    border: 1pt solid var(--frame-blue);
-    background: var(--ivory);
-  }
-
-  .compact-list .head {
-    background: var(--frame-blue);
-    color: var(--ivory);
-    padding: 6pt 10pt 5pt;
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 12pt;
-    line-height: 1.1;
-    font-weight: 500;
-  }
-
-  .compact-list .rows {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 9pt;
-    row-gap: 4pt;
-    padding: 8pt 10pt 9pt;
-  }
-
-  .compact-list p {
-    font-size: 8.3pt;
-    line-height: 1.4;
-    color: var(--dark-warm);
-  }
-
-  .remark {
-    border: 1pt solid var(--frame-blue);
-    padding: 9pt 12pt;
-    background: var(--ivory);
-  }
-
-  .remark .label {
-    font-size: 8pt;
-    line-height: 1.35;
-    letter-spacing: 1.6pt;
-    text-transform: uppercase;
-    color: var(--frame-blue);
-    margin-bottom: 7pt;
-  }
-
-  .remark .quote {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-size: 10.2pt;
-    line-height: 1.5;
-    color: var(--near-black);
-    margin-bottom: 8pt;
-  }
-
-  .remark .note {
-    border-top: 0.45pt solid var(--rule-solid);
-    padding-top: 7pt;
-    font-size: 8pt;
-    line-height: 1.4;
-    color: var(--stone);
-  }
-
-  .tag {
-    display: inline-block;
-    background: var(--tag-bg);
-    color: var(--frame-blue);
-    font-size: 7.5pt;
-    line-height: 1.35;
-    font-weight: 500;
-    padding: 1pt 5pt;
-    border-radius: 2pt;
-    margin-right: 3pt;
-  }
-
-  .footer {
-    display: flex;
-    justify-content: space-between;
-    font-size: 8pt;
-    line-height: 1.35;
-    letter-spacing: 0.4pt;
-    color: var(--stone);
-  }
-
-  /* Theme override · neo-brutalism */
-  body {
-    padding: 8.5mm;
-    background: var(--frame-blue);
-    font-family: "Inter", "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+      radial-gradient(#000 1.2pt, transparent 1.35pt) 0 0 / 9mm 9mm,
+      var(--cream);
+    font-family: "Space Grotesk", "Inter", "Source Han Sans SC", "Noto Sans CJK SC", system-ui, sans-serif;
     font-weight: 700;
   }
-
-  .folio,
-  .sheet {
-    background:
-      radial-gradient(#000 0.55pt, transparent 0.6pt) 0 0 / 14pt 14pt,
-      var(--parchment) !important;
-    border: 2.2pt solid #000;
-    box-shadow: 4mm 4mm 0 #FF6B6B;
+  .page { position: relative; min-height: 297mm; padding: 11mm; overflow: hidden; }
+  .shape { position: absolute; z-index: 0; border: 4pt solid var(--black); box-shadow: 8pt 8pt 0 var(--black); }
+  .shape.red { width: 50mm; height: 32mm; background: var(--red); right: -8mm; top: 25mm; transform: rotate(8deg); }
+  .shape.yellow { width: 42mm; height: 42mm; background: var(--yellow); left: -10mm; bottom: 30mm; transform: rotate(-12deg); }
+  .shape.violet { width: 30mm; height: 30mm; background: var(--violet); right: 22mm; bottom: 22mm; transform: rotate(20deg); }
+  .content { position: relative; z-index: 1; }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.22fr 0.78fr;
+    gap: 8mm;
+    margin-bottom: 8mm;
   }
-
-  .folio::before,
-  .sheet::before { inset: 4.5mm; border: 1.6pt solid #000; }
-  .folio::after,
-  .sheet::after { inset: 7mm; border: 0.8pt solid #000; }
-
-  .title-plaque {
-    background: #FF6B6B !important;
-    color: #000 !important;
-    border: 2pt solid #000;
-    box-shadow: 3mm 3mm 0 #000;
-    transform: rotate(-0.35deg);
+  .block {
+    border: 4pt solid var(--black);
+    background: var(--white);
+    box-shadow: 10pt 10pt 0 var(--black);
   }
-
-  .title-plaque::before,
-  .title-plaque::after { border-color: #000 !important; }
-
-  h1, h2, h3, .side-title, .metric-value, .section-head .zh, .chapter-title, .letter-title {
-    font-family: "Inter", "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif !important;
-    font-weight: 900 !important;
-    color: #000 !important;
-    letter-spacing: 0 !important;
+  .headline {
+    min-height: 96mm;
+    padding: 7mm;
+    transform: rotate(-1deg);
   }
-
-  .subtitle, .eyebrow { color: #000 !important; font-weight: 800; }
-
-  .side-card, .metric, .lead-panel, .panel, .content-card, .evidence-card, .quote, .callout, .timeline, table, .letter-body, .signature-card {
-    background: #FFFFFF !important;
-    border: 1.4pt solid #000 !important;
-    border-radius: 0 !important;
-    box-shadow: 1.8mm 1.8mm 0 #000;
+  .badge {
+    display: inline-block;
+    padding: 2.5mm 4mm;
+    border: 4pt solid var(--black);
+    background: var(--yellow);
+    box-shadow: 5pt 5pt 0 var(--black);
+    font-size: 8pt;
+    font-weight: 900;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    margin-bottom: 6mm;
   }
-
-  .metric:nth-child(2n), .evidence-card:nth-child(2n), .content-card:nth-child(2n) { background: #FFD93D !important; }
-  .metric:nth-child(3n), .evidence-card:nth-child(3n), .content-card:nth-child(3n) { background: #C4B5FD !important; }
-
-  .tag, .label, .side-label, .section-head .en, th {
-    background: #FFD93D !important;
-    color: #000 !important;
-    border: 1pt solid #000 !important;
-    font-weight: 900 !important;
+  h1 {
+    font-size: 44pt;
+    line-height: 0.86;
+    letter-spacing: -1.7pt;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+  .outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5pt var(--black);
+  }
+  .subtitle {
+    margin-top: 6mm;
+    padding: 4mm;
+    border: 4pt solid var(--black);
+    background: var(--violet);
+    font-size: 11pt;
+    line-height: 1.35;
+    box-shadow: 6pt 6pt 0 var(--black);
+  }
+  .side { display: grid; gap: 6mm; }
+  .side .block { padding: 6mm; }
+  .side .block:nth-child(1) { background: var(--red); transform: rotate(2deg); }
+  .side .block:nth-child(2) { background: var(--yellow); transform: rotate(-2deg); }
+  .side h2 { font-size: 22pt; line-height: 0.95; font-weight: 900; text-transform: uppercase; margin-bottom: 4mm; }
+  .side p, .card p, .card li { font-size: 9.2pt; line-height: 1.42; }
+  .marquee {
+    border: 4pt solid var(--black);
+    background: var(--black);
+    color: var(--white);
+    padding: 3mm;
+    margin-bottom: 8mm;
+    font-size: 10pt;
+    font-weight: 900;
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    box-shadow: 7pt 7pt 0 var(--black);
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6mm;
+    margin-bottom: 8mm;
+  }
+  .metric {
+    min-height: 31mm;
+    padding: 5mm;
+    border: 4pt solid var(--black);
+    background: var(--white);
+    box-shadow: 7pt 7pt 0 var(--black);
+  }
+  .metric:nth-child(2) { background: var(--yellow); transform: rotate(1deg); }
+  .metric:nth-child(3) { background: var(--violet); transform: rotate(-1deg); }
+  .num { font-size: 27pt; line-height: 0.85; font-weight: 900; }
+  .metric p { margin-top: 3mm; font-size: 8pt; line-height: 1.25; text-transform: uppercase; }
+  .grid {
+    display: grid;
+    grid-template-columns: 5fr 4fr 3fr;
+    gap: 7mm;
+  }
+  .card {
+    min-height: 73mm;
+    padding: 6mm;
+    border: 4pt solid var(--black);
+    background: var(--white);
+    box-shadow: 9pt 9pt 0 var(--black);
+  }
+  .card:nth-child(1) { transform: rotate(1deg); }
+  .card:nth-child(2) { background: var(--red); transform: rotate(-1.5deg); }
+  .card:nth-child(3) { background: var(--black); color: var(--white); transform: rotate(2deg); }
+  .card h2 {
+    font-size: 24pt;
+    line-height: 0.9;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 5mm;
+  }
+  .card ul { list-style: none; display: grid; gap: 3mm; }
+  .card li::before { content: "★ "; }
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8mm;
+    font-size: 8pt;
+    font-weight: 900;
+    letter-spacing: 1.3pt;
+    text-transform: uppercase;
   }
 </style>
 </head>
 <body>
-<main class="folio">
-  <div class="sheet-content">
-    <header class="header">
-      <section class="title-plaque">
-        <div class="eyebrow">{{英文眉题 · 如 COMPANY BRIEF / PROJECT DOSSIER}}</div>
-        <h1>{{文档主标题，两行内，动词 + 名词结构最好}}</h1>
-        <div class="subtitle">{{一行副标题 / 一句核心论点}}</div>
-      </section>
-
-      <aside class="side-card">
-        <div class="side-label">{{档案标签 · 如 Archive Note}}</div>
-        <div class="side-title">{{项目 / 公司 / 主题名称}}</div>
-        <div class="side-meta">
-          版本：{{版本 / 状态}}<br>
-          日期：{{日期 YYYY.MM.DD}}<br>
-          分类：{{文档分类}}
-        </div>
-      </aside>
-    </header>
-
-    <section class="metrics" aria-label="关键指标">
-      <div class="metric">
-        <div class="metric-value">{{数字}}</div>
-        <div class="metric-label">{{指标说明}}</div>
-      </div>
-      <div class="metric">
-        <div class="metric-value">{{数字}}</div>
-        <div class="metric-label">{{指标说明}}</div>
-      </div>
-      <div class="metric">
-        <div class="metric-value">{{数字}}</div>
-        <div class="metric-label">{{指标说明}}</div>
-      </div>
-      <div class="metric">
-        <div class="metric-value">{{数字}}</div>
-        <div class="metric-label">{{指标说明}}</div>
-      </div>
-    </section>
-
-    <section class="lead-panel">
-      <p>{{40-70 字核心导语。用 <span class="hl">关键词</span> 点出判断，让读者立刻知道这份一页纸的主张。}}</p>
-    </section>
-
-    <section class="two-col">
-      <article class="section-card">
-        <div class="section-head">
-          <span class="cn">{{栏目标题 1}}</span>
-          <span class="en">{{英文小标题}}</span>
-        </div>
-        <p>{{1-2 句概括。}}</p>
-        <ul class="dash">
-          <li>{{短 bullet：事实 / 数据 / 判断}}</li>
-          <li>{{短 bullet：带 <span class="hl">关键数字</span> 的论据}}</li>
-          <li>{{短 bullet：下一步或风险}}</li>
-        </ul>
+<main class="page">
+  <div class="shape red"></div><div class="shape yellow"></div><div class="shape violet"></div>
+  <div class="content">
+    <section class="hero">
+      <article class="block headline">
+        <div class="badge">NEO BRUTALISM / PROJECT BRIEF</div>
+        <h1>{{文档主标题，<span class="outline">越大越响</span>，不要温柔}}</h1>
+        <p class="subtitle">{{一句副标题：直接说结论、对象、下一步。要像海报标语，不像档案摘要。}}</p>
       </article>
-
-      <article class="section-card">
-        <div class="section-head">
-          <span class="cn">{{栏目标题 2}}</span>
-          <span class="en">{{英文小标题}}</span>
-        </div>
-        <p>{{1-2 句概括。}}</p>
-        <ul class="dash">
-          <li>{{短 bullet}}</li>
-          <li>{{短 bullet}}</li>
-          <li>{{短 bullet}}</li>
-        </ul>
-      </article>
-    </section>
-
-    <section class="timeline">
-      <div class="timeline-title">
-        <span class="cn">主线演进</span>
-        <span class="en">{{Timeline / Roadmap}}</span>
-      </div>
-      <div class="timeline-grid">
-        <div class="tl-step">
-          <div class="tl-year">{{阶段 / 年份 1}}</div>
-          <div class="tl-head">{{阶段标题}}</div>
-          <div class="tl-body">{{一句解释}}</div>
-        </div>
-        <div class="tl-step">
-          <div class="tl-year">{{阶段 / 年份 2}}</div>
-          <div class="tl-head">{{阶段标题}}</div>
-          <div class="tl-body">{{一句解释}}</div>
-        </div>
-        <div class="tl-step">
-          <div class="tl-year">{{阶段 / 年份 3}}</div>
-          <div class="tl-head">{{阶段标题}}</div>
-          <div class="tl-body">{{一句解释}}</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="bottom-grid">
-      <div class="compact-list">
-        <div class="head">{{关键里程碑 / 核心事项}}</div>
-        <div class="rows">
-          <p>{{事项 1：一句话}}</p>
-          <p>{{事项 2：一句话}}</p>
-          <p>{{事项 3：一句话}}</p>
-          <p>{{事项 4：一句话}}</p>
-        </div>
-      </div>
-
-      <aside class="remark">
-        <div class="label">Filed Remark</div>
-        <div class="quote">{{关键引用 / 核心 takeaway / 重要提示。}}</div>
-        <div class="note">{{补充说明：为什么这句话重要。}}</div>
+      <aside class="side">
+        <div class="block"><h2>{{LOUD NOTE}}</h2><p>{{项目 / 公司 / 主题名称}}<br>{{版本 / 日期 / 分类}}</p></div>
+        <div class="block"><h2>{{WHY NOW}}</h2><p>{{一句话说明最重要的变化或机会。}}</p></div>
       </aside>
     </section>
-
-    <footer class="footer">
-      <span>{{公开 / 内部 / 机密级别}}</span>
-      <span>{{页码 / 联系方式}}</span>
-    </footer>
+    <div class="marquee">RAW STRUCTURE ★ HARD SHADOW ★ HIGH SATURATION ★ NO SOFTNESS ★</div>
+    <section class="metrics">
+      <div class="metric"><div class="num">{{数字}}</div><p>{{指标说明}}</p></div>
+      <div class="metric"><div class="num">{{数字}}</div><p>{{指标说明}}</p></div>
+      <div class="metric"><div class="num">{{数字}}</div><p>{{指标说明}}</p></div>
+    </section>
+    <section class="grid">
+      <article class="card"><h2>{{核心论点}}</h2><p>{{80-120 字正文导语。稳定可读，但构图像 DIY flyer：旋转、硬阴影、粗黑边和高饱和色块。}}</p></article>
+      <article class="card"><h2>{{证据清单}}</h2><ul><li>{{事实 / 判断 1}}</li><li>{{事实 / 判断 2}}</li><li>{{下一步行动}}</li></ul></article>
+      <aside class="card"><h2>{{ACTION}}</h2><p>{{责任人、时间和交付物。}}</p></aside>
+    </section>
+    <footer class="footer"><span>{{Neo Brutalism Edition}}</span><span>{{Kami Demo · 1 / 1}}</span></footer>
   </div>
 </main>
 </body>

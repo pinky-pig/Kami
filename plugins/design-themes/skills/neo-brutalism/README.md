@@ -2,7 +2,7 @@
 
 A Kami document theme for **新粗野主义 / Neo-Brutalism** output.
 
-It is a full copy of the `republican-manuscript` document production pipeline with a different visual system: HTML templates, WeasyPrint PDF generation, PPTX slides, diagrams, examples, fonts, and validation scripts are all present.
+It uses the stable Kami document production pipeline, but the visible output is a prompt-native Neo-Brutalism system: thick black strokes, high-saturation color blocking, hard ink shadows, rotated sticker layers, halftone/grid textures, and DIY zine composition.
 
 ## Supports
 

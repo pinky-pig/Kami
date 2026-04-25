@@ -2,7 +2,7 @@
 
 ## 设计宣言
 
-这一版 Kami 的目标是把原 `republican-manuscript` 的稳定文档能力换成 **新粗野主义 / Neo-Brutalism** 视觉系统。
+这一版 Kami 的目标是使用稳定生成能力，输出真正的 **新粗野主义 / Neo-Brutalism** 文档系统。
 
 **黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴。**
 
@@ -51,7 +51,7 @@ Additional implementation colors:
 
 ## 字体与层级
 
-中文默认用重字重 sans，标题和数字尽量粗；保留 KingHwa 字体文件只是为了兼容旧模板。
+中文默认用重字重 sans，标题和数字尽量粗；不要使用旧 serif 文稿字体。
 
 ## 组件语言
 

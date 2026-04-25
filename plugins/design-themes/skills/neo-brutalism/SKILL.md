@@ -1,13 +1,13 @@
 ---
 name: neo-brutalism
-description: 'Typeset Chinese professional documents in a Neo-Brutalism document style: one-pagers, white papers, project proposals, formal letters, recommendation letters, reports, PDFs, HTML documents, and slide decks. Uses the full Kami template/build pipeline copied from republican-manuscript, but swaps the visual system to 黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴. Auto-triggers from natural requests such as "用新粗野主义风格", "Neo-Brutalism theme", "做 PDF", "生成报告", "一页纸", "白皮书", "推荐信", "项目方案", "做一套汇报 slides", and when raw Chinese content is handed over to be typeset in this theme.'
+description: 'Typeset Chinese professional documents in a Neo-Brutalism document style: one-pagers, white papers, project proposals, formal letters, recommendation letters, reports, PDFs, HTML documents, and slide decks. Uses the Kami build pipeline, but the visible layout/content system must be prompt-native Neo-Brutalism: thick black strokes, high-saturation color blocking, hard ink shadows, rotated sticker layers, halftone/grid textures, and DIY zine composition. Auto-triggers from natural requests such as "用新粗野主义风格", "Neo-Brutalism theme", "做 PDF", "生成报告", "一页纸", "白皮书", "推荐信", "项目方案", "做一套汇报 slides", and when raw Chinese content is handed over to be typeset in this theme.'
 ---
 
 # Kami · Neo-Brutalism
 
-Use this skill when the user wants a Chinese professional document rendered as **新粗野主义 / Neo-Brutalism** instead of the Republican manuscript or newspaper styles.
+Use this skill when the user wants a Chinese professional document rendered as **新粗野主义 / Neo-Brutalism** rather than a quiet archival or editorial style.
 
-This skill keeps the same production surface as `republican-manuscript`: HTML templates, WeasyPrint PDF output, PPTX generation, diagrams, fonts, build checks, and the same document routing. Only the visual language changes: **黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴**.
+This skill keeps only the production surface: HTML templates, WeasyPrint PDF output, PPTX generation, diagrams, fonts, build checks, and document routing. The visible result must not keep old frame/page composition. Neo-Brutalism output must use **黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴 / DIY zine composition**.
 
 ## V1 Scope
 
@@ -58,6 +58,7 @@ Prefer Chinese output. If the user writes in Chinese, use Chinese templates and 
 
 - Copy the matching template into the working directory; do not write HTML from scratch
 - Keep the theme CSS unless the user asks for a visual adjustment
+- Rewrite raw content into neo-brutalist units: loud hero, marquee strip, rotated evidence cards, proof sticker, poster cover, blocky TOC, raw subject bar
 - Follow `references/writing.md`: data over adjectives, specific evidence over generic praise
 - For recommendation letters, use `letter.html` and structure the body as relationship -> evidence -> fit -> clear recommendation
 
@@ -79,7 +80,7 @@ Template response: "当前 X 是 Y。要改成 (a) [specific Neo-Brutalism optio
 
 ## When Not To Use
 
-- User asks for `republican-manuscript` or `republican-newspaper`
+- User asks for a quiet archival or editorial theme
 - User wants a dynamic web app UI rather than print/static documents
 - User wants a different named design system that conflicts with Neo-Brutalism
 - The requested visual direction depends on: 柔和阴影、玻璃拟态、细灰线、低对比 SaaS 卡片

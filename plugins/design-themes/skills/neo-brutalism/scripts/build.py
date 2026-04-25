@@ -77,10 +77,9 @@ SYNC_TARGETS: set[str] = {
     "letter.html",
 }
 
-# Demo files have real content and are the right source for --verify.
-VERIFY_SOURCES: dict[str, tuple[str, Path]] = {
-    "long-doc": ("demo-long-doc.html", ROOT / "assets" / "demos"),
-}
+# Verification uses active templates directly. Keep stale demo HTML out of the
+# default path so old theme structure cannot override the prompt-native theme.
+VERIFY_SOURCES: dict[str, tuple[str, Path]] = {}
 
 
 # ------------------------- build -------------------------

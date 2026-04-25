@@ -1,491 +1,81 @@
 <!DOCTYPE html>
-<!-- ==================================================================
-     LETTER TEMPLATE · neo-brutalism
-     A4 正式信件 / 推荐信 / 推荐函 / 备忘录 / 说明函
-     视觉：黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴
-     目标：页数必须 == 1
-     ================================================================== -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>{{信件主题}}</title>
+<title>{{函件标题}}</title>
 <style>
-  @font-face {
-    font-family: "KingHwa_OldSong";
-    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
-    font-weight: 500;
-    font-style: normal;
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+  @font-face { font-family: "Inter"; src: url("../fonts/Inter-600.woff2") format("woff2"); font-weight: 900; font-style: normal; }
+  @page { size: A4; margin: 0; background: #FFFDF5; }
+  :root { --cream:#FFFDF5; --black:#000000; --red:#FF6B6B; --yellow:#FFD93D; --violet:#C4B5FD; --white:#FFFFFF; }
+  * { box-sizing: border-box; margin: 0; padding: 0; border-radius: 0; }
+  html, body {
+    width: 210mm; min-height: 297mm; margin: 0 auto; color: var(--black);
+    background: radial-gradient(#000 1.2pt, transparent 1.35pt) 0 0 / 9mm 9mm, var(--cream);
+    font-family: "Space Grotesk", "Inter", "Source Han Sans SC", system-ui, sans-serif; font-weight: 700;
   }
-
-  @page {
-    size: A4;
-    margin: 0;
-    background: #000000;
-  }
-
-  :root {
-    --parchment:  #FFFDF5;
-    --ivory:      #FFFFFF;
-    --brand:      #000000;
-    --near-black: #000000;
-    --dark-warm:  #000000;
-    --charcoal:   #171717;
-    --olive:      #1F1F1F;
-    --stone:      #000000;
-
-    --frame-blue: #000000;
-    --blue-soft:  #000000;
-    --paper-wash: #FFFDF5;
-    --paper-deep: #FFD93D;
-    --rule:       #000000;
-    --panel-fill: #FFFFFF;
-    --tag-bg:     #FFD93D;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html,
-  body {
-    width: 210mm;
-    min-height: 297mm;
-    margin: 0 auto;
-    background: var(--frame-blue);
-    color: var(--near-black);
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
-  }
-
-  body {
-    padding: 11mm;
-    margin: 0 auto;
-  }
-
-  .folio {
-    position: relative;
-    min-height: 275mm;
-    padding: 15mm 15mm 12mm;
-    background:
-      url("../images/paper-overlay.png") center / 72mm auto repeat,
-      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
-    overflow: hidden;
-  }
-
-  .folio::before,
-  .folio::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .folio::before {
-    inset: 6mm;
-    border: 1pt solid var(--frame-blue);
-  }
-
-  .folio::after {
-    inset: 8.2mm;
-    border: 0.45pt solid var(--blue-soft);
-  }
-
-  .sheet-content {
-    position: relative;
-    z-index: 1;
-  }
-
-  .sans,
-  .label,
-  .sub,
-  .meta,
-  .subject-meta,
-  .note,
-  .attachments,
-  .footer {
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
-  }
-
+  .page { position: relative; min-height: 297mm; padding: 11mm; overflow: hidden; }
+  .noise { position:absolute; inset: 0; background: linear-gradient(90deg, transparent 96%, #000 97%) 0 0 / 22mm 22mm; opacity: 0.18; z-index:0; }
+  .content { position: relative; z-index: 1; }
   .top {
     display: grid;
-    grid-template-columns: 0.88fr 1.12fr;
-    gap: 10pt;
-    margin-bottom: 14pt;
+    grid-template-columns: 1.25fr 0.75fr;
+    gap: 8mm;
+    margin-bottom: 8mm;
   }
-
-  .tag-plaque {
-    position: relative;
-    min-height: 82pt;
-    padding: 12pt 14pt;
-    background: var(--frame-blue);
-    color: var(--ivory);
+  .block { border: 4pt solid var(--black); background: var(--white); box-shadow: 10pt 10pt 0 var(--black); }
+  .title { padding: 7mm; min-height: 70mm; background: var(--yellow); transform: rotate(-1deg); }
+  .sender { padding: 6mm; background: var(--red); transform: rotate(2deg); }
+  .badge {
+    display:inline-block; padding:2.5mm 4mm; border:4pt solid var(--black); background:var(--white);
+    box-shadow:5pt 5pt 0 var(--black); font-size:8pt; font-weight:900; letter-spacing:1.2pt;
+    text-transform:uppercase; margin-bottom:5mm;
   }
-
-  .tag-plaque::before,
-  .tag-plaque::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .tag-plaque::before {
-    inset: 6pt;
-    border: 0.85pt solid #FFFFFF;
-  }
-
-  .tag-plaque::after {
-    inset: 9pt;
-    border: 0.45pt solid #FFD93D;
-  }
-
-  .tag-plaque .label {
-    font-size: 7.6pt;
-    line-height: 1.35;
-    letter-spacing: 1.8pt;
-    text-transform: uppercase;
-    color: #FFD93D;
-    margin-bottom: 7pt;
-  }
-
-  .tag-plaque .value {
-    font-size: 17pt;
-    line-height: 1.3;
-    font-weight: 500;
-  }
-
-  .sender {
-    border: 1pt solid var(--frame-blue);
-    padding: 12pt 12pt 10pt;
-    background: var(--panel-fill);
-    text-align: right;
-  }
-
-  .sender .org {
-    font-size: 15pt;
-    line-height: 1.2;
-    color: var(--near-black);
-    margin-bottom: 8pt;
-    font-weight: 500;
-  }
-
-  .sender .meta {
-    font-size: 8.9pt;
-    line-height: 1.55;
-    color: var(--stone);
-  }
-
-  .sender a {
-    color: var(--stone);
-    text-decoration: none;
-  }
-
+  h1 { font-size: 40pt; line-height: 0.88; font-weight: 900; text-transform: uppercase; letter-spacing: -1.2pt; }
+  h2 { font-size: 22pt; line-height: 0.92; font-weight: 900; text-transform: uppercase; margin-bottom: 4mm; }
+  p, li { font-size: 9.5pt; line-height: 1.42; }
   .subject {
-    border: 1pt solid var(--frame-blue);
-    margin-bottom: 13pt;
-    background: var(--ivory);
-  }
-
-  .subject-head {
-    padding: 8pt 14pt 7pt;
-    background: var(--frame-blue);
-    color: var(--ivory);
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-  }
-
-  .subject-head .main {
-    font-size: 13pt;
-    line-height: 1.2;
-    font-weight: 500;
-  }
-
-  .subject-head .sub {
-    font-size: 7.2pt;
-    line-height: 1.35;
-    letter-spacing: 1.6pt;
-    text-transform: uppercase;
-    color: #FFD93D;
-  }
-
-  .subject-body {
-    padding: 12pt 14pt 11pt;
-  }
-
-  .subject-title {
-    font-size: 22pt;
-    line-height: 1.25;
-    color: var(--near-black);
-    font-weight: 500;
-    margin-bottom: 6pt;
-  }
-
-  .subject-meta {
-    display: flex;
-    justify-content: space-between;
-    gap: 12pt;
-    font-size: 9pt;
-    line-height: 1.45;
-    color: var(--stone);
-  }
-
-  .body-frame {
-    position: relative;
-    border: 1pt solid var(--frame-blue);
-    padding: 13pt 16pt 12pt;
-    background: var(--ivory);
-  }
-
-  .body-frame::before {
-    content: "";
-    position: absolute;
-    inset: 7pt;
-    border: 0.45pt solid var(--rule);
-    pointer-events: none;
-  }
-
-  .salutation {
-    position: relative;
-    z-index: 1;
-    font-size: 13pt;
-    line-height: 1.3;
-    color: var(--near-black);
-    margin-bottom: 10pt;
-    font-weight: 500;
-  }
-
-  .body-frame p {
-    position: relative;
-    z-index: 1;
-    margin-bottom: 10pt;
-    font-size: 11.1pt;
-    line-height: 1.55;
-    color: var(--near-black);
-    text-indent: 2em;
-  }
-
-  .body-frame p.no-indent {
-    text-indent: 0;
-  }
-
-  .hl {
-    color: var(--frame-blue);
-    font-weight: 500;
-  }
-
-  .evidence-list {
-    position: relative;
-    z-index: 1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6pt;
-    margin: 4pt 0 10pt;
+    grid-template-columns: 42mm 1fr;
+    border: 4pt solid var(--black);
+    background: var(--white);
+    box-shadow: 8pt 8pt 0 var(--black);
+    margin-bottom: 8mm;
   }
-
-  .evidence-list div {
-    border: 0.45pt solid var(--rule);
-    padding: 6pt 7pt;
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
-    font-size: 8.2pt;
-    line-height: 1.4;
-    color: var(--dark-warm);
-  }
-
-  .closing {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 16pt;
-    align-items: end;
-    margin-top: 13pt;
-    padding-top: 12pt;
-    border-top: 1pt solid var(--frame-blue);
-  }
-
-  .closing .regards {
-    font-size: 13pt;
-    line-height: 1.35;
-    color: var(--near-black);
-    margin-bottom: 5pt;
-    font-weight: 500;
-  }
-
-  .closing .note {
-    font-size: 8.8pt;
-    line-height: 1.45;
-    color: var(--stone);
-  }
-
-  .signature {
-    text-align: right;
-  }
-
-  .signature .name {
-    font-size: 18pt;
-    line-height: 1.2;
-    color: var(--near-black);
-    font-weight: 500;
-    margin-bottom: 5pt;
-  }
-
-  .signature .meta {
-    font-size: 8.8pt;
-    line-height: 1.45;
-    color: var(--stone);
-  }
-
-  .attachments {
-    margin-top: 10pt;
-    padding-top: 8pt;
-    border-top: 0.45pt solid var(--rule);
-    font-size: 8.6pt;
-    line-height: 1.45;
-    color: var(--stone);
-  }
-
-  .attachments .label {
-    color: var(--frame-blue);
-    font-weight: 500;
-    margin-right: 6pt;
-  }
-
-  .footer {
-    margin-top: 9pt;
-    display: flex;
-    justify-content: space-between;
-    font-size: 8pt;
-    line-height: 1.35;
-    letter-spacing: 0.6pt;
-    color: var(--stone);
-  }
-
-  /* Theme override · neo-brutalism */
-  body {
-    padding: 8.5mm;
-    background: var(--frame-blue);
-    font-family: "Inter", "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
-    font-weight: 700;
-  }
-
-  .folio,
-  .sheet {
-    background:
-      radial-gradient(#000 0.55pt, transparent 0.6pt) 0 0 / 14pt 14pt,
-      var(--parchment) !important;
-    border: 2.2pt solid #000;
-    box-shadow: 4mm 4mm 0 #FF6B6B;
-  }
-
-  .folio::before,
-  .sheet::before { inset: 4.5mm; border: 1.6pt solid #000; }
-  .folio::after,
-  .sheet::after { inset: 7mm; border: 0.8pt solid #000; }
-
-  .title-plaque {
-    background: #FF6B6B !important;
-    color: #000 !important;
-    border: 2pt solid #000;
-    box-shadow: 3mm 3mm 0 #000;
-    transform: rotate(-0.35deg);
-  }
-
-  .title-plaque::before,
-  .title-plaque::after { border-color: #000 !important; }
-
-  h1, h2, h3, .side-title, .metric-value, .section-head .zh, .chapter-title, .letter-title {
-    font-family: "Inter", "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif !important;
-    font-weight: 900 !important;
-    color: #000 !important;
-    letter-spacing: 0 !important;
-  }
-
-  .subtitle, .eyebrow { color: #000 !important; font-weight: 800; }
-
-  .side-card, .metric, .lead-panel, .panel, .content-card, .evidence-card, .quote, .callout, .timeline, table, .letter-body, .signature-card {
-    background: #FFFFFF !important;
-    border: 1.4pt solid #000 !important;
-    border-radius: 0 !important;
-    box-shadow: 1.8mm 1.8mm 0 #000;
-  }
-
-  .metric:nth-child(2n), .evidence-card:nth-child(2n), .content-card:nth-child(2n) { background: #FFD93D !important; }
-  .metric:nth-child(3n), .evidence-card:nth-child(3n), .content-card:nth-child(3n) { background: #C4B5FD !important; }
-
-  .tag, .label, .side-label, .section-head .en, th {
-    background: #FFD93D !important;
-    color: #000 !important;
-    border: 1pt solid #000 !important;
-    font-weight: 900 !important;
-  }
+  .subject .left { background: var(--black); color: var(--white); padding: 5mm; font-size: 16pt; font-weight: 900; text-transform: uppercase; }
+  .subject .right { padding: 5mm; }
+  .main { display: grid; grid-template-columns: 1fr 66mm; gap: 8mm; }
+  .body { min-height: 145mm; padding: 7mm; transform: rotate(0.7deg); }
+  .evidence { min-height: 145mm; padding: 7mm; background: var(--violet); transform: rotate(-1.5deg); }
+  .drop { display:inline-block; font-size:36pt; line-height:0.72; font-weight:900; color:var(--red); vertical-align:text-top; padding-right:2pt; }
+  .body p { margin-bottom: 4mm; }
+  .closing { display:grid; grid-template-columns:1fr 1fr; gap:8mm; margin-top:5mm; padding-top:5mm; border-top:4pt solid var(--black); }
+  .signature { text-align:right; font-size:18pt; font-weight:900; text-transform:uppercase; }
+  .evidence ul { list-style:none; display:grid; gap:4mm; }
+  .evidence li { border:4pt solid var(--black); background:var(--white); padding:4mm; box-shadow:5pt 5pt 0 var(--black); }
+  .footer { display:flex; justify-content:space-between; margin-top:8mm; font-size:8pt; font-weight:900; letter-spacing:1.3pt; text-transform:uppercase; }
 </style>
 </head>
 <body>
-<main class="folio">
-  <div class="sheet-content">
-    <header class="top">
-      <section class="tag-plaque">
-        <div class="label">{{Filed Letter / Recommendation Letter}}</div>
-        <div class="value">{{推荐信 / 正式函件<br>一句短标题}}</div>
-      </section>
-
-      <section class="sender">
-        <div class="org">{{寄件人姓名 / 机构}}</div>
-        <div class="meta">
-          {{寄件人身份 / 部门 / 城市}}<br>
-          {{电话}}　<a href="mailto:{{EMAIL}}">{{EMAIL}}</a><br>
-          日期：{{2026 年 4 月 21 日}}
-        </div>
-      </section>
-    </header>
-
-    <section class="subject">
-      <div class="subject-head">
-        <span class="main">函件主题</span>
-        <span class="sub">Formal Correspondence</span>
-      </div>
-      <div class="subject-body">
-        <div class="subject-title">{{关于推荐 / 说明 / 申请事项的一句话标题}}</div>
-        <div class="subject-meta">
-          <span>致：{{收件人 / 委员会 / 单位}}</span>
-          <span>分类：{{推荐信 / 内部说明函 / 正式信件}}</span>
-        </div>
-      </div>
+<main class="page">
+  <div class="noise"></div>
+  <div class="content">
+    <section class="top">
+      <article class="block title"><div class="badge">LETTER / LOUD</div><h1>{{推荐信 / 正式函件标题}}</h1></article>
+      <aside class="block sender"><h2>{{寄件人姓名 / 机构}}</h2><p>{{身份 / 部门 / 城市}}<br>{{电话}} · {{EMAIL}}<br>{{日期}}</p></aside>
     </section>
-
-    <section class="body-frame">
-      <div class="salutation">{{尊敬的 XX 委员会 / 负责人：}}</div>
-
-      <p>{{第一段：说明写信目的和与被推荐人的关系。例如“我谨以 XX 身份推荐 XX 申请 XX 项目”。}}</p>
-
-      <p>{{第二段：写清推荐理由。用具体事实支撑，不只写“优秀”。可用 <span class="hl">关键能力 / 关键成果</span> 高亮。}}</p>
-
-      <div class="evidence-list">
-        <div>{{证据 1：项目 / 成果}}</div>
-        <div>{{证据 2：能力 / 品质}}</div>
-        <div>{{证据 3：影响 / 评价}}</div>
-      </div>
-
-      <p>{{第三段：结合申请场景说明为什么匹配。把对方关心的标准和被推荐人的经历连接起来。}}</p>
-
-      <p>{{第四段：明确推荐结论，并提供后续联系出口。}}</p>
-
-      <div class="closing">
-        <div>
-          <div class="regards">{{此致　敬礼 / 顺颂商祺}}</div>
-          <div class="note">{{附言：如需进一步了解，我愿意补充说明。}}</div>
-        </div>
-        <div class="signature">
-          <div class="name">{{签名}}</div>
-          <div class="meta">{{职位 · 单位}}<br>{{日期复写}}</div>
-        </div>
-      </div>
+    <section class="subject"><div class="left">SUBJECT</div><div class="right"><p>{{关于推荐 / 说明 / 申请事项的一句话标题。致：{{收件人 / 委员会 / 单位}}。}}</p></div></section>
+    <section class="main">
+      <article class="block body">
+        <p><span class="drop">{{敬}}</span>{{第一段：说明写信目的和与被推荐人的关系，第一句直接给出推荐结论。}}</p>
+        <p>{{第二段：写清推荐理由。使用具体项目、成果、数字和观察，不只写“优秀”。}}</p>
+        <p>{{第三段：结合申请场景说明为什么匹配，把对方关心的标准和被推荐人的经历连接起来。}}</p>
+        <p>{{第四段：明确推荐结论，并提供后续联系出口。}}</p>
+        <div class="closing"><div>{{此致　敬礼 / 顺颂商祺}}<br>{{附言：如需进一步了解，我愿意补充说明。}}</div><div class="signature">{{签名}}<br><span style="font-size:8pt">{{职位 · 单位}}<br>{{日期复写}}</span></div></div>
+      </article>
+      <aside class="block evidence"><div class="badge">PROOF</div><h2>{{三条可核验事实}}</h2><ul><li>{{证据 1：项目 / 成果}}</li><li>{{证据 2：能力 / 品质}}</li><li>{{证据 3：影响 / 评价}}</li></ul></aside>
     </section>
-
-    <div class="attachments">
-      <span class="label">附件</span>{{附件清单：① 简历 ② 成果材料 ③ 其他证明；无附件可删除本行}}
-    </div>
-
-    <footer class="footer">
-      <span>INTERNAL FILED LETTER</span>
-      <span>KAMI DEMO · 1 / 1</span>
-    </footer>
+    <footer class="footer"><span>Neo Brutalism Letter</span><span>Kami · 1 / 1</span></footer>
   </div>
 </main>
 </body>

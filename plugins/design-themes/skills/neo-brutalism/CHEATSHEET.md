@@ -4,18 +4,18 @@
 
 - 正式支持：中文 `one-pager`、`long-doc`、`letter`、`slides`
 - 风格目标：黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴
-- 模板能力：沿用 `republican-manuscript` 的 HTML / PDF / PPTX / diagram / build pipeline
+- 模板能力：沿用稳定的 HTML / PDF / PPTX / diagram / build pipeline；版面和内容格式必须是 Neo-Brutalism 原生
 
 ## 八条铁律
 
 1. 文档不是网页 prompt 的直接粘贴；必须转译成 A4 / slides 可打印版式
-2. 保持 Kami 的固定模板和页数稳定性，只替换视觉语言
-3. 主风格信号：黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴
-4. 中文默认用重字重 sans，标题和数字尽量粗；保留 KingHwa 字体文件只是为了兼容旧模板。
+2. 只继承生产流程，不继承旧主题的版式、题签、外框和内容节奏
+3. 主风格信号：黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴 / DIY zine composition
+4. 中文默认用重字重 sans，标题和数字尽量粗；不要使用旧 serif 文稿字体。
 5. Tag 背景必须是实色 hex，不用 `rgba()`
 6. 结构和正文清晰度优先于装饰
 7. 页面可输出为 PDF；不要依赖浏览器-only 动效表达核心信息
-8. 不要混入 republican-manuscript 的深蓝档案题签或 republican-newspaper 的民国报刊符号
+8. 不要混入旧主题的深色题签、厚重框页、档案卡片或民国报刊符号
 
 ## 自然语言触发
 
@@ -54,4 +54,4 @@ python3 scripts/build.py slides
 python3 scripts/build.py --check
 ```
 
-一句话：**内容骨架沿用 Kami，风格信号交给 黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴。**
+一句话：**生产流程沿用 Kami，内容骨架必须改写成 loud hero、marquee strip、rotated cards、proof sticker、poster cover 和 blocky TOC。**

@@ -1,6 +1,6 @@
 # Handoff · Neo-Brutalism
 
-This theme was created by copying `plugins/republican-themes/skills/republican-manuscript` and replacing the visual system with `neo-brutalism`.
+This theme keeps the stable document production workflow, but its visual and content system must stay native to `neo-brutalism`.
 
 ## Included
 
