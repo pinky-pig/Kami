@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{长文标题}}</title>
+<style>
+  @font-face { font-family: "LXGW WenKai"; src: url("../fonts/LXGWWenKai-Regular.ttf") format("truetype"); font-weight: 400; }
+  @font-face { font-family: "TsangerJinKai02"; src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype"); font-weight: 400; }
+  @page { size: A4; margin: 0; background: #fdfbf7; }
+  :root {
+    --paper: #fdfbf7;
+    --ink: #2d2d2d;
+    --border: #2d2d2d;
+    --muted: #e5e0d8;
+    --accent: #ff4d4d;
+    --secondary: #2d5da1;
+    --note: #fff9c4;
+    --card: #ffffff;
+    --wobbly-a: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    --wobbly-b: 18px 210px 22px 180px / 24px 18px 210px 26px;
+    --wobbly-c: 32px 14px 30px 220px / 14px 220px 20px 28px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    margin: 0 auto;
+    background:
+      radial-gradient(var(--muted) 1px, transparent 1px) 0 0 / 24px 24px,
+      var(--paper);
+    color: var(--ink);
+    font-family: "Noteworthy", "LXGW WenKai", "TsangerJinKai02", "Bradley Hand", cursive;
+  }
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12mm;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .page:last-child { page-break-after: auto; }
+  .card { position: relative; background: var(--card); border: 3px solid var(--border); box-shadow: 4px 4px 0 0 var(--border); }
+  .card.tape::before {
+    content: "";
+    position: absolute;
+    top: -6mm;
+    left: 50%;
+    width: 24mm;
+    height: 8mm;
+    margin-left: -12mm;
+    background: var(--muted);
+    border: 2px dashed var(--border);
+    transform: rotate(-6deg);
+  }
+  .card.tack::after {
+    content: "";
+    position: absolute;
+    top: -5mm;
+    left: 50%;
+    width: 8mm;
+    height: 8mm;
+    margin-left: -4mm;
+    border-radius: 999px;
+    background: var(--accent);
+    border: 2px solid var(--border);
+  }
+  .cover {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 8mm;
+    align-items: start;
+  }
+  .cover-main {
+    min-height: 178mm;
+    padding: 11mm 9mm 8mm;
+    border-radius: var(--wobbly-a);
+    transform: rotate(-1.8deg);
+  }
+  .tag {
+    display: inline-block;
+    padding: 2mm 4mm;
+    border: 3px solid var(--border);
+    border-radius: 999px;
+    background: var(--note);
+    font-family: "Marker Felt", "LXGW WenKai", "TsangerJinKai02", cursive;
+    font-size: 8pt;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+  }
+  h1, h2, h3 {
+    font-family: "Marker Felt", "LXGW WenKai", "TsangerJinKai02", cursive;
+    letter-spacing: 0;
+  }
+  h1 {
+    margin-top: 10mm;
+    max-width: 110mm;
+    font-size: 38pt;
+    line-height: 0.98;
+  }
+  .lead { margin-top: 6mm; max-width: 108mm; font-size: 11.5pt; line-height: 1.45; }
+  .cover-side { display: grid; gap: 7mm; }
+  .meta, .toc, .quote {
+    padding: 7mm;
+    border-radius: var(--wobbly-b);
+  }
+  .meta { transform: rotate(1.2deg); }
+  .toc { background: var(--note); transform: rotate(-1.4deg); }
+  .quote { transform: rotate(1deg); }
+  .cover-side h2 { font-size: 20pt; line-height: 1.04; margin-bottom: 4mm; }
+  .cover-side p, .cover-side li, .article p, .facts p { font-size: 10pt; line-height: 1.46; }
+  .toc ol { margin-left: 5mm; }
+  .toc li { margin-bottom: 2.5mm; }
+  .article-layout { display: grid; grid-template-columns: 1.12fr 0.88fr; gap: 8mm; }
+  .article {
+    min-height: 246mm;
+    padding: 9mm;
+    border-radius: var(--wobbly-a);
+    background:
+      repeating-linear-gradient(to bottom, transparent 0 10.3mm, var(--muted) 10.3mm 11mm),
+      var(--card);
+    transform: rotate(0.7deg);
+  }
+  .article h2 { font-size: 28pt; line-height: 1; margin-bottom: 6mm; }
+  .article h3 { margin: 7mm 0 3mm; font-size: 18pt; color: var(--secondary); }
+  .article p { margin-bottom: 4mm; }
+  .callout {
+    margin: 6mm 0;
+    padding: 5mm;
+    background: var(--note);
+    border: 3px dashed var(--border);
+    border-radius: var(--wobbly-c);
+    transform: rotate(-1deg);
+  }
+  .facts { display: grid; gap: 6mm; align-content: start; }
+  .fact {
+    padding: 6mm;
+    border-radius: var(--wobbly-b);
+    transform: rotate(-1.2deg);
+  }
+  .fact:nth-child(2) { background: var(--note); transform: rotate(1.4deg); }
+  .fact strong {
+    display: block;
+    margin-bottom: 2mm;
+    color: var(--accent);
+    font-family: "Marker Felt", "LXGW WenKai", "TsangerJinKai02", cursive;
+    font-size: 14pt;
+  }
+  .footer {
+    position: absolute;
+    left: 12mm;
+    right: 12mm;
+    bottom: 8mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.8pt;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="cover">
+    <article class="card tape cover-main">
+      <span class="tag">Sketch / Long Doc</span>
+      <h1>{{长文标题：像贴在白板中央的主卡}}</h1>
+      <p class="lead">{{摘要：先写问题，再写判断，再写为什么读者现在要看。让它像团队 kickoff 的封面，不像正式年鉴。}}</p>
+    </article>
+    <aside class="cover-side">
+      <div class="card tack meta">
+        <h2>{{文档信息}}</h2>
+        <p>{{项目 / 公司 / 作者 / 日期 / 版本}}</p>
+      </div>
+      <div class="card toc">
+        <h2>{{目录}}</h2>
+        <ol>
+          <li>{{问题}}</li>
+          <li>{{证据}}</li>
+          <li>{{方案}}</li>
+          <li>{{下一步}}</li>
+        </ol>
+      </div>
+      <div class="card quote">
+        <h2>{{一句提醒}}</h2>
+        <p>{{写给读者的工作提示、风险提醒或一句判断。}}</p>
+      </div>
+    </aside>
+  </div>
+  <footer class="footer"><span>Sketch Long Doc</span><span>01 / 02</span></footer>
+</section>
+
+<section class="page">
+  <div class="article-layout">
+    <article class="card article">
+      <h2>{{章节标题}}</h2>
+      <p>{{第一段：先写本章结论。手绘风不是为了装饰，而是为了把文档做成“正在思考中的工作面板”。}}</p>
+      <h3>{{问题定义}}</h3>
+      <p>{{第二段：写清对象、约束和背景。每一段都尽量短一些，像写在 sketchbook 上的一段说明。}}</p>
+      <div class="callout">{{提示：这里适合放一句重点判断、风险提醒或一句行动原则。}}</div>
+      <h3>{{建议与动作}}</h3>
+      <p>{{第三段：给出下一步、负责人和交付物。内容太多时继续新增 article page，不要把草图风做成挤满整页的小字。}}</p>
+    </article>
+    <aside class="facts">
+      <div class="card tack fact"><strong>{{事实 1}}</strong><p>{{关键数据 / 背景}}</p></div>
+      <div class="card fact"><strong>{{事实 2}}</strong><p>{{用户 / 业务 / 风险}}</p></div>
+      <div class="card tack fact"><strong>{{事实 3}}</strong><p>{{时间 / 下一步}}</p></div>
+    </aside>
+  </div>
+  <footer class="footer"><span>Paper Notes / Hard Shadow</span><span>02 / 02</span></footer>
+</section>
+</body>
+</html>

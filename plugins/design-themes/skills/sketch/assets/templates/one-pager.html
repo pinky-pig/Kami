@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>{{文档标题}}</title>
+<style>
+  @font-face { font-family: "LXGW WenKai"; src: url("../fonts/LXGWWenKai-Regular.ttf") format("truetype"); font-weight: 400; }
+  @font-face { font-family: "TsangerJinKai02"; src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype"); font-weight: 400; }
+  @page { size: A4; margin: 0; background: #fdfbf7; }
+  :root {
+    --paper: #fdfbf7;
+    --ink: #2d2d2d;
+    --border: #2d2d2d;
+    --muted: #e5e0d8;
+    --accent: #ff4d4d;
+    --secondary: #2d5da1;
+    --note: #fff9c4;
+    --card: #ffffff;
+    --wobbly-a: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    --wobbly-b: 18px 210px 22px 180px / 24px 18px 210px 26px;
+    --wobbly-c: 32px 14px 30px 220px / 14px 220px 20px 28px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background:
+      radial-gradient(var(--muted) 1px, transparent 1px) 0 0 / 24px 24px,
+      var(--paper);
+    color: var(--ink);
+    font-family: "Noteworthy", "LXGW WenKai", "TsangerJinKai02", "Bradley Hand", cursive;
+  }
+  .page {
+    position: relative;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 12mm;
+    overflow: hidden;
+  }
+  .scribble {
+    position: absolute;
+    border-top: 3px dashed var(--secondary);
+    transform: rotate(-7deg);
+    opacity: 0.95;
+  }
+  .scribble.one { width: 36mm; right: 18mm; top: 18mm; }
+  .scribble.two { width: 28mm; left: 20mm; bottom: 34mm; transform: rotate(8deg); }
+  .card {
+    position: relative;
+    background: var(--card);
+    border: 3px solid var(--border);
+    box-shadow: 4px 4px 0 0 var(--border);
+  }
+  .card.tape::before {
+    content: "";
+    position: absolute;
+    top: -6mm;
+    left: 50%;
+    width: 24mm;
+    height: 9mm;
+    margin-left: -12mm;
+    background: var(--muted);
+    border: 2px dashed var(--border);
+    transform: rotate(-5deg);
+  }
+  .card.tack::after {
+    content: "";
+    position: absolute;
+    top: -5mm;
+    left: 50%;
+    width: 8mm;
+    height: 8mm;
+    margin-left: -4mm;
+    border-radius: 999px;
+    background: var(--accent);
+    border: 2px solid var(--border);
+    box-shadow: 2px 2px 0 0 var(--border);
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 7mm;
+    align-items: start;
+    margin-bottom: 7mm;
+  }
+  .hero-main {
+    min-height: 96mm;
+    padding: 9mm 8mm 8mm;
+    border-radius: var(--wobbly-a);
+    transform: rotate(-1.6deg);
+  }
+  .eyebrow {
+    display: inline-block;
+    padding: 2.5mm 4mm;
+    background: var(--note);
+    border: 3px solid var(--border);
+    border-radius: 999px;
+    font-size: 8pt;
+    letter-spacing: 1.2pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: "Marker Felt", "LXGW WenKai", "TsangerJinKai02", cursive;
+  }
+  h1 {
+    margin-top: 8mm;
+    max-width: 108mm;
+    font-family: "Marker Felt", "LXGW WenKai", "TsangerJinKai02", cursive;
+    font-size: 36pt;
+    line-height: 0.98;
+    letter-spacing: 0;
+  }
+  .subtitle {
+    margin-top: 5mm;
+    max-width: 102mm;
+    font-size: 12pt;
+    line-height: 1.45;
+  }
+  .side-stack { display: grid; gap: 6mm; }
+  .mini-note, .yellow-note {
+    min-height: 44mm;
+    padding: 6mm;
+    border-radius: var(--wobbly-b);
+  }
+  .mini-note { transform: rotate(1.4deg); }
+  .yellow-note {
+    background: var(--note);
+    transform: rotate(-2.2deg);
+  }
+  .side-title {
+    font-family: "Marker Felt", "LXGW WenKai", "TsangerJinKai02", cursive;
+    font-size: 18pt;
+    line-height: 1.06;
+    margin-bottom: 3mm;
+  }
+  .side-stack p { font-size: 10pt; line-height: 1.42; }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5mm;
+    margin-bottom: 7mm;
+  }
+  .metric {
+    min-height: 34mm;
+    padding: 5mm;
+    border-radius: var(--wobbly-c);
+  }
+  .metric:nth-child(1) { transform: rotate(-1.4deg); }
+  .metric:nth-child(2) { background: var(--note); transform: rotate(1deg); }
+  .metric:nth-child(3) { transform: rotate(-0.4deg); }
+  .metric strong {
+    display: block;
+    color: var(--accent);
+    font-family: "Marker Felt", "LXGW WenKai", "TsangerJinKai02", cursive;
+    font-size: 24pt;
+    line-height: 1;
+  }
+  .metric span { display: block; margin-top: 3mm; font-size: 9pt; line-height: 1.35; }
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 7mm;
+  }
+  .proof {
+    min-height: 103mm;
+    padding: 8mm;
+    border-radius: var(--wobbly-a);
+    transform: rotate(0.8deg);
+  }
+  .proof h2, .action h2 {
+    font-family: "Marker Felt", "LXGW WenKai", "TsangerJinKai02", cursive;
+    font-size: 24pt;
+    line-height: 1.02;
+    margin-bottom: 4mm;
+  }
+  .proof p, .action p { font-size: 10pt; line-height: 1.45; }
+  .proof-list {
+    margin-top: 5mm;
+    padding-top: 4mm;
+    border-top: 3px dashed var(--border);
+  }
+  .proof-list div { margin-bottom: 3mm; font-size: 9.5pt; line-height: 1.38; }
+  .action {
+    min-height: 103mm;
+    padding: 8mm;
+    border-radius: var(--wobbly-b);
+    background: var(--note);
+    transform: rotate(-1.4deg);
+  }
+  .check {
+    display: grid;
+    grid-template-columns: 8mm 1fr;
+    gap: 3mm;
+    align-items: start;
+    margin-top: 4mm;
+    font-size: 9.6pt;
+    line-height: 1.38;
+  }
+  .dot {
+    width: 7mm;
+    height: 7mm;
+    margin-top: 0.5mm;
+    border-radius: 999px;
+    background: var(--secondary);
+    border: 2px solid var(--border);
+  }
+  .footer {
+    position: absolute;
+    left: 12mm;
+    right: 12mm;
+    bottom: 8mm;
+    display: flex;
+    justify-content: space-between;
+    font-size: 7.8pt;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="scribble one"></div>
+  <div class="scribble two"></div>
+  <section class="hero">
+    <article class="card tape hero-main">
+      <span class="eyebrow">Sketch / Project Brief</span>
+      <h1>{{文档标题：像贴在墙上的主标题}}</h1>
+      <p class="subtitle">{{一句副标题：直接写结论、对象和下一步，不要写像公关口号的句子。}}</p>
+    </article>
+    <aside class="side-stack">
+      <div class="card tack mini-note">
+        <div class="side-title">{{当前状态}}</div>
+        <p>{{项目 / 公司 / 日期 / 版本。像一张贴在角落里的说明便签。}}</p>
+      </div>
+      <div class="card yellow-note">
+        <div class="side-title">{{为什么现在}}</div>
+        <p>{{一句话写清机会、变化或者卡点。}}</p>
+      </div>
+    </aside>
+  </section>
+
+  <section class="metrics">
+    <div class="card metric"><strong>{{数字}}</strong><span>{{指标说明}}</span></div>
+    <div class="card metric"><strong>{{数字}}</strong><span>{{指标说明}}</span></div>
+    <div class="card metric"><strong>{{数字}}</strong><span>{{指标说明}}</span></div>
+  </section>
+
+  <section class="body-grid">
+    <article class="card proof">
+      <h2>{{核心论点}}</h2>
+      <p>{{80-120 字正文。要像工作现场的说明，而不是 polished 宣传稿。写具体判断、证据、对象和行动。}}</p>
+      <div class="proof-list">
+        <div>{{事实 / 证据 1}}</div>
+        <div>{{事实 / 证据 2}}</div>
+        <div>{{事实 / 证据 3}}</div>
+      </div>
+    </article>
+    <article class="card action">
+      <h2>{{下一步}}</h2>
+      <p>{{负责人、时间、交付物。}}</p>
+      <div class="check"><i class="dot"></i><span>{{动作 1}}</span></div>
+      <div class="check"><i class="dot"></i><span>{{动作 2}}</span></div>
+      <div class="check"><i class="dot"></i><span>{{动作 3}}</span></div>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <span>{{Sketch Edition}}</span>
+    <span>{{Kami Demo · 1 / 1}}</span>
+  </footer>
+</main>
+</body>
+</html>
