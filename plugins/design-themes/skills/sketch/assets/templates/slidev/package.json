@@ -1,0 +1,15 @@
+{
+  "name": "kami-sketch-slidev",
+  "private": true,
+  "packageManager": "pnpm@10.13.1",
+  "scripts": {
+    "render": "python3 render_from_spec.py",
+    "dev": "python3 render_from_spec.py && slidev slides.md --open false --port 3030",
+    "build": "python3 render_from_spec.py && slidev build slides.md --base ./ --out ../../examples/slides-online",
+    "export": "python3 render_from_spec.py && slidev export slides.md"
+  },
+  "devDependencies": {
+    "@slidev/cli": "52.14.2",
+    "@slidev/theme-default": "0.25.0"
+  }
+}

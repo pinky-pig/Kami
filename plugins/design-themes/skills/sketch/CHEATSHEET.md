@@ -21,3 +21,4 @@
 - Long doc: cover board, pinned TOC note, lined article sheet, side proof notes.
 - Letter: taped header, recipient note, dashed subject strip, notebook body, evidence notes.
 - Slides: paper board, pinned cards, scribbled connectors, note-wall rhythm.
+- Slides content source: keep `slides_spec.py` as the single source for both PPTX and Slidev.

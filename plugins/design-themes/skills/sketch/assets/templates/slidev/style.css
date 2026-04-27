@@ -1,0 +1,330 @@
+@font-face {
+  font-family: "KamiSketchCN";
+  src: url("../../fonts/LXGWWenKai-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KamiSketchKai";
+  src: url("../../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+  font-display: swap;
+}
+
+:root {
+  --sketch-paper: #fdfbf7;
+  --sketch-ink: #2d2d2d;
+  --sketch-muted: #e5e0d8;
+  --sketch-card: #ffffff;
+  --sketch-note: #fff9c4;
+  --sketch-accent: #ff4d4d;
+  --sketch-secondary: #2d5da1;
+  --wobbly-a: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --wobbly-b: 18px 210px 22px 180px / 24px 18px 210px 26px;
+  --wobbly-c: 32px 14px 30px 220px / 14px 220px 20px 28px;
+}
+
+html,
+body,
+#app {
+  background:
+    linear-gradient(180deg, #f6f1e7 0%, #efe6d9 100%);
+  color: var(--sketch-ink);
+  font-family: "Noteworthy", "Bradley Hand", "KamiSketchCN", cursive;
+}
+
+.slidev-layout {
+  padding: 0 !important;
+  background: transparent !important;
+  color: inherit;
+}
+
+.slidev-layout.cover,
+.slidev-layout.default {
+  display: block !important;
+  width: 100%;
+  height: 100%;
+}
+
+.slidev-layout.cover > .my-auto,
+.slidev-layout.default > .my-auto {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+}
+
+.slidev-layout h1,
+.slidev-layout h2,
+.slidev-layout p {
+  margin: 0;
+}
+
+.sketch-board {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(var(--sketch-muted) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(180deg, #fffefc 0%, var(--sketch-paper) 100%);
+}
+
+.board-label,
+.board-page {
+  position: absolute;
+  top: 20px;
+  font-family: "Marker Felt", "Bradley Hand", "KamiSketchKai", cursive;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.board-label {
+  left: 53px;
+  color: var(--sketch-secondary);
+}
+
+.board-page {
+  right: 52px;
+  color: var(--sketch-ink);
+}
+
+.slide-title,
+.system-summary,
+.summary-copy {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.slide-title {
+  font-family: "Marker Felt", "Bradley Hand", "KamiSketchKai", cursive;
+  font-size: 37px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.summary-copy {
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.system-summary {
+  font-family: "Marker Felt", "Bradley Hand", "KamiSketchKai", cursive;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--sketch-accent);
+  text-align: center;
+}
+
+.paper-card {
+  position: absolute;
+  box-sizing: border-box;
+  border: 3px solid var(--sketch-ink);
+  box-shadow: 6px 6px 0 0 var(--sketch-ink);
+  transform: rotate(var(--rot, 0deg));
+  overflow: visible;
+  background: var(--sketch-card);
+}
+
+.paper-card.tone-card {
+  background: var(--sketch-card);
+}
+
+.paper-card.tone-note {
+  background: var(--sketch-note);
+}
+
+.hero-card,
+.end-hero {
+  border-radius: var(--wobbly-a);
+}
+
+.token-card {
+  border-radius: var(--wobbly-b);
+}
+
+.system-card,
+.output-row,
+.corner-sticky,
+.closing-sticky {
+  border-radius: var(--wobbly-c);
+}
+
+.paper-card.tape::before {
+  content: "";
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  width: 76px;
+  height: 20px;
+  margin-left: -38px;
+  background: var(--sketch-muted);
+  border: 2px dashed var(--sketch-ink);
+  transform: rotate(-5deg);
+}
+
+.paper-card.tack::after {
+  content: "";
+  position: absolute;
+  top: -17px;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  border-radius: 999px;
+  background: var(--sketch-accent);
+  border: 2px solid var(--sketch-ink);
+  box-shadow: 2px 2px 0 0 var(--sketch-ink);
+}
+
+.hero-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  height: 100%;
+  padding: 66px 42px 34px;
+}
+
+.hero-title {
+  max-width: 560px;
+  font-family: "Marker Felt", "Bradley Hand", "KamiSketchKai", cursive;
+  font-size: 51px;
+  line-height: 0.92;
+  font-weight: 700;
+}
+
+.hero-title.small {
+  max-width: 640px;
+  font-size: 46px;
+}
+
+.hero-subtitle,
+.closing-copy {
+  max-width: 560px;
+  font-size: 19px;
+  line-height: 1.34;
+}
+
+.sticky-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  padding: 26px 22px 20px;
+}
+
+.sticky-inner.center {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.sticky-label {
+  font-family: "Marker Felt", "Bradley Hand", "KamiSketchKai", cursive;
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.sticky-label.accent {
+  color: var(--sketch-accent);
+}
+
+.sticky-copy {
+  font-family: "Marker Felt", "Bradley Hand", "KamiSketchKai", cursive;
+  font-size: 24px;
+  line-height: 1.08;
+  font-weight: 700;
+}
+
+.token-card-inner,
+.system-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+}
+
+.token-card-inner {
+  justify-content: center;
+  gap: 24px;
+  padding: 44px 18px 18px;
+}
+
+.token-name,
+.system-name,
+.output-name {
+  font-family: "Marker Felt", "Bradley Hand", "KamiSketchKai", cursive;
+  font-weight: 700;
+}
+
+.token-name {
+  font-size: 26px;
+  line-height: 1.05;
+}
+
+.token-dot {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  border: 3px solid var(--sketch-ink);
+  background: var(--sketch-ink);
+}
+
+.token-dot.accent {
+  background: var(--sketch-accent);
+}
+
+.token-dot.secondary {
+  background: var(--sketch-secondary);
+}
+
+.system-card-inner {
+  justify-content: center;
+  gap: 18px;
+  padding: 34px 22px 18px;
+}
+
+.system-name {
+  font-size: 29px;
+  line-height: 1.02;
+}
+
+.system-body {
+  font-size: 18px;
+  line-height: 1.3;
+}
+
+.output-row-inner {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  height: 100%;
+  padding: 14px 30px;
+}
+
+.output-name {
+  font-size: 25px;
+  line-height: 1;
+}
+
+.output-desc {
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.scribble {
+  position: absolute;
+  height: 0;
+  border-top: 4px dashed var(--sketch-secondary);
+  opacity: 0.95;
+  transform: rotate(var(--rot, 0deg));
+}
+
+.scribble.accent {
+  border-top-color: var(--sketch-accent);
+}

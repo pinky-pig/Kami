@@ -2,7 +2,7 @@
 """kami Sketch build & check
 
 Usage:
-    python3 scripts/build.py                      # build supported HTML/PDF + PPTX examples
+    python3 scripts/build.py                      # build supported HTML/PDF + PPTX + Slidev examples
     python3 scripts/build.py one-pager            # build one template, print pages + fonts
     python3 scripts/build.py --check              # scan templates for CSS rule violations
     python3 scripts/build.py --check -v           # verbose (show each scanned file)
@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -39,6 +40,8 @@ _ensure_homebrew_library_path()
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES = ROOT / "assets" / "templates"
+SLIDEV = TEMPLATES / "slidev"
+SLIDEV_RENDER = SLIDEV / "render_from_spec.py"
 DIAGRAMS = ROOT / "assets" / "diagrams"
 EXAMPLES = ROOT / "assets" / "examples"
 
@@ -51,6 +54,9 @@ HTML_TARGETS: dict[str, tuple[str, int]] = {
 }
 PPTX_TARGETS: dict[str, str] = {
     "slides":    "slides.py",
+}
+SLIDEV_TARGETS: dict[str, str] = {
+    "slides": "slides.md",
 }
 
 # Diagram HTMLs live in a separate directory and have no page-count contract.
@@ -113,8 +119,12 @@ def build_slides(name: str = "slides") -> bool:
 
     EXAMPLES.mkdir(parents=True, exist_ok=True)
     out = EXAMPLES / f"{name}.pptx"
+    python_bin = _python_with_module("pptx")
+    if python_bin is None:
+        print("✗ missing deps: install python-pptx in the active Python environment")
+        return False
     result = subprocess.run(
-        [sys.executable, str(src)],
+        [python_bin, str(src)],
         cwd=str(src.parent),
         capture_output=True,
         text=True,
@@ -132,6 +142,200 @@ def build_slides(name: str = "slides") -> bool:
     return False
 
 
+def _python_with_module(module_name: str) -> str | None:
+    candidates: list[str] = []
+    for raw in (
+        sys.executable,
+        shutil.which("python3"),
+        shutil.which("python"),
+        str(Path.home() / ".pyenv" / "shims" / "python3"),
+        str(Path.home() / ".pyenv" / "shims" / "python"),
+    ):
+        if not raw:
+            continue
+        candidate = str(Path(raw).expanduser())
+        if candidate not in candidates and Path(candidate).exists():
+            candidates.append(candidate)
+
+    for candidate in candidates:
+        result = subprocess.run(
+            [candidate, "-c", f"import {module_name}"],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode == 0:
+            return candidate
+    return None
+
+
+def _ensure_slidev_deps() -> bool:
+    if not SLIDEV.exists():
+        print(f"✗ slidev project not found ({SLIDEV})")
+        return False
+    node_modules = SLIDEV / "node_modules"
+    package_json = SLIDEV / "package.json"
+    lockfile = SLIDEV / "pnpm-lock.yaml"
+    needs_install = not node_modules.exists()
+    if not needs_install and package_json.exists():
+        newest_input = package_json.stat().st_mtime
+        if lockfile.exists():
+            newest_input = max(newest_input, lockfile.stat().st_mtime)
+        needs_install = newest_input > node_modules.stat().st_mtime
+    if not needs_install:
+        return True
+    install_cmd = ["pnpm", "install", "--frozen-lockfile"] if lockfile.exists() else ["pnpm", "install"]
+    try:
+        result = subprocess.run(
+            install_cmd,
+            cwd=str(SLIDEV),
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        print("✗ slidev: pnpm not found. Install Node.js + pnpm first.")
+        return False
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "pnpm install failed"
+        print(f"✗ slidev: {detail}")
+        return False
+    return True
+
+
+def _render_slidev_source() -> bool:
+    if not SLIDEV_RENDER.exists():
+        print(f"✗ slidev render script not found ({SLIDEV_RENDER})")
+        return False
+    python_bin = shutil.which("python3") or shutil.which("python") or sys.executable
+    if not python_bin:
+        print("✗ slidev: python3 not found.")
+        return False
+    result = subprocess.run(
+        [python_bin, str(SLIDEV_RENDER)],
+        cwd=str(SLIDEV),
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "render_from_spec.py failed"
+        print(f"✗ slidev: {detail}")
+        return False
+    return True
+
+
+def write_slidev_preview_helper(name: str, out_dir: Path) -> Path:
+    helper = EXAMPLES / f"{name}-online-preview.py"
+    helper.write_text(
+        f"""#!/usr/bin/env python3
+from __future__ import annotations
+
+import socket
+import webbrowser
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parent / "{out_dir.name}"
+
+
+def pick_port(start: int = 4173) -> int:
+    port = start
+    while True:
+        with socket.socket() as sock:
+            try:
+                sock.bind(("127.0.0.1", port))
+            except OSError:
+                port += 1
+                continue
+        return port
+
+
+def main() -> None:
+    port = pick_port()
+    handler = partial(SimpleHTTPRequestHandler, directory=str(ROOT))
+    server = ThreadingHTTPServer(("127.0.0.1", port), handler)
+    url = f"http://127.0.0.1:{{port}}"
+    print(f"Serving {{ROOT}} at {{url}}")
+    webbrowser.open(url)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == "__main__":
+    main()
+""",
+        encoding="utf-8",
+    )
+    helper.chmod(0o755)
+    return helper
+
+
+def write_slidev_preview_command(name: str, helper: Path) -> Path:
+    launcher = EXAMPLES / f"{name}-online-preview.command"
+    launcher.write_text(
+        f"""#!/bin/zsh
+set -euo pipefail
+
+DIR=$(cd "$(dirname "$0")" && pwd)
+exec python3 "$DIR/{helper.name}"
+""",
+        encoding="utf-8",
+    )
+    launcher.chmod(0o755)
+    return launcher
+
+
+def build_slidev(name: str = "slides") -> bool:
+    source = SLIDEV_TARGETS.get(name)
+    if source is None:
+        return True
+    if not _render_slidev_source():
+        return False
+    src = SLIDEV / source
+    if not src.exists():
+        print(f"✗ {name}: slidev source not found ({src})")
+        return False
+    if not _ensure_slidev_deps():
+        return False
+
+    EXAMPLES.mkdir(parents=True, exist_ok=True)
+    out_dir = EXAMPLES / f"{name}-online"
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+
+    try:
+        result = subprocess.run(
+            ["pnpm", "run", "build"],
+            cwd=str(SLIDEV),
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        print("✗ slidev: pnpm not found. Install Node.js + pnpm first.")
+        return False
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "slidev build failed"
+        print(f"✗ {name}: {detail}")
+        return False
+    if out_dir.exists():
+        helper = write_slidev_preview_helper(name, out_dir)
+        launcher = write_slidev_preview_command(name, helper)
+        print(f"✓ {name}: generated {out_dir.relative_to(ROOT)}")
+        print(f"✓ {name}: preview via {helper.relative_to(ROOT)}")
+        print(f"✓ {name}: double-click preview via {launcher.relative_to(ROOT)}")
+        return True
+    print(f"✗ {name}: slidev bundle not produced")
+    return False
+
+
+def build_slide_outputs(name: str = "slides") -> bool:
+    pptx_ok = build_slides(name)
+    slidev_ok = build_slidev(name)
+    return pptx_ok and slidev_ok
+
+
 def build_all() -> int:
     failures = 0
     for name, (source, max_pages) in HTML_TARGETS.items():
@@ -141,7 +345,7 @@ def build_all() -> int:
         if not build_html(name, source, 0, src_dir=DIAGRAMS):
             failures += 1
     for name in PPTX_TARGETS:
-        if not build_slides(name):
+        if not build_slide_outputs(name):
             failures += 1
     return failures
 
@@ -158,7 +362,7 @@ def build_single(name: str) -> int:
         ok = build_html(name, source, 0, src_dir=DIAGRAMS)
         return 0 if ok else 1
     if name in PPTX_TARGETS:
-        return 0 if build_slides(name) else 1
+        return 0 if build_slide_outputs(name) else 1
     known = list(HTML_TARGETS) + list(DIAGRAM_TARGETS) + list(PPTX_TARGETS)
     print(f"✗ unknown target: {name}. Known: {', '.join(known)}")
     return 2

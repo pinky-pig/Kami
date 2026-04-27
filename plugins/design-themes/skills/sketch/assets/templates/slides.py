@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Prompt-native Sketch slide deck generator."""
+"""Prompt-native Sketch slide deck generator.
+
+This renderer owns the `.pptx` output. The shared slide content lives in
+`slides_spec.py`, which is also consumed by the Slidev renderer.
+"""
 
 from __future__ import annotations
 
@@ -12,6 +16,8 @@ from pptx.enum.shapes import MSO_CONNECTOR, MSO_SHAPE
 from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
 from pptx.oxml.xmlchemy import OxmlElement
 from pptx.util import Inches, Pt
+
+from slides_spec import DECK, TOTAL_SLIDES
 
 
 PAPER = RGBColor(0xFD, 0xFB, 0xF7)
@@ -28,6 +34,15 @@ FONT_EA = "LXGW WenKai"
 SLIDE_W = Inches(13.333)
 SLIDE_H = Inches(7.5)
 M = Inches(0.55)
+CARD_FILL = {
+    "card": WHITE,
+    "note": NOTE,
+}
+DOT_FILL = {
+    "ink": INK,
+    "accent": ACCENT,
+    "secondary": BLUE,
+}
 
 
 def apply_typeface(run, latin_font=BODY_FONT, ea_font=FONT_EA):
@@ -137,95 +152,116 @@ def bg(slide, page, section):
     shape(slide, MSO_SHAPE.RECTANGLE, 0, 0, SLIDE_W, SLIDE_H, PAPER, line=None)
     dots(slide)
     text(slide, f"SKETCH | {section}", M, Inches(0.22), Inches(4.1), Inches(0.2), size=8, color=BLUE, bold=True, latin_font=HEADING_FONT)
-    text(slide, f"{page:02d} / 05", SLIDE_W - Inches(1.5), Inches(0.22), Inches(0.95), Inches(0.2), size=8, color=INK, bold=True, align=PP_ALIGN.RIGHT, latin_font=HEADING_FONT)
+    text(slide, f"{page:02d} / {TOTAL_SLIDES:02d}", SLIDE_W - Inches(1.5), Inches(0.22), Inches(0.95), Inches(0.2), size=8, color=INK, bold=True, align=PP_ALIGN.RIGHT, latin_font=HEADING_FONT)
 
 
-def slide_cover(prs):
+def slide_cover(prs, spec):
     s = prs.slides.add_slide(prs.slide_layouts[6])
-    bg(s, 1, "NOTE WALL")
+    bg(s, spec["page"], spec["section"])
     note_card(s, M, Inches(1.0), Inches(7.2), Inches(4.55), fill=WHITE, rotation=-2, tape=True)
-    text(s, "把文档贴成\n草图墙", M + Inches(0.42), Inches(1.78), Inches(5.9), Inches(1.2), size=38, bold=True, line_spacing=0.92, latin_font=HEADING_FONT)
-    text(s, "纸张纹理、手写字体、wobble 边框、硬偏移阴影。看起来像 brainstorm 现场，而不是 polished 年报。", M + Inches(0.42), Inches(3.48), Inches(5.8), Inches(0.62), size=14, color=INK, line_spacing=1.15)
+    text(s, spec["title"], M + Inches(0.42), Inches(1.78), Inches(5.9), Inches(1.2), size=38, bold=True, line_spacing=0.92, latin_font=HEADING_FONT)
+    text(s, spec["subtitle"], M + Inches(0.42), Inches(3.48), Inches(5.8), Inches(0.62), size=14, color=INK, line_spacing=1.15)
     note_card(s, Inches(8.8), Inches(1.35), Inches(3.1), Inches(1.55), fill=NOTE, rotation=2, tack=True)
-    text(s, "Now", Inches(9.2), Inches(1.72), Inches(0.9), Inches(0.25), size=18, color=ACCENT, bold=True, latin_font=HEADING_FONT, align=PP_ALIGN.CENTER)
-    text(s, "不做直线排版。\n做一面工作板。", Inches(9.1), Inches(2.05), Inches(2.45), Inches(0.55), size=16, bold=True, latin_font=HEADING_FONT, align=PP_ALIGN.CENTER)
+    text(s, spec["sticky"]["label"], Inches(9.2), Inches(1.72), Inches(0.9), Inches(0.25), size=18, color=ACCENT, bold=True, latin_font=HEADING_FONT, align=PP_ALIGN.CENTER)
+    text(s, spec["sticky"]["body"], Inches(9.1), Inches(2.05), Inches(2.45), Inches(0.55), size=16, bold=True, latin_font=HEADING_FONT, align=PP_ALIGN.CENTER)
     scribble(s, Inches(7.35), Inches(3.15), Inches(8.95), Inches(2.25))
 
 
-def slide_tokens(prs):
+def slide_tokens(prs, spec):
     s = prs.slides.add_slide(prs.slide_layouts[6])
-    bg(s, 2, "TOKENS")
-    text(s, "四种手绘信号", M, Inches(0.9), Inches(6.8), Inches(0.4), size=28, bold=True, latin_font=HEADING_FONT)
-    cards = [
-        ("Paper", WHITE, -2),
-        ("Post-it", NOTE, 1.8),
-        ("Red Marker", WHITE, -1),
-        ("Blue Pen", WHITE, 2),
-    ]
-    for i, (label, fill, rot) in enumerate(cards):
+    bg(s, spec["page"], spec["section"])
+    text(s, spec["title"], M, Inches(0.9), Inches(6.8), Inches(0.4), size=28, bold=True, latin_font=HEADING_FONT)
+    for i, card in enumerate(spec["cards"]):
         x = M + Inches(2.95) * i
-        note_card(s, x, Inches(2.0), Inches(2.35), Inches(2.1), fill=fill, rotation=rot, tape=i % 2 == 0, tack=i % 2 == 1)
-        text(s, label, x + Inches(0.24), Inches(2.55), Inches(1.9), Inches(0.3), size=16, bold=True, align=PP_ALIGN.CENTER, latin_font=HEADING_FONT)
-        color = [INK, INK, ACCENT, BLUE][i]
-        shape(s, MSO_SHAPE.OVAL, x + Inches(0.93), Inches(3.23), Inches(0.5), Inches(0.5), color, line=INK, weight=1.5)
-    text(s, "Warm paper + handwritten type + hard offset shadow + small rotation.", M, Inches(5.35), Inches(8.5), Inches(0.24), size=13, color=INK)
+        note_card(
+            s,
+            x,
+            Inches(2.0),
+            Inches(2.35),
+            Inches(2.1),
+            fill=CARD_FILL[card["fill"]],
+            rotation=card["rotation"],
+            tape=card["attachment"] == "tape",
+            tack=card["attachment"] == "tack",
+        )
+        text(s, card["label"], x + Inches(0.24), Inches(2.55), Inches(1.9), Inches(0.3), size=16, bold=True, align=PP_ALIGN.CENTER, latin_font=HEADING_FONT)
+        shape(s, MSO_SHAPE.OVAL, x + Inches(0.93), Inches(3.23), Inches(0.5), Inches(0.5), DOT_FILL[card["dot"]], line=INK, weight=1.5)
+    text(s, spec["summary"], M, Inches(5.35), Inches(8.5), Inches(0.24), size=13, color=INK)
 
 
-def slide_system(prs):
+def slide_system(prs, spec):
     s = prs.slides.add_slide(prs.slide_layouts[6])
-    bg(s, 3, "SYSTEM")
-    text(s, "不是换色，是换工作现场", M, Inches(0.92), Inches(8.4), Inches(0.42), size=28, bold=True, latin_font=HEADING_FONT)
-    items = [
-        ("No straight lines", WHITE, -2.4, True, False),
-        ("Tape / tack", NOTE, 1.2, False, True),
-        ("Hard shadow", WHITE, -1.2, False, False),
-    ]
-    for i, (label, fill, rot, tape, tack) in enumerate(items):
+    bg(s, spec["page"], spec["section"])
+    text(s, spec["title"], M, Inches(0.92), Inches(8.4), Inches(0.42), size=28, bold=True, latin_font=HEADING_FONT)
+    for i, card in enumerate(spec["cards"]):
         x = M + Inches(3.9) * i
-        note_card(s, x, Inches(1.95), Inches(3.0), Inches(2.45), fill=fill, rotation=rot, tape=tape, tack=tack)
-        text(s, label, x + Inches(0.26), Inches(3.05), Inches(2.45), Inches(0.34), size=18, bold=True, align=PP_ALIGN.CENTER, latin_font=HEADING_FONT)
-        text(s, "有点歪，有点手写，像刚刚钉上去。", x + Inches(0.22), Inches(3.72), Inches(2.48), Inches(0.34), size=11.5, color=INK, align=PP_ALIGN.CENTER)
+        note_card(
+            s,
+            x,
+            Inches(1.95),
+            Inches(3.0),
+            Inches(2.45),
+            fill=CARD_FILL[card["fill"]],
+            rotation=card["rotation"],
+            tape=card["attachment"] == "tape",
+            tack=card["attachment"] == "tack",
+        )
+        text(s, card["label"], x + Inches(0.26), Inches(3.05), Inches(2.45), Inches(0.34), size=18, bold=True, align=PP_ALIGN.CENTER, latin_font=HEADING_FONT)
+        text(s, card["body"], x + Inches(0.22), Inches(3.72), Inches(2.48), Inches(0.34), size=11.5, color=INK, align=PP_ALIGN.CENTER)
     scribble(s, Inches(1.85), Inches(5.5), Inches(11.25), Inches(5.25), color=ACCENT)
-    text(s, "所有重点模块都应该像卡片，不像软件面板。", Inches(2.0), Inches(5.02), Inches(9.4), Inches(0.26), size=13, color=ACCENT, bold=True, align=PP_ALIGN.CENTER, latin_font=HEADING_FONT)
+    text(s, spec["summary"], Inches(2.0), Inches(5.02), Inches(9.4), Inches(0.26), size=13, color=ACCENT, bold=True, align=PP_ALIGN.CENTER, latin_font=HEADING_FONT)
 
 
-def slide_outputs(prs):
+def slide_outputs(prs, spec):
     s = prs.slides.add_slide(prs.slide_layouts[6])
-    bg(s, 4, "OUTPUTS")
-    text(s, "PDF 与 PPT 共用手绘语言", M, Inches(0.9), Inches(8.8), Inches(0.42), size=28, bold=True, latin_font=HEADING_FONT)
-    rows = [
-        ("One-pager", "taped hero + side note + 3 stickies"),
-        ("Long-doc", "pin-board cover + article sheet + fact notes"),
-        ("Letter", "header board + dashed subject + proof notes"),
-    ]
-    fills = [WHITE, NOTE, WHITE]
-    rots = [-1.4, 1.1, -0.8]
-    for i, (name, desc) in enumerate(rows):
+    bg(s, spec["page"], spec["section"])
+    text(s, spec["title"], M, Inches(0.9), Inches(8.8), Inches(0.42), size=28, bold=True, latin_font=HEADING_FONT)
+    for i, row in enumerate(spec["rows"]):
         y = Inches(1.9 + i * 1.28)
-        note_card(s, M + Inches(0.2 if i == 1 else 0), y, Inches(10.9), Inches(0.82), fill=fills[i], rotation=rots[i], tape=i == 0, tack=i == 2)
-        text(s, name, M + Inches(0.34), y + Inches(0.22), Inches(2.0), Inches(0.2), size=15.5, bold=True, latin_font=HEADING_FONT)
-        text(s, desc, M + Inches(2.75), y + Inches(0.23), Inches(6.8), Inches(0.2), size=12.2, color=INK)
+        note_card(
+            s,
+            M + Inches(row["offset"]),
+            y,
+            Inches(10.9),
+            Inches(0.82),
+            fill=CARD_FILL[row["fill"]],
+            rotation=row["rotation"],
+            tape=row["attachment"] == "tape",
+            tack=row["attachment"] == "tack",
+        )
+        text(s, row["name"], M + Inches(0.34), y + Inches(0.22), Inches(2.0), Inches(0.2), size=15.5, bold=True, latin_font=HEADING_FONT)
+        text(s, row["desc"], M + Inches(2.75), y + Inches(0.23), Inches(6.8), Inches(0.2), size=12.2, color=INK)
 
 
-def slide_end(prs):
+def slide_end(prs, spec):
     s = prs.slides.add_slide(prs.slide_layouts[6])
-    bg(s, 5, "FINAL")
+    bg(s, spec["page"], spec["section"])
     note_card(s, M, Inches(1.25), Inches(7.8), Inches(3.5), fill=WHITE, rotation=-2, tape=True)
-    text(s, "不是改配色。\n是整面换成手绘草稿。", M + Inches(0.42), Inches(1.95), Inches(6.9), Inches(1.0), size=34, bold=True, line_spacing=0.92, latin_font=HEADING_FONT)
+    text(s, spec["title"], M + Inches(0.42), Inches(1.95), Inches(6.9), Inches(1.0), size=34, bold=True, line_spacing=0.92, latin_font=HEADING_FONT)
     note_card(s, Inches(9.1), Inches(1.65), Inches(2.45), Inches(1.2), fill=NOTE, rotation=2, tack=True)
-    text(s, "Messy\non purpose", Inches(9.36), Inches(1.96), Inches(1.95), Inches(0.46), size=15, bold=True, align=PP_ALIGN.CENTER, latin_font=HEADING_FONT)
-    text(s, "Warm. Human. Playful. Deliberately unfinished.", M + Inches(0.46), Inches(3.68), Inches(6.5), Inches(0.26), size=14, color=BLUE, bold=True, latin_font=HEADING_FONT)
+    text(s, f"{spec['sticky']['label']}\n{spec['sticky']['body']}", Inches(9.36), Inches(1.96), Inches(1.95), Inches(0.46), size=15, bold=True, align=PP_ALIGN.CENTER, latin_font=HEADING_FONT)
+    text(s, spec["summary"], M + Inches(0.46), Inches(3.68), Inches(6.5), Inches(0.26), size=14, color=BLUE, bold=True, latin_font=HEADING_FONT)
+
+
+RENDERERS = {
+    "cover": slide_cover,
+    "tokens": slide_tokens,
+    "system": slide_system,
+    "outputs": slide_outputs,
+    "end": slide_end,
+}
 
 
 def main():
     prs = Presentation()
     prs.slide_width = SLIDE_W
     prs.slide_height = SLIDE_H
-    for fn in (slide_cover, slide_tokens, slide_system, slide_outputs, slide_end):
-        fn(prs)
+    for slide in DECK:
+        RENDERERS[slide["kind"]](prs, slide)
     out = Path(__file__).resolve().parent / "output.pptx"
     prs.save(out)
     patch_theme_fonts(str(out))
+    print("✓ Saved output.pptx")
 
 
 if __name__ == "__main__":

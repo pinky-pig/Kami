@@ -9,6 +9,8 @@ Use this skill when the user wants a Chinese professional document rendered as *
 
 This skill keeps only the production surface: HTML templates, WeasyPrint PDF output, PPTX generation, fonts, build checks, and document routing. The visible result must not become a neat modern editorial layout with just a different palette. Sketch output must feel like a wall of notes and napkin diagrams: **纸张纹理 / 手写字体 / wobble 边框 / 硬偏移阴影 / tape 与图钉 / 轻微旋转**.
 
+`slides` 现在是双产物路径：同一份 Sketch 内容要同时交付 `slides.pptx` 和 Slidev 在线 deck。
+
 ## V1 Scope
 
 - Officially supported: Chinese `one-pager`, `long-doc`, `letter`, `slides`
@@ -36,7 +38,7 @@ Prefer Chinese output. If the user writes in Chinese, use Chinese templates and 
 | "one-pager / 方案 / 项目方案 / 执行摘要" | One-Pager | `one-pager.html` |
 | "white paper / 白皮书 / 长文 / 年度总结" | Long Doc | `long-doc.html` |
 | "formal letter / 信件 / 推荐信 / 推荐函 / memo" | Letter | `letter.html` |
-| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides.py` |
+| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides_spec.py` -> `slides.py` + `assets/templates/slidev/render_from_spec.py` |
 
 ## Step 3 · Load The Right Spec
 
@@ -67,8 +69,11 @@ python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py slides
+cd assets/templates/slidev && pnpm run dev
 python3 scripts/build.py --check
 ```
+
+`python3 scripts/build.py slides` 会先从 `slides_spec.py` 渲染 `assets/templates/slidev/slides.md`，再同时生成 `assets/examples/slides.pptx` 和 `assets/examples/slides-online/`。不要手改 `slides.md`，它是生成物。
 
 ## Feedback Protocol
 
