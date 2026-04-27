@@ -26,7 +26,7 @@
 | 帮我生成一份白皮书 | `long-doc.html` |
 | 生成一份项目方案 / 做一页项目方案 | `one-pager.html` |
 | 帮我写一份推荐信 / 写一封推荐函 | `letter.html` |
-| 做一套汇报 slides / 生成一个 Slides | `slides.py` |
+| 做一套汇报 slides / 生成一个 Slides | `slides_spec.py` -> `slides.py` + `slidev/render_from_spec.py` |
 | 帮我把这些内容排版成好看的 PDF | 先判断 `one-pager` / `long-doc` / `letter` |
 
 ## 色板

@@ -5,6 +5,8 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+node_modules/
+plugins/*/skills/*/assets/templates/slidev/index.html
 
 # Font build artifacts
 plugins/*/skills/*/assets/fonts/*.otf

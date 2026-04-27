@@ -14,6 +14,8 @@ Part of `Kaku · Waza · Kami` - Kaku writes code, Waza drills habits, **Kami de
 ## V1 scope
 
 - Officially supported: Chinese `one-pager`, `long-doc`, `letter`, `slides`
+- `slides` is now a dual-output path: generate both `slides.pptx` and a Slidev online deck
+- `slides_spec.py` is the single source of truth for slide content; `slides.py` and `slidev/render_from_spec.py` are renderers
 - Visual standard: Style 1, `#243851` archive-blue frame + `#EBE5DD` old-paper base
 - Pending migration: English styling, resume, portfolio
 
@@ -45,7 +47,7 @@ When ambiguous (e.g. a one-word command like "resume"), ask a one-liner rather t
 | "one-pager / 方案 / 项目方案 / 执行摘要" | One-Pager | `one-pager.html` |
 | "white paper / 白皮书 / 长文 / 年度总结" | Long Doc | `long-doc.html` |
 | "formal letter / 信件 / 正式信件 / 推荐信 / 推荐函 / reference letter / recommendation letter / memo" | Letter | `letter.html` |
-| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides.py` |
+| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides_spec.py` -> `slides.py` + `assets/templates/slidev/render_from_spec.py` |
 
 If the user asks for `resume / portfolio / English`, say those paths are still not the official v1 target of this fork.
 
@@ -113,6 +115,7 @@ The full spec files for reference:
 - **CSS stays untouched**, only edit the body
 - Content follows `writing.md` / `writing.en.md`: data over adjectives, distinctive phrasing over industry clichés
 - For "推荐信 / 推荐函", use `letter.html`; structure the body as relationship -> evidence -> fit -> clear recommendation. Use the three evidence boxes for concrete achievements, not generic praise.
+- For `slides`, edit `slides_spec.py` first. `slides.py` owns the `.pptx`, `assets/templates/slidev/render_from_spec.py` turns the same schema into `slides.md`, and Slidev builds the online deck from that generated markdown.
 
 ## Step 5 · Build & verify
 
@@ -121,8 +124,11 @@ python3 scripts/build.py --verify one-pager # verify content-filled Chinese demo
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py --check            # CSS rule violations only (fast, no build)
-python3 scripts/build.py slides             # generate the republican-manuscript slide deck
+python3 scripts/build.py slides             # render slides.md from slides_spec.py + generate slides.pptx + assets/examples/slides-online/
+cd assets/templates/slidev && pnpm run dev  # local presenter / online preview at http://localhost:3030
 ```
+
+`python3 scripts/build.py slides` 还会先从 `slides_spec.py` 渲染出 `assets/templates/slidev/slides.md`，然后再生成 `slides.pptx` 和 Slidev 在线版。不要手改 `slides.md`，它是生成物。构建完成后还会额外生成 `assets/examples/slides-online-preview.py` 和 `assets/examples/slides-online-preview.command`。如果要在本地浏览器里看构建后的静态 deck，用这两个入口之一；不要直接双击 `assets/examples/slides-online/index.html`，Chrome 下会因为 `file://` 的模块加载限制白屏。
 
 `--verify` now prefers content-filled demo HTMLs for the migrated Chinese trio. Visual anomalies (tag double rectangle, font fallback, page break issues) -> `production.md` / `production.en.md` Part 4.
 

@@ -15,6 +15,8 @@
 ## V1 Scope
 
 - 正式支持：中文 `One-Pager`、`Long Doc`、`Letter`、`Slides`，其中 `Letter` 覆盖正式信件、推荐信、推荐函
+- `Slides` 默认同时生成 `PPTX` 和 `Slidev` 在线版
+- `Slides` 使用 `assets/templates/slides_spec.py` 作为单一 schema，再分别渲染到 `slides.py` 和 `slidev`
 - 视觉原则：深蓝外框 `#243851`、旧纸底 `#EBE5DD`、明显 padding、蓝色题签、档案式边框
 - 暂不主推：英文模板、简历、作品集
 
@@ -60,10 +62,23 @@ python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py slides
+cd assets/templates/slidev && pnpm install && pnpm run dev
 python3 scripts/build.py --check
 ```
 
-`--verify` 会优先校验无占位符的 demo 样例，适合做视觉与页数回归；`--check` 继续扫描 CSS 约束与已迁移模板的 token 漂移。
+`python3 scripts/build.py slides` 会先把 `assets/templates/slides_spec.py` 渲染成 Slidev 所需的 `assets/templates/slidev/slides.md`，再产出两份同主题的演示稿：`assets/examples/slides.pptx` 和 `assets/examples/slides-online/`。前者给 PowerPoint / Keynote，后者是可部署的静态 Slidev bundle，同时还会生成 `assets/examples/slides-online-preview.py` 和 `assets/examples/slides-online-preview.command` 作为本地浏览器预览入口。`--verify` 会优先校验无占位符的 demo 样例，适合做视觉与页数回归；`--check` 继续扫描 CSS 约束与已迁移模板的 token 漂移。
+
+不要直接双击 `assets/examples/slides-online/index.html` 用 `file://` 打开。Chrome 会因为 ES module / CORS 限制白屏。请改用：
+
+```bash
+python3 assets/examples/slides-online-preview.py
+```
+
+或者直接双击：
+
+```text
+assets/examples/slides-online-preview.command
+```
 
 ## Notes
 

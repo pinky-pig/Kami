@@ -1,0 +1,490 @@
+@font-face {
+  font-family: "KamiKingHwa";
+  src: url("../../fonts/京華老宋体v2.002.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KamiInter";
+  src: url("../../fonts/Inter.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KamiInter";
+  src: url("../../fonts/Inter-500.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KamiInter";
+  src: url("../../fonts/Inter-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KamiNewsreader";
+  src: url("../../fonts/Newsreader.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KamiMono";
+  src: url("../../fonts/JetBrainsMono.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --kami-navy: #243851;
+  --kami-navy-soft: #4d5b6d;
+  --kami-paper: #ebe5dd;
+  --kami-paper-light: #f6f1e8;
+  --kami-ivory: #f3efeb;
+  --kami-ink: #232222;
+  --kami-copy: #4a4947;
+  --kami-muted: #666361;
+  --kami-stone: #8b8782;
+  --kami-rule: #d0c7bb;
+  --kami-tag: #d5dee7;
+  --kami-shell-pad: 20.16px;
+}
+
+html,
+body,
+#app {
+  background: var(--kami-navy);
+  color: var(--kami-ink);
+  font-family: "KamiInter", "PingFang SC", "Source Han Sans SC", system-ui, sans-serif;
+}
+
+.slidev-layout {
+  padding: 0 !important;
+  background: transparent !important;
+  color: inherit;
+}
+
+.slidev-layout.cover,
+.slidev-layout.default {
+  display: block !important;
+  width: 100%;
+  height: 100%;
+}
+
+.slidev-layout.cover > .my-auto {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+}
+
+.slidev-layout h1,
+.slidev-layout h2,
+.slidev-layout h3,
+.slidev-layout p,
+.slidev-layout pre,
+.slidev-layout ul {
+  margin: 0;
+}
+
+.folio-shell {
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: var(--kami-shell-pad);
+  background: var(--kami-navy);
+}
+
+.folio-sheet {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid var(--kami-navy);
+  background:
+    url("../../images/paper-overlay.png") center / 72mm auto repeat,
+    radial-gradient(circle at 16% 14%, rgba(255, 255, 255, 0.42), transparent 23%),
+    radial-gradient(circle at 83% 18%, rgba(222, 210, 194, 0.28), transparent 26%),
+    linear-gradient(135deg, #f7f2ea 0%, #f2ebe0 45%, #eee4d8 100%);
+}
+
+.folio-sheet::before,
+.folio-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 17px;
+  pointer-events: none;
+  border: 1px solid var(--kami-navy);
+}
+
+.folio-sheet::after {
+  inset: 28px;
+  border-color: var(--kami-navy-soft);
+  opacity: 0.85;
+}
+
+.folio-footer {
+  position: absolute;
+  left: 46px;
+  right: 46px;
+  bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "KamiMono", monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--kami-stone);
+}
+
+.fixed-box {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.cover-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 74px 76px 58px;
+}
+
+.cover-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.9fr) minmax(280px, 0.95fr);
+  gap: 46px;
+  align-items: center;
+}
+
+.cover-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 34px;
+}
+
+.cover-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.title-plaque {
+  position: relative;
+  padding: 21px 24px 24px;
+  background: var(--kami-navy);
+  color: var(--kami-ivory);
+  border: 1px solid var(--kami-ivory);
+}
+
+.cover-plaque {
+  min-height: 300px;
+}
+
+.title-plaque::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(243, 239, 235, 0.9);
+  pointer-events: none;
+}
+
+.title-plaque .kicker {
+  position: relative;
+  z-index: 1;
+  font-family: "KamiMono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kami-tag);
+}
+
+.title-plaque h1 {
+  position: relative;
+  z-index: 1;
+  margin-top: 17px;
+  font-family: "KamiKingHwa", "STSong", "Songti SC", "Noto Serif CJK SC", serif;
+  font-size: 45px;
+  line-height: 0.95;
+  font-weight: 500;
+  color: var(--kami-ivory);
+}
+
+.title-plaque p {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 18px;
+  z-index: 1;
+  font-size: 10px;
+  color: var(--kami-tag);
+}
+
+.cover-copy {
+  font-size: 13px;
+  line-height: 1.32;
+  color: var(--kami-copy);
+}
+
+.cover-meta {
+  font-family: "KamiMono", monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--kami-stone);
+  margin-top: 16px;
+}
+
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 17px 14px;
+  overflow: hidden;
+  background: var(--kami-ivory);
+  border: 1px solid var(--kami-navy-soft);
+}
+
+.flow-metric-card {
+  min-height: 170px;
+}
+
+.metric-value {
+  font-family: "KamiKingHwa", "KamiNewsreader", serif;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--kami-navy);
+}
+
+.metric-label {
+  font-family: "KamiMono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kami-stone);
+}
+
+.metric-note {
+  font-size: 8.5px;
+  color: var(--kami-muted);
+}
+
+.section-kicker {
+  font-family: "KamiMono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--kami-stone);
+}
+
+.section-title {
+  font-family: "KamiKingHwa", "KamiNewsreader", serif;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--kami-ink);
+}
+
+.section-rule {
+  height: 1px;
+  background: var(--kami-navy);
+}
+
+.section-lede {
+  font-size: 11px;
+  line-height: 1.14;
+  color: var(--kami-muted);
+}
+
+.archive-card {
+  display: flex;
+  flex-direction: column;
+  padding: 18px 19px 18px;
+  overflow: hidden;
+  background: var(--kami-ivory);
+  border: 1px solid var(--kami-rule);
+}
+
+.archive-card.with-label {
+  padding-top: 0;
+}
+
+.archive-label {
+  margin: 0 -19px 14px;
+  padding: 8px 19px 7px;
+  background: var(--kami-navy);
+  font-family: "KamiMono", monospace;
+  font-size: 7.2px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kami-tag);
+}
+
+.archive-card h3 {
+  font-family: "KamiKingHwa", "KamiNewsreader", serif;
+  font-size: 17px;
+  line-height: 1.08;
+  color: var(--kami-ink);
+}
+
+.archive-card p {
+  margin-top: 10px;
+  font-size: 10.5px;
+  line-height: 1.18;
+  color: var(--kami-copy);
+}
+
+.principle-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "KamiKingHwa", "KamiNewsreader", serif;
+  font-size: 24px;
+  color: var(--kami-navy);
+  text-align: center;
+}
+
+.swatch-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.swatch-box {
+  width: 100%;
+  height: 110px;
+  border: 1px solid var(--kami-rule);
+}
+
+.swatch-card h3 {
+  margin-top: 10px;
+  font-family: "KamiMono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kami-stone);
+}
+
+.swatch-card .hex {
+  margin-top: 5px;
+  font-family: "KamiKingHwa", "KamiNewsreader", serif;
+  font-size: 15px;
+  color: var(--kami-navy);
+}
+
+.swatch-card .use {
+  margin-top: 4px;
+  font-size: 9px;
+  color: var(--kami-muted);
+}
+
+.callout-card {
+  justify-content: center;
+}
+
+.prompt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--kami-ivory);
+  border: 1px solid var(--kami-rule);
+}
+
+.prompt-row .text {
+  font-family: "KamiKingHwa", "KamiNewsreader", serif;
+  font-size: 14px;
+  color: var(--kami-ink);
+}
+
+.prompt-route {
+  font-family: "KamiMono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--kami-navy);
+}
+
+.auto-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--kami-navy);
+  color: var(--kami-ivory);
+  border: 1px solid var(--kami-ivory);
+  font-family: "KamiMono", monospace;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.bullet-list {
+  padding-left: 24px;
+  color: var(--kami-copy);
+  font-size: 15px;
+  line-height: 1.18;
+}
+
+.bullet-list li + li {
+  margin-top: 11px;
+}
+
+.pipeline-code {
+  padding: 16px 19px;
+  overflow: hidden;
+  background: rgba(243, 239, 235, 0.72);
+  border: 1px solid var(--kami-rule);
+  font-family: "KamiMono", monospace;
+  font-size: 10.5px;
+  line-height: 1.35;
+  color: var(--kami-navy);
+  white-space: pre-wrap;
+}
+
+.pipeline-code code {
+  font-family: inherit;
+}
+
+.closing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.closing h1 {
+  font-family: "KamiKingHwa", "KamiNewsreader", serif;
+  font-size: 52px;
+  line-height: 1;
+  color: var(--kami-navy);
+}
+
+.closing-rule {
+  width: 115px;
+  height: 1px;
+  margin: 30px 0 24px;
+  background: var(--kami-navy);
+}
+
+.closing p {
+  font-size: 16px;
+  color: var(--kami-muted);
+}
+
+.closing .meta {
+  margin-top: 42px;
+  font-family: "KamiMono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--kami-stone);
+}

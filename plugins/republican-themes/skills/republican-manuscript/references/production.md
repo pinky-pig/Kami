@@ -1,6 +1,6 @@
 # Production（生成 · 验证 · 排错）
 
-这份文档覆盖 kami 的工程执行：从 HTML/Python 模板到 PDF/PPTX 成品的完整流程。分四部分：**HTML -> PDF** · **Python -> PPTX** · **验证与调试** · **15 条踩坑**。
+这份文档覆盖 kami 的工程执行：从 HTML / Python / Slidev 模板到 PDF / PPTX / 在线 deck 成品的完整流程。分四部分：**HTML -> PDF** · **Python -> PPTX** · **Slidev -> 在线 deck** · **验证与调试**。
 
 ---
 
@@ -227,7 +227,80 @@ prs.save('output.pptx')
 
 ---
 
-## Part 3 · 验证与调试
+## Part 3 · Slidev -> 在线 deck
+
+`republican-manuscript` 的 `slides` 不再只有 `.pptx`。同一次交付还要生成一份 **可本地预览、可静态部署的在线 deck**，入口固定在：
+
+```text
+assets/templates/
+  slides_spec.py
+  slides.py
+  slidev/
+    package.json
+    render_from_spec.py
+    slides.md
+    style.css
+```
+
+### 安装
+
+```bash
+cd assets/templates/slidev
+pnpm install
+```
+
+### 开发预览
+
+```bash
+cd assets/templates/slidev
+pnpm run dev
+```
+
+默认访问 `http://localhost:3030`。这一步是编辑和演讲预览入口，不替代最终构建。
+
+### 生成在线版
+
+```bash
+python3 scripts/build.py slides
+```
+
+会先从 `slides_spec.py` 生成 `slidev/slides.md`，再同时生成：
+
+- `assets/examples/slides.pptx`
+- `assets/examples/slides-online/index.html`
+- `assets/examples/slides-online-preview.py`
+- `assets/examples/slides-online-preview.command`
+
+第二个目录是 Slidev 静态 bundle，可直接部署到静态站点。后两个文件是本地浏览器预览入口：`file://` 直接打开 `index.html` 在 Chrome 下会触发 ES module / CORS 限制，所以本地检查请走预览脚本或 `pnpm run dev`。
+
+### 结构约束
+
+1. **`slides_spec.py` 是唯一内容源**
+   不要再分别手改 `slides.py` 和 `slides.md`。PPTX 与 Slidev 都必须从同一份 schema 渲染。
+2. **主题语言保持同构**
+   Slidev 产物必须使用固定画布坐标模板，不能退回普通网页文档流，否则卡片高度、垂直分布、页心节奏会漂。
+3. **把 Slidev 当成在线交付，不是草稿**
+   它不是为了“先随便出个网页”，而是和 `.pptx` 一起作为正式 deliverable。
+4. **`style.css` 负责全局皮肤**
+   根据 Slidev 官方约定，项目根目录下的 `style.css` 会自动注入到整个 deck。主题级字体、颜色、边框和纸面语言放这里，而不是每页内联重复。
+
+### 推荐命令
+
+```bash
+cd assets/templates/slidev
+pnpm run dev     # 编辑 / 预演
+pnpm run build   # 单独构建静态站点
+```
+
+如果只想走统一出口，仍然优先使用：
+
+```bash
+python3 scripts/build.py slides
+```
+
+---
+
+## Part 4 · 验证与调试
 
 ### 必跑三步（每次改动）
 
