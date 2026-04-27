@@ -7,6 +7,7 @@
 - 正式支持：中文 `one-pager`、`long-doc`、`letter`、`slides`
 - 兼容保留：`resume`、`portfolio`、英文模板
 - 风格目标：**杂志页眉页脚 / 电子墨水反差 / serif 大标题 / sans 正文 / mono 元信息**
+- `slides` 现在走双产物：同一份 `assets/templates/slides_spec.py` 同时生成 `assets/demos/demo-slides.pptx` 和 `assets/demos/slides-online/`
 
 ## 八条铁律
 
@@ -18,6 +19,13 @@
 6. 规则线要细，信息层级靠字体和留白，不靠厚重边框
 7. 图片优先 top-safe 裁切，避免把人物头部和主视觉裁掉
 8. 页面的节奏要有深浅变化，不能整份文档都长一个样
+
+## slides 双产物
+
+- 内容单一来源：`assets/templates/slides_spec.py`
+- PPTX 渲染：`assets/templates/slides.py`
+- Slidev 渲染：`assets/templates/slidev/render_from_spec.py`
+- 构建命令：`python3 scripts/build.py slides`
 
 ## 自然语言触发
 
@@ -69,4 +77,4 @@
 - 章节节奏
 - 图片裁切
 
-一句话：**内容骨架沿用 Kami，风格信号交给 Guizang 的杂志层级、电子墨水反差和预设主题。**
+一句话：**内容骨架沿用 Kami，风格信号交给 Guizang 的杂志层级、电子墨水反差和预设主题；slides 的在线版和 PPTX 也必须共用这一套语言。**

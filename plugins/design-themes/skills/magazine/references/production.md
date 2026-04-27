@@ -2,7 +2,7 @@
 
 ## 目标
 
-保证这个 theme 在 HTML / PDF / PPTX 三端都能稳定输出，不因为追求风格而破坏可读性和构建稳定性。
+保证这个 theme 在 HTML / PDF / PPTX / Slidev 四端都能稳定输出，不因为追求风格而破坏可读性和构建稳定性。
 
 ## 常见坑
 
@@ -51,6 +51,28 @@ mono 只给：
 
 如果 `build.py --verify` 指向 demo HTML，那么样式改完以后 demo 也要更新，不然会出现“模板是新的，验证源还是旧的”。
 
+### 7. slides 的 PPTX 和 Slidev 不能各写各的
+
+`slides` 现在是双产物：
+
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/`
+
+所以内容必须放在同一份 `assets/templates/slides_spec.py` 里，由：
+
+- `assets/templates/slides.py`
+- `assets/templates/slidev/render_from_spec.py`
+
+分别消费。
+
+如果只改了其中一个出口，结果通常会出现：
+
+- 讲述顺序不一致
+- 标题或引语改了一边，另一边还旧着
+- online deck 和 PPTX 看起来像两个主题
+
+这种分叉要直接视为回归。
+
 ## 调样式时的优先级
 
 1. 先保页数
@@ -67,3 +89,10 @@ python3 scripts/build.py letter
 python3 scripts/build.py slides
 python3 scripts/build.py --check
 ```
+
+`python3 scripts/build.py slides` 的成功标准是同时拿到：
+
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/`
+- `assets/demos/slides-online/slides-online-preview.py`
+- `assets/demos/slides-online/slides-online-preview.command`

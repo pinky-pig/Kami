@@ -572,7 +572,6 @@ def build_slides_demo() -> None:
         check=True,
         cwd=str(ROOT.parent.parent.parent.parent),
     )
-    shutil.copy2(EXAMPLES / "slides.pptx", DEMOS / "demo-slides.pptx")
 
 
 def main() -> None:

@@ -12,6 +12,7 @@ This skill keeps only the production surface: HTML templates, WeasyPrint PDF out
 ## V1 Scope
 
 - Officially supported: Chinese `one-pager`, `long-doc`, `letter`, `slides`
+- Chinese `slides` now build from shared `assets/templates/slides_spec.py` into both `assets/demos/demo-slides.pptx` and `assets/demos/slides-online/`
 - Visual standard: 把 Kami 文档输出变成高对比、厚黑边、硬阴影、贴纸拼贴感的新粗野主义文件。
 - Legacy retained: English, resume, and portfolio templates remain available but are not the primary target
 - Original website prompt source: `prompts.md` is kept for reference; use `references/design.md` as the print-document spec
@@ -32,7 +33,7 @@ Prefer Chinese output. If the user writes in Chinese, use Chinese templates and 
 
 | User language | Templates | References | Cheatsheet |
 |---|---|---|
-| Chinese (primary) | `one-pager.html` / `long-doc.html` / `letter.html` / `slides.py` | `references/*.md` | `CHEATSHEET.md` |
+| Chinese (primary) | `one-pager.html` / `long-doc.html` / `letter.html` / `slides.py` + `slides_spec.py` | `references/*.md` | `CHEATSHEET.md` |
 | English (legacy) | `*-en.html` | `references/*.en.md` | `CHEATSHEET.en.md` |
 
 ## Step 2 · Pick Document Type
@@ -42,7 +43,7 @@ Prefer Chinese output. If the user writes in Chinese, use Chinese templates and 
 | "one-pager / 方案 / 项目方案 / 执行摘要" | One-Pager | `one-pager.html` |
 | "white paper / 白皮书 / 长文 / 年度总结" | Long Doc | `long-doc.html` |
 | "formal letter / 信件 / 推荐信 / 推荐函 / memo" | Letter | `letter.html` |
-| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides.py` |
+| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides.py` + `slides_spec.py` |
 
 ## Step 3 · Load The Right Spec
 
@@ -71,6 +72,8 @@ python3 scripts/build.py --verify letter
 python3 scripts/build.py slides
 python3 scripts/build.py --check
 ```
+
+`python3 scripts/build.py slides` 会同时写出 `assets/demos/demo-slides.pptx` 和 `assets/demos/slides-online/`。预览脚本位于 `assets/demos/slides-online/` 目录内。
 
 ## Feedback Protocol
 

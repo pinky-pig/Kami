@@ -3,6 +3,7 @@
 ## 范围
 
 - 正式支持：中文 `one-pager`、`long-doc`、`letter`、`slides`
+- `slides` 走双产物：共享 `slides_spec.py`，同时输出 `assets/demos/demo-slides.pptx` 与 `assets/demos/slides-online/`
 - 风格目标：黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴
 - 模板能力：沿用稳定的 HTML / PDF / PPTX / diagram / build pipeline；版面和内容格式必须是 Neo-Brutalism 原生
 
@@ -24,7 +25,7 @@
 | 用新粗野主义风格做一份项目方案 | `one-pager.html` |
 | 把这份白皮书排成 Neo-Brutalism | `long-doc.html` |
 | 推荐信做成新粗野主义风 | `letter.html` |
-| 做一套 Neo-Brutalism slides | `slides.py` |
+| 做一套 Neo-Brutalism slides | `slides.py` + `slides_spec.py` |
 | 帮我把这些内容排版成好看的 PDF | 先判断 `one-pager` / `long-doc` / `letter` |
 
 ## 色板
@@ -54,4 +55,4 @@ python3 scripts/build.py slides
 python3 scripts/build.py --check
 ```
 
-一句话：**生产流程沿用 Kami，内容骨架必须改写成 loud hero、marquee strip、rotated cards、proof sticker、poster cover 和 blocky TOC。**
+一句话：**生产流程沿用 Kami，内容骨架必须改写成 loud hero、marquee strip、rotated cards、proof sticker、poster cover 和 blocky TOC；`slides` 用同一份 schema 同时生成 PPTX 与在线 deck。**

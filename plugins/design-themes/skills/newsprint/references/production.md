@@ -1,6 +1,22 @@
 # Production（生成 · 验证 · 排错）
 
-这份文档覆盖 kami 的工程执行：从 HTML/Python 模板到 PDF/PPTX 成品的完整流程。分四部分：**HTML -> PDF** · **Python -> PPTX** · **验证与调试** · **15 条踩坑**。
+这份文档覆盖 kami 的工程执行：从 HTML/Python 模板到 PDF/PPTX/Slidev 成品的完整流程。分四部分：**HTML -> PDF** · **Python -> PPTX** · **Slidev 在线 deck** · **验证与调试**。
+
+---
+
+## Slides 双产物
+
+- `slides_spec.py` 是 PPTX 和 Slidev 两个渲染器共享的内容源。
+- `slides.py` 用 `python-pptx` 生成 `assets/demos/demo-slides.pptx`。
+- `assets/templates/slidev/render_from_spec.py` 把同一份 spec 渲染成 `assets/templates/slidev/slides.md`，再由 Slidev 构建 `assets/demos/slides-online/`。
+- 不要手改 `slides.md`；先改 `slides_spec.py`，再重新构建。
+
+### 常用命令
+
+```bash
+python3 scripts/build.py slides
+cd assets/templates/slidev && pnpm run dev
+```
 
 ---
 

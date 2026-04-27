@@ -230,7 +230,7 @@ add_text(s, "副标题 · 副说明", Inches(1.5), Inches(4.2), Inches(10.33), I
 prs.save('output.pptx')
 ```
 
-完整版见 `assets/templates/slides.py`。
+`slides` 现在是双产物路径。内容单源在 `assets/templates/slides_spec.py`，PPTX 渲染器是 `assets/templates/slides.py`，在线 deck 渲染器是 `assets/templates/slidev/render_from_spec.py`。不要分别手改 `.pptx` 和 `slides.md`。
 
 ### PPT 注意事项
 
@@ -291,6 +291,35 @@ if max_pages and n > max_pages:
 ```
 
 项目脚本 `scripts/build.py` 是这段的产品化版本。
+
+## Slidev Output
+
+`python3 scripts/build.py slides` 现在会同时生成：
+
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/`
+- `assets/demos/slides-online/slides-online-preview.py`
+- `assets/demos/slides-online/slides-online-preview.command`
+
+Slidev 源目录固定为：
+
+```text
+assets/templates/
+  slides_spec.py
+  slides.py
+  slidev/
+    package.json
+    render_from_spec.py
+    slides.md
+    style.css
+```
+
+本地编辑/预演入口：
+
+```bash
+cd assets/templates/slidev
+pnpm run dev
+```
 
 ### 高分辨率视觉检查
 

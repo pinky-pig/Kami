@@ -8,14 +8,15 @@ This skill is built from the `republican-manuscript` production scaffold, but th
 - electronic-ink contrast
 - serif display + sans body + mono metadata
 - curated theme presets
-- editorial rhythm across HTML / PDF / PPTX
+- editorial rhythm across HTML / PDF / PPTX / Slidev
 
 ## Supports
 
 - Chinese one-pager: `assets/templates/one-pager.html`
 - Chinese long document / white paper: `assets/templates/long-doc.html`
 - Chinese formal letter / recommendation letter: `assets/templates/letter.html`
-- Chinese slide deck: `assets/templates/slides.py`
+- Chinese slide deck: `assets/templates/slides.py` + shared content in `assets/templates/slides_spec.py`
+- Online slide deck companion: `assets/templates/slidev/` -> `assets/demos/slides-online/`
 - Compatibility templates: `resume`, `portfolio`, English variants
 
 ## Visual Target
@@ -47,6 +48,7 @@ For day-to-day document production, load:
 - `CHEATSHEET.md`
 - `references/design.md`
 - `references/themes.md`
+- `assets/templates/slides_spec.py` when the task is specifically about `slides`
 
 ## Build
 
@@ -54,10 +56,16 @@ For day-to-day document production, load:
 python3 scripts/build.py one-pager
 python3 scripts/build.py long-doc
 python3 scripts/build.py letter
-python3 scripts/build.py slides
+python3 scripts/build.py slides     # demo-slides.pptx + demos/slides-online/
 python3 scripts/build.py --check
 python3 scripts/build.py --verify
 ```
+
+`slides` now ships as a dual-output target:
+
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/`
+- preview helpers: `assets/demos/slides-online/slides-online-preview.py` and `.command`
 
 ## Theme Presets
 

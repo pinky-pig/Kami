@@ -5,6 +5,7 @@
 - 正式支持：中文 `one-pager`、`long-doc`、`letter`、`slides`
 - 风格目标：新闻纸底 / 黑色网格 / 出版物层级 / 少量红色强调
 - 模板能力：沿用稳定的 HTML / PDF / PPTX / diagram / build pipeline；版面和内容格式必须是 Newsprint 原生
+- Slides 内容源：`slides_spec.py` 是 PPTX 和 Slidev 的单一内容源
 
 ## 八条铁律
 
@@ -24,7 +25,7 @@
 | 用新闻纸风格做一份项目方案 | `one-pager.html` |
 | 把这份白皮书排成 Newsprint | `long-doc.html` |
 | 推荐信做成新闻纸风 | `letter.html` |
-| 做一套 Newsprint slides | `slides.py` |
+| 做一套 Newsprint slides | `slides_spec.py` -> `slides.py` + `slidev/render_from_spec.py` |
 | 帮我把这些内容排版成好看的 PDF | 先判断 `one-pager` / `long-doc` / `letter` |
 
 ## 色板
@@ -51,6 +52,7 @@ python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py slides
+cd assets/templates/slidev && pnpm run dev
 python3 scripts/build.py --check
 ```
 

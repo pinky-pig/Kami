@@ -4,12 +4,14 @@ A Kami document theme for **新闻纸 / Newsprint** output.
 
 It uses the stable Kami document production pipeline, but the visible output is a native Newsprint system: newspaper sheet, masthead, column grid, lede, sidebar facts, black rules, and sparse red editorial marks.
 
+For `slides`, the production path is now dual-output: `slides_spec.py` feeds both the PPTX renderer (`slides.py`) and the Slidev online deck renderer (`assets/templates/slidev/render_from_spec.py`).
+
 ## Supports
 
 - Chinese one-pager: `assets/templates/one-pager.html`
 - Chinese long document / white paper: `assets/templates/long-doc.html`
 - Chinese formal letter / recommendation letter: `assets/templates/letter.html`
-- Chinese slide deck: `assets/templates/slides.py`
+- Chinese slide deck: `assets/templates/slides_spec.py` -> `slides.py` + `assets/templates/slidev/render_from_spec.py`
 
 ## Visual Target
 

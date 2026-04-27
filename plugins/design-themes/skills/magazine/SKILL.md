@@ -12,6 +12,7 @@ This skill keeps the **Kami production surface** intact:
 - HTML templates for document types
 - WeasyPrint PDF output
 - PPTX generation through `slides.py`
+- online Slidev generation through `assets/templates/slidev/`
 - build / verify / token sync scripts
 
 What changes is the entire visual language. The source style comes from [`op7418/guizang-ppt-skill`](https://github.com/op7418/guizang-ppt-skill):
@@ -56,11 +57,11 @@ If the request is simply "做个好看的 PDF / PPT", choose this skill when the
 | "正式信件 / 推荐信 / 推荐函 / memo" | Letter | `letter.html` |
 | "简历 / resume / CV" | Resume | `resume.html` |
 | "作品集 / portfolio / case study deck" | Portfolio | `portfolio.html` |
-| "slides / PPT / 演示稿 / 汇报 deck" | Slides | `slides.py` |
+| "slides / PPT / 演示稿 / 汇报 deck" | Slides | `slides.py` + `slides_spec.py` |
 
 ## Step 2 · Pick A Theme Preset
 
-Do **not** accept arbitrary hex values by default. Use the curated presets from [references/themes.md](/Users/wangwenbo/Desktop/demo/kami/plugins/guizang-themes/skills/guizang-magazine/references/themes.md):
+Do **not** accept arbitrary hex values by default. Use the curated presets from [references/themes.md](/Users/wangwenbo/Desktop/demo/kami/plugins/design-themes/skills/magazine/references/themes.md):
 
 1. `墨水经典`
 2. `靛蓝瓷`
@@ -87,7 +88,7 @@ For document work, map them like this:
 | Content-only | 只填正文，不动 CSS | `CHEATSHEET.md` |
 | Layout tweak | 需要调版式 / 间距 / 栏目节奏 | `CHEATSHEET.md` + `references/design.md` |
 | New document | 从零排一份 PDF / PPT / HTML | `references/design.md` + `references/writing.md` |
-| Slide-specific | 做 PPTX / 理解杂志 deck 的节奏 | `references/components.md` + `references/layouts.md` + `references/themes.md` |
+| Slide-specific | 做 PPTX / Slidev / 理解杂志 deck 的节奏 | `references/components.md` + `references/layouts.md` + `references/themes.md` + `assets/templates/slides_spec.py` |
 | Troubleshoot | 溢出、字体、断页、图片比例问题 | `references/production.md` + `references/checklist.md` |
 
 Original Guizang source files are preserved under:
@@ -101,12 +102,13 @@ Original Guizang source files are preserved under:
 ## Step 4 · Fill Content Into The Template
 
 - Copy the closest template instead of writing HTML from scratch
-- Keep the shared visual system consistent across HTML, PDF, and PPTX
+- Keep the shared visual system consistent across HTML, PDF, PPTX, and Slidev
 - Respect the font split:
   - `"TsangerJinKai02", "Newsreader", "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Charter", Georgia, "Times New Roman", serif` for display, body, quotes, and key numbers
   - mono for metadata / labels / chrome
 - Do not use `KingHwa_OldSong` / 京華老宋体 in this skill.
 - Prefer editorial hierarchy over decorative panels
+- For `slides`, treat `assets/templates/slides_spec.py` as the single content source. `slides.py` and `assets/templates/slidev/render_from_spec.py` should both read from it.
 
 When filling content:
 
@@ -121,10 +123,17 @@ When filling content:
 python3 scripts/build.py one-pager
 python3 scripts/build.py long-doc
 python3 scripts/build.py letter
-python3 scripts/build.py slides
+python3 scripts/build.py slides     # emits demo-slides.pptx + demos/slides-online/
 python3 scripts/build.py --check
 python3 scripts/build.py --verify
 ```
+
+For the `slides` target, the expected outputs are:
+
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/`
+- `assets/demos/slides-online/slides-online-preview.py`
+- `assets/demos/slides-online/slides-online-preview.command`
 
 ## Feedback Vocabulary
 

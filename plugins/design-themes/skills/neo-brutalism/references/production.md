@@ -1,6 +1,6 @@
 # Production（生成 · 验证 · 排错）
 
-这份文档覆盖 kami 的工程执行：从 HTML/Python 模板到 PDF/PPTX 成品的完整流程。分四部分：**HTML -> PDF** · **Python -> PPTX** · **验证与调试** · **15 条踩坑**。
+这份文档覆盖 kami 的工程执行：从 HTML/Python 模板到 PDF/PPTX/Slidev 成品的完整流程。分四部分：**HTML -> PDF** · **Slides 双产物（PPTX + Slidev）** · **验证与调试** · **15 条踩坑**。
 
 ---
 
@@ -97,14 +97,28 @@ font-family: "KingHwa_OldSong",
 
 ---
 
-## Part 2 · Python -> PPTX（python-pptx）
+## Part 2 · Slides 双产物（python-pptx + Slidev）
 
-PPT 审美和 PDF **共享同一套设计语言**，但因为载体是屏幕、16:9、一屏一信息，字号加大、版式固化。
+Neo-Brutalism 的 slides 现在走**单一内容源 + 双渲染器**：
+
+- `assets/templates/slides_spec.py`：共享 slide schema
+- `assets/templates/slides.py`：生成 `assets/demos/demo-slides.pptx`
+- `assets/templates/slidev/render_from_spec.py`：生成 `assets/templates/slidev/slides.md`
+- `assets/templates/slidev/`：通过 Slidev build 到 `assets/demos/slides-online/`
+
+视觉上，PPTX 和在线 deck 都必须继续保持 Neo-Brutalism 的 **黑色粗框 / 高饱和色块 / 硬阴影 / 贴纸拼贴**，不能退回安静排版。
 
 ### 安装
 
 ```bash
 pip install python-pptx --break-system-packages --quiet
+```
+
+在线 deck 额外需要：
+
+```bash
+cd assets/templates/slidev
+pnpm install
 ```
 
 ### 尺寸
@@ -113,48 +127,42 @@ pip install python-pptx --break-system-packages --quiet
 - **4:3 传统**：10 × 7.5 inch
 - **安全区**：四周 0.5 inch 不放内容，底部额外 0.3 inch 给页码
 
-### 色板（1:1 对应 design.md）
+### 色板（1:1 对应 design.md / slides.py）
 
 ```python
 from pptx.dml.color import RGBColor
 
-PARCHMENT   = RGBColor(0xf5, 0xf4, 0xed)
-IVORY       = RGBColor(0xfa, 0xf9, 0xf5)
-BRAND       = RGBColor(0xc9, 0x64, 0x42)
-NEAR_BLACK  = RGBColor(0x14, 0x14, 0x13)
-DARK_WARM   = RGBColor(0x3d, 0x3d, 0x3a)
-OLIVE       = RGBColor(0x5e, 0x5d, 0x59)
-STONE       = RGBColor(0x87, 0x86, 0x7f)
-BORDER_WARM = RGBColor(0xe8, 0xe6, 0xdc)
-TAG_BG      = RGBColor(0xed, 0xd9, 0xce)
+CREAM   = RGBColor(0xFF, 0xFD, 0xF5)
+WHITE   = RGBColor(0xFF, 0xFF, 0xFF)
+BLACK   = RGBColor(0x00, 0x00, 0x00)
+RED     = RGBColor(0xFF, 0x6B, 0x6B)
+YELLOW  = RGBColor(0xFF, 0xD9, 0x3D)
+VIOLET  = RGBColor(0xC4, 0xB5, 0xFD)
 ```
 
 ### 字号（屏幕投影优先易读性，比 PDF 大）
 
 | 角色 | 字号 | 字体 |
 |---|---|---|
-| Title | 44pt | Serif 500 |
+| Title | 38-44pt | Sans 700-900 |
 | Subtitle | 24pt | Sans 400 |
-| H2 章节 | 32pt | Serif 500 |
-| H3 小标题 | 20pt | Serif 500 |
-| Body | 18pt | Sans 400 |
-| Caption | 14pt | Sans 400 |
-| Footer | 12pt | Sans 400 |
+| H2 章节 | 30-32pt | Sans 700-900 |
+| H3 小标题 | 18-22pt | Sans 700 |
+| Body | 13-18pt | Sans 400-700 |
+| Label / Eyebrow | 7-12pt | Sans / Mono 700 |
+| Footer | 8-12pt | Sans / Mono 700 |
 
 中文字体栈：
-- Serif：`KingHwa_OldSong` -> `Source Han Serif SC` -> `宋体`
-- Sans：`Source Han Sans SC` -> `PingFang SC` -> `微软雅黑`
+- 主字体：`Inter` -> `Source Han Sans SC` -> `PingFang SC` -> `微软雅黑`
+- 在线 deck 小标签可用：`JetBrains Mono`
 
-### 8 种标准版式
+### 5 张标准版式
 
-1. **封面页**：Parchment 底，正中大标题 + 品牌色短线 + 副标题/作者/日期
-2. **目录页**：Parchment 底，左对齐 `01　章节标题`（数字 serif 品牌色）
-3. **章节首页**：油墨蓝 `#1B365D` 满屏，居中白色大字--deck 里唯一的彩色满屏
-4. **内容页**：小标题（sans stone）+ 核心论点（serif near-black）+ 品牌色短线 + 正文（sans dark-warm）
-5. **数据页**：顶部 takeaway + 下方 2-4 张 metric 卡（大数字 serif 品牌色 + 小标签 sans olive）
-6. **对比页**：左右两栏 + 中间 0.5pt 暖灰竖线
-7. **引用页**：Parchment 底极简，居中大号斜体引文 + `- 来源`
-8. **结束页**：Parchment 底，居中"谢谢 / Q&A / 联系方式"
+1. **封面页**：红色大底 panel + 黄色 badge + 右侧高饱和贴纸
+2. **Tokens 页**：四色卡片并列，强调 theme palette 本身就是内容
+3. **Composition 页**：一张白卡配两张旋转 sticker，表现 60/40 非对称和硬阴影
+4. **Outputs 页**：三条彩色粗框 row，说明 PDF / 长文 / 信件的共通语言
+5. **结束页**：黄色大 panel + 红色 badge，句子必须像海报口号
 
 ### 脚本骨架
 
@@ -165,10 +173,9 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN
 
-PARCHMENT = RGBColor(0xf5, 0xf4, 0xed)
-BRAND     = RGBColor(0xc9, 0x64, 0x42)
+CREAM = RGBColor(0xff, 0xfd, 0xf5)
+RED   = RGBColor(0xff, 0x6b, 0x6b)
 # ... 其他色见上表
-SERIF = "Source Han Serif SC"
 SANS  = "Source Han Sans SC"
 
 prs = Presentation()
@@ -176,11 +183,11 @@ prs.slide_width  = Inches(13.33)
 prs.slide_height = Inches(7.5)
 
 def blank_slide():
-    """空白页，parchment 底"""
+    """空白页，cream 底"""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     bg = slide.shapes.add_shape(
         MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
-    bg.fill.solid(); bg.fill.fore_color.rgb = PARCHMENT
+    bg.fill.solid(); bg.fill.fore_color.rgb = CREAM
     bg.line.fill.background(); bg.shadow.inherit = False
     return slide
 
@@ -198,7 +205,7 @@ def add_text(slide, text, left, top, width, height,
     run.font.color.rgb = color
     return tb
 
-def add_line(slide, left, top, width, color=BRAND, weight_pt=1):
+def add_line(slide, left, top, width, color=RED, weight_pt=1):
     line = slide.shapes.add_connector(1, left, top, left + width, top)
     line.line.color.rgb = color; line.line.width = Pt(weight_pt)
     return line
@@ -206,21 +213,33 @@ def add_line(slide, left, top, width, color=BRAND, weight_pt=1):
 # 封面
 s = blank_slide()
 add_text(s, "文档标题", Inches(1.5), Inches(3), Inches(10.33), Inches(1),
-         font=SERIF, size=44)
-add_line(s, Inches(1.5), Inches(4), Inches(2))
-add_text(s, "副标题 · 副说明", Inches(1.5), Inches(4.2), Inches(10.33), Inches(0.6),
-         font=SANS, size=18, color=RGBColor(0x5e,0x5d,0x59))
+         font=SANS, size=44, bold=True)
+add_line(s, Inches(1.5), Inches(4), Inches(2), color=RED, weight_pt=4)
+add_text(s, "副标题 · 副说明", Inches(1.5), Inches(4.2), Inches(10.33), Inches(0.6), font=SANS, size=18)
 
 prs.save('output.pptx')
 ```
 
-完整版见 `assets/templates/slides.py`。
+完整版见 `assets/templates/slides.py`，共享内容源见 `assets/templates/slides_spec.py`，在线 deck 渲染器见 `assets/templates/slidev/render_from_spec.py`。
+
+### 在线 deck 文件流
+
+```bash
+python3 scripts/build.py slides
+```
+
+输出：
+
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/`
+- `assets/demos/slides-online/slides-online-preview.py`
+- `assets/demos/slides-online/slides-online-preview.command`
 
 ### PPT 注意事项
 
 1. **一页一个核心信息**：超过 3 段文字就拆分
-2. **不用自带 Template**：PowerPoint default 是冷蓝灰，和 parchment 冲突
-3. **动画**：不加。Parchment 风格是印刷品，不是 SaaS 演示。最多允许 fade
+2. **不用自带 Template**：PowerPoint default 的冷蓝灰会削弱 Neo-Brutalism 的黑边和高饱和色块
+3. **动画**：不加。Neo-Brutalism slides 是海报式静态构图，不靠 motion 讲故事
 4. **导出 PDF**：分享时推荐导出 PDF，跨机器一致性比 .pptx 高
    - macOS：Keynote 打开 -> Export to PDF
    - Linux：`libreoffice --headless --convert-to pdf output.pptx`

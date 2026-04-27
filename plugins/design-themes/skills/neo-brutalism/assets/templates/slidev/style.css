@@ -1,0 +1,337 @@
+@font-face {
+  font-family: "KamiNeoSans";
+  src: url("../../fonts/Inter.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KamiNeoSansBold";
+  src: url("../../fonts/Inter-600.woff2") format("woff2");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "KamiNeoMono";
+  src: url("../../fonts/JetBrainsMono.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --neo-paper: #fffdf5;
+  --neo-surface: #ffffff;
+  --neo-ink: #000000;
+  --neo-red: #ff6b6b;
+  --neo-yellow: #ffd93d;
+  --neo-violet: #c4b5fd;
+  --neo-shadow: 12px 12px 0 0 var(--neo-ink);
+  --neo-grid: rgba(0, 0, 0, 0.1);
+}
+
+html,
+body,
+#app {
+  background: linear-gradient(180deg, #fffdf5 0%, #fff2b5 100%);
+  color: var(--neo-ink);
+  font-family: "KamiNeoSans", "Inter", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+}
+
+.slidev-layout {
+  padding: 0 !important;
+  background: transparent !important;
+  color: inherit;
+}
+
+.slidev-layout.cover,
+.slidev-layout.default {
+  display: block !important;
+  width: 100%;
+  height: 100%;
+}
+
+.slidev-layout.cover > .my-auto,
+.slidev-layout.default > .my-auto {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+}
+
+.slidev-layout h1,
+.slidev-layout h2,
+.slidev-layout p {
+  margin: 0;
+}
+
+.neo-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px) 0 0 / 64px 64px,
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px) 0 0 / 64px 64px,
+    radial-gradient(circle, rgba(0, 0, 0, 0.12) 0 1px, transparent 1.5px) 0 0 / 24px 24px,
+    var(--neo-paper);
+}
+
+.edge-dots {
+  position: absolute;
+  left: 96px;
+  width: calc(100% - 192px);
+  height: 12px;
+  background:
+    radial-gradient(circle, var(--neo-ink) 0 2px, transparent 2.5px) left center / 130px 12px repeat-x;
+  opacity: 0.9;
+}
+
+.edge-dots-top {
+  top: 24px;
+}
+
+.edge-dots-bottom {
+  bottom: 24px;
+}
+
+.bg-chip {
+  position: absolute;
+  border: 4px solid var(--neo-ink);
+  box-shadow: var(--neo-shadow);
+  transform-origin: center;
+}
+
+.bg-chip-red {
+  left: -48px;
+  top: 96px;
+  width: 228px;
+  height: 112px;
+  background: var(--neo-red);
+  transform: rotate(-8deg);
+}
+
+.bg-chip-yellow {
+  right: 36px;
+  bottom: 86px;
+  width: 168px;
+  height: 96px;
+  background: var(--neo-yellow);
+  transform: rotate(12deg);
+}
+
+.neo-label,
+.neo-page {
+  position: absolute;
+  top: 24px;
+  font-family: "KamiNeoMono", "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.neo-label {
+  left: 52px;
+}
+
+.neo-page {
+  right: 52px;
+}
+
+.section-title,
+.support-copy {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.section-title {
+  font-family: "KamiNeoSansBold", "Inter", "PingFang SC", sans-serif;
+  font-size: 48px;
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.section-title.wide {
+  font-size: 44px;
+}
+
+.support-copy {
+  font-size: 20px;
+  line-height: 1.24;
+  max-width: 840px;
+}
+
+.neo-panel {
+  position: absolute;
+  box-sizing: border-box;
+  border: 4px solid var(--neo-ink);
+  box-shadow: var(--neo-shadow);
+  transform: rotate(var(--rot, 0deg));
+  transform-origin: center;
+  overflow: hidden;
+}
+
+.tone-paper {
+  background: var(--neo-surface);
+}
+
+.tone-red {
+  background: var(--neo-red);
+}
+
+.tone-yellow {
+  background: var(--neo-yellow);
+}
+
+.tone-violet {
+  background: var(--neo-violet);
+}
+
+.tone-black {
+  background: var(--neo-ink);
+}
+
+.text-ink {
+  color: var(--neo-ink);
+}
+
+.text-paper {
+  color: #ffffff;
+}
+
+.center-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cover-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  height: 100%;
+  padding: 28px 42px 28px;
+}
+
+.neo-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 158px;
+  min-height: 34px;
+  padding: 4px 16px;
+  border: 3px solid var(--neo-ink);
+  box-shadow: 6px 6px 0 0 var(--neo-ink);
+  font-family: "KamiNeoMono", "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.cover-title,
+.composition-hero,
+.end-title {
+  font-family: "KamiNeoSansBold", "Inter", "PingFang SC", sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 0.88;
+}
+
+.cover-title {
+  max-width: 740px;
+  font-size: 74px;
+}
+
+.cover-strap {
+  max-width: 620px;
+  font-family: "KamiNeoMono", "JetBrains Mono", monospace;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.sticker-copy,
+.badge-copy,
+.token-name,
+.output-name {
+  font-family: "KamiNeoSansBold", "Inter", "PingFang SC", sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.sticker-copy {
+  font-size: 38px;
+  line-height: 0.9;
+}
+
+.badge-copy {
+  font-size: 31px;
+  line-height: 0.95;
+}
+
+.badge-copy.large {
+  font-size: 35px;
+}
+
+.token-card-inner,
+.output-row-inner {
+  display: flex;
+  height: 100%;
+}
+
+.token-card-inner {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+.token-name {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.token-rule {
+  width: 64px;
+  height: 10px;
+  background: currentColor;
+}
+
+.composition-panel {
+  padding: 40px 34px;
+}
+
+.composition-hero {
+  font-size: 64px;
+}
+
+.output-row-inner {
+  align-items: center;
+  gap: 34px;
+  padding: 0 22px;
+}
+
+.output-name {
+  flex: 0 0 220px;
+  font-size: 25px;
+  line-height: 1;
+}
+
+.output-desc {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.end-hero {
+  padding: 44px 42px;
+}
+
+.end-title {
+  max-width: 760px;
+  font-size: 68px;
+}

@@ -9,6 +9,8 @@ Use this skill when the user wants a Chinese professional document rendered as *
 
 This skill keeps only the production surface: HTML templates, WeasyPrint PDF output, PPTX generation, diagrams, fonts, build checks, and document routing. The visible result must not keep old frame/page composition. Playful Geometric output must use **稳定网格 / 几何贴纸 / primitive shapes / 明亮色彩 / 友好硬阴影**.
 
+`slides` 现在是双产物路径：同一份 Playful Geometric 内容要同时交付 `assets/demos/demo-slides.pptx` 和 Slidev 在线 deck。
+
 ## V1 Scope
 
 - Officially supported: Chinese `one-pager`, `long-doc`, `letter`, `slides`
@@ -33,7 +35,7 @@ Prefer Chinese output. If the user writes in Chinese, use Chinese templates and 
 
 | User language | Templates | References | Cheatsheet |
 |---|---|---|
-| Chinese (primary) | `one-pager.html` / `long-doc.html` / `letter.html` / `slides.py` | `references/*.md` | `CHEATSHEET.md` |
+| Chinese (primary) | `one-pager.html` / `long-doc.html` / `letter.html` / `slides_spec.py` -> `slides.py` + `slidev` | `references/*.md` | `CHEATSHEET.md` |
 | English (legacy) | `*-en.html` | `references/*.en.md` | `CHEATSHEET.en.md` |
 
 ## Step 2 · Pick Document Type
@@ -43,7 +45,7 @@ Prefer Chinese output. If the user writes in Chinese, use Chinese templates and 
 | "one-pager / 方案 / 项目方案 / 执行摘要" | One-Pager | `one-pager.html` |
 | "white paper / 白皮书 / 长文 / 年度总结" | Long Doc | `long-doc.html` |
 | "formal letter / 信件 / 推荐信 / 推荐函 / memo" | Letter | `letter.html` |
-| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides.py` |
+| "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides_spec.py` -> `slides.py` + `assets/templates/slidev/render_from_spec.py` |
 
 ## Step 3 · Load The Right Spec
 
@@ -78,8 +80,11 @@ python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py slides
+cd assets/templates/slidev && pnpm run dev
 python3 scripts/build.py --check
 ```
+
+`python3 scripts/build.py slides` 会先从 `slides_spec.py` 渲染 `assets/templates/slidev/slides.md`，再同时生成 `assets/demos/demo-slides.pptx` 和 `assets/demos/slides-online/`。不要手改 `slides.md`，它是生成物；预览脚本位于 `assets/demos/slides-online/` 内。
 
 ## Feedback Protocol
 

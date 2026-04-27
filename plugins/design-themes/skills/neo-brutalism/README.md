@@ -9,7 +9,7 @@ It uses the stable Kami document production pipeline, but the visible output is 
 - Chinese one-pager: `assets/templates/one-pager.html`
 - Chinese long document / white paper: `assets/templates/long-doc.html`
 - Chinese formal letter / recommendation letter: `assets/templates/letter.html`
-- Chinese slide deck: `assets/templates/slides.py`
+- Chinese slide deck: shared `assets/templates/slides_spec.py` -> `assets/templates/slides.py` + `assets/templates/slidev/`
 
 ## Visual Target
 
@@ -26,5 +26,7 @@ python3 scripts/build.py --verify letter
 python3 scripts/build.py slides
 python3 scripts/build.py --check
 ```
+
+`python3 scripts/build.py slides` 现在会同时生成 `assets/demos/demo-slides.pptx` 和 `assets/demos/slides-online/`。
 
 `prompts.md` is kept as the original web-design prompt source. For document production, load `SKILL.md`, `CHEATSHEET.md`, and `references/design.md`.

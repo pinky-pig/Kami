@@ -32,7 +32,7 @@
 | 用趣味几何风格做一份项目方案 | `one-pager.html` |
 | 把这份白皮书排成 Playful Geometric | `long-doc.html` |
 | 推荐信做成趣味几何风 | `letter.html` |
-| 做一套 Playful Geometric slides | `slides.py` |
+| 做一套 Playful Geometric slides | `slides_spec.py` -> `slides.py` + `slidev/render_from_spec.py` |
 | 帮我把这些内容排版成好看的 PDF | 先判断 `one-pager` / `long-doc` / `letter` |
 
 ## 色板
@@ -59,6 +59,7 @@ python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py slides
+cd assets/templates/slidev && pnpm run dev
 python3 scripts/build.py --check
 ```
 
