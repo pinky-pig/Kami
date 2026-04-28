@@ -2,7 +2,7 @@
 """kami build & check
 
 Usage:
-    python3 scripts/build.py                      # build all 15 examples (10 HTML + 3 diagrams + 2 PPTX)
+    python3 scripts/build.py                      # build all examples + slide bundles
     python3 scripts/build.py resume               # build one template, print pages + fonts
     python3 scripts/build.py --check              # scan templates for CSS rule violations
     python3 scripts/build.py --check -v           # verbose (show each scanned file)
@@ -27,8 +27,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES = ROOT / "assets" / "templates"
+SLIDEV = TEMPLATES / "slidev"
+SLIDEV_RENDER = SLIDEV / "render_from_spec.py"
 DIAGRAMS = ROOT / "assets" / "diagrams"
 EXAMPLES = ROOT / "assets" / "examples"
+DEMOS = ROOT / "assets" / "demos"
 FONTS = ROOT / "assets" / "fonts"
 FONT_CONFIG = FONTS / "fonts.json"
 
@@ -51,6 +54,9 @@ PPTX_TARGETS: dict[str, str] = {
     "slides":    "slides.py",
     "slides-en": "slides-en.py",
 }
+SLIDEV_TARGETS: dict[str, str] = {
+    "slides": "slides.md",
+}
 
 # Diagram HTMLs live in a separate directory and have no page-count contract.
 DIAGRAM_TARGETS: dict[str, str] = {
@@ -72,6 +78,30 @@ VERIFY_SOURCES: dict[str, tuple[str, Path]] = {
     "one-pager": ("demo-one-pager.html", ROOT / "assets" / "demos"),
     "long-doc": ("demo-long-doc.html", ROOT / "assets" / "demos"),
 }
+
+
+def slide_pptx_output(name: str) -> Path:
+    return DEMOS / "demo-slides.pptx" if name == "slides" else EXAMPLES / f"{name}.pptx"
+
+
+def slide_online_output(name: str) -> Path:
+    return DEMOS / "slides-online" if name == "slides" else EXAMPLES / f"{name}-online"
+
+
+def cleanup_legacy_slide_outputs(name: str) -> None:
+    if name != "slides":
+        return
+    legacy_paths = [
+        EXAMPLES / "slides.pptx",
+        EXAMPLES / "slides-online",
+        EXAMPLES / "slides-online-preview.py",
+        EXAMPLES / "slides-online-preview.command",
+    ]
+    for path in legacy_paths:
+        if path.is_dir():
+            shutil.rmtree(path)
+        elif path.exists():
+            path.unlink()
 
 
 # ------------------------- build -------------------------
@@ -106,6 +136,32 @@ def build_html(name: str, source: str, max_pages: int,
     return True
 
 
+def _python_with_module(module_name: str) -> str | None:
+    candidates: list[str] = []
+    for raw in (
+        sys.executable,
+        shutil.which("python3"),
+        shutil.which("python"),
+        str(Path.home() / ".pyenv" / "shims" / "python3"),
+        str(Path.home() / ".pyenv" / "shims" / "python"),
+    ):
+        if not raw:
+            continue
+        candidate = str(Path(raw).expanduser())
+        if candidate not in candidates and Path(candidate).exists():
+            candidates.append(candidate)
+
+    for candidate in candidates:
+        result = subprocess.run(
+            [candidate, "-c", f"import {module_name}"],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode == 0:
+            return candidate
+    return None
+
+
 def build_slides(name: str = "slides") -> bool:
     source = PPTX_TARGETS.get(name)
     if source is None:
@@ -116,10 +172,14 @@ def build_slides(name: str = "slides") -> bool:
         print(f"✗ {name}: source not found ({src})")
         return False
 
-    EXAMPLES.mkdir(parents=True, exist_ok=True)
-    out = EXAMPLES / f"{name}.pptx"
+    out = slide_pptx_output(name)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    python_bin = _python_with_module("pptx")
+    if python_bin is None:
+        print("✗ missing deps: install python-pptx in the active Python environment")
+        return False
     result = subprocess.run(
-        [sys.executable, str(src)],
+        [python_bin, str(src)],
         cwd=str(src.parent),
         capture_output=True,
         text=True,
@@ -127,14 +187,184 @@ def build_slides(name: str = "slides") -> bool:
     if result.returncode != 0:
         print(f"✗ {name}: {result.stderr.strip() or 'script failed'}")
         return False
-    # The script writes output.pptx in cwd; move to examples/ under our name.
+    # The script writes output.pptx in cwd; move it to the target output path.
     generated = src.parent / "output.pptx"
     if generated.exists():
+        cleanup_legacy_slide_outputs(name)
         generated.replace(out)
-        print(f"✓ {name}: generated {out.name}")
+        print(f"✓ {name}: generated {out.relative_to(ROOT)}")
         return True
     print(f"✗ {name}: output.pptx not produced")
     return False
+
+
+def _ensure_slidev_deps() -> bool:
+    if not SLIDEV.exists():
+        print(f"✗ slidev project not found ({SLIDEV})")
+        return False
+    node_modules = SLIDEV / "node_modules"
+    package_json = SLIDEV / "package.json"
+    lockfile = SLIDEV / "pnpm-lock.yaml"
+    needs_install = not node_modules.exists()
+    if not needs_install and package_json.exists():
+        newest_input = package_json.stat().st_mtime
+        if lockfile.exists():
+            newest_input = max(newest_input, lockfile.stat().st_mtime)
+        needs_install = newest_input > node_modules.stat().st_mtime
+    if not needs_install:
+        return True
+    install_cmd = ["pnpm", "install", "--frozen-lockfile"] if lockfile.exists() else ["pnpm", "install"]
+    try:
+        result = subprocess.run(
+            install_cmd,
+            cwd=str(SLIDEV),
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        print("✗ slidev: pnpm not found. Install Node.js + pnpm first.")
+        return False
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "pnpm install failed"
+        print(f"✗ slidev: {detail}")
+        return False
+    return True
+
+
+def _render_slidev_source() -> bool:
+    if not SLIDEV_RENDER.exists():
+        print(f"✗ slidev render script not found ({SLIDEV_RENDER})")
+        return False
+    python_bin = shutil.which("python3") or shutil.which("python") or sys.executable
+    if not python_bin:
+        print("✗ slidev: python3 not found.")
+        return False
+    result = subprocess.run(
+        [python_bin, str(SLIDEV_RENDER)],
+        cwd=str(SLIDEV),
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "render_from_spec.py failed"
+        print(f"✗ slidev: {detail}")
+        return False
+    return True
+
+
+def write_slidev_preview_helper(out_dir: Path) -> Path:
+    helper = out_dir / "slides-online-preview.py"
+    helper.write_text(
+        """#!/usr/bin/env python3
+from __future__ import annotations
+
+import socket
+import webbrowser
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parent
+
+
+def pick_port(start: int = 4173) -> int:
+    port = start
+    while True:
+        with socket.socket() as sock:
+            try:
+                sock.bind(("127.0.0.1", port))
+            except OSError:
+                port += 1
+                continue
+        return port
+
+
+def main() -> None:
+    port = pick_port()
+    handler = partial(SimpleHTTPRequestHandler, directory=str(ROOT))
+    server = ThreadingHTTPServer(("127.0.0.1", port), handler)
+    url = f"http://127.0.0.1:{port}"
+    print(f"Serving {ROOT} at {url}")
+    webbrowser.open(url)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == "__main__":
+    main()
+""",
+        encoding="utf-8",
+    )
+    helper.chmod(0o755)
+    return helper
+
+
+def write_slidev_preview_command(helper: Path) -> Path:
+    launcher = helper.parent / "slides-online-preview.command"
+    launcher.write_text(
+        f"""#!/bin/zsh
+set -euo pipefail
+
+DIR=$(cd "$(dirname "$0")" && pwd)
+exec python3 "$DIR/{helper.name}"
+""",
+        encoding="utf-8",
+    )
+    launcher.chmod(0o755)
+    return launcher
+
+
+def build_slidev(name: str = "slides") -> bool:
+    source = SLIDEV_TARGETS.get(name)
+    if source is None:
+        return True
+    if not _render_slidev_source():
+        return False
+    src = SLIDEV / source
+    if not src.exists():
+        print(f"✗ {name}: slidev source not found ({src})")
+        return False
+    if not _ensure_slidev_deps():
+        return False
+
+    out_dir = slide_online_output(name)
+    out_dir.parent.mkdir(parents=True, exist_ok=True)
+    if out_dir.exists():
+        shutil.rmtree(out_dir)
+
+    try:
+        result = subprocess.run(
+            ["pnpm", "run", "build"],
+            cwd=str(SLIDEV),
+            capture_output=True,
+            text=True,
+        )
+    except FileNotFoundError:
+        print("✗ slidev: pnpm not found. Install Node.js + pnpm first.")
+        return False
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "slidev build failed"
+        print(f"✗ {name}: {detail}")
+        return False
+    if out_dir.exists():
+        cleanup_legacy_slide_outputs(name)
+        helper = write_slidev_preview_helper(out_dir)
+        launcher = write_slidev_preview_command(helper)
+        print(f"✓ {name}: generated {out_dir.relative_to(ROOT)}")
+        print(f"✓ {name}: preview via {helper.relative_to(ROOT)}")
+        print(f"✓ {name}: double-click preview via {launcher.relative_to(ROOT)}")
+        return True
+    print(f"✗ {name}: slidev bundle not produced")
+    return False
+
+
+def build_slide_outputs(name: str = "slides") -> bool:
+    pptx_ok = build_slides(name)
+    slidev_ok = build_slidev(name)
+    return pptx_ok and slidev_ok
 
 
 def build_all() -> int:
@@ -146,7 +376,7 @@ def build_all() -> int:
         if not build_html(name, source, 0, src_dir=DIAGRAMS):
             failures += 1
     for name in PPTX_TARGETS:
-        if not build_slides(name):
+        if not build_slide_outputs(name):
             failures += 1
     return failures
 
@@ -163,7 +393,7 @@ def build_single(name: str) -> int:
         ok = build_html(name, source, 0, src_dir=DIAGRAMS)
         return 0 if ok else 1
     if name in PPTX_TARGETS:
-        return 0 if build_slides(name) else 1
+        return 0 if build_slide_outputs(name) else 1
     known = list(HTML_TARGETS) + list(DIAGRAM_TARGETS) + list(PPTX_TARGETS)
     print(f"✗ unknown target: {name}. Known: {', '.join(known)}")
     return 2
@@ -471,13 +701,13 @@ def _pptx_typefaces(pptx_path: Path) -> set[str]:
 
 
 def verify_slides_target(name: str) -> list[str]:
-    if not build_slides(name):
+    if not build_slide_outputs(name):
         return [f"{name}: slide build failed"]
 
     if name != "slides":
         return []
 
-    out = EXAMPLES / f"{name}.pptx"
+    out = slide_pptx_output(name)
     faces = _pptx_typefaces(out)
     try:
         font = configured_font("serif")

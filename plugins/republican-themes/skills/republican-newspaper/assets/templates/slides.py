@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-"""
-Kami republican-newspaper slide deck generator.
+"""Prompt-native republican-newspaper slide deck generator.
 
-Run from this directory via:
-  python3 slides.py
-
-The script writes output.pptx. scripts/build.py moves it to
-assets/examples/slides.pptx when invoked as `python3 scripts/build.py slides`.
+This renderer owns the `.pptx` output. The shared slide content lives in
+`slides_spec.py`, which is also consumed by the Slidev renderer.
 """
 
 from __future__ import annotations
 
-import zipfile
 import json
+import zipfile
 from pathlib import Path
 
 from pptx import Presentation
@@ -22,10 +18,8 @@ from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
 from pptx.oxml.xmlchemy import OxmlElement
 from pptx.util import Inches, Pt
 
+from slides_spec import DECK, DISPLAY_TOTAL
 
-# ---------------------------------------------------------------------------
-# Design tokens
-# ---------------------------------------------------------------------------
 
 NAVY = RGBColor(0x16, 0x14, 0x11)
 NAVY_SOFT = RGBColor(0x4B, 0x40, 0x36)
@@ -65,10 +59,6 @@ INNER_H = SLIDE_H - PAD * 2
 TEXTURE = Path(__file__).resolve().parent.parent / "images" / "paper-overlay.png"
 
 
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
-
 def rgb(color: RGBColor) -> RGBColor:
     return color
 
@@ -87,6 +77,30 @@ def add_shape(slide, shape_type, left, top, width, height, fill, line=None, weig
         shape.line.width = Pt(weight)
     shape.shadow.inherit = False
     return shape
+
+
+def apply_typeface(run, font):
+    """Set Latin, East Asian, and complex-script font slots."""
+    run.font.name = font
+    east_asian = SERIF_EA
+    r_pr = run._r.get_or_add_rPr()
+    for tag in (
+        "{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
+        "{http://schemas.openxmlformats.org/drawingml/2006/main}ea",
+        "{http://schemas.openxmlformats.org/drawingml/2006/main}cs",
+    ):
+        for child in list(r_pr):
+            if child.tag == tag:
+                r_pr.remove(child)
+    latin = OxmlElement("a:latin")
+    latin.set("typeface", font)
+    ea = OxmlElement("a:ea")
+    ea.set("typeface", east_asian)
+    cs = OxmlElement("a:cs")
+    cs.set("typeface", font)
+    r_pr.append(latin)
+    r_pr.append(ea)
+    r_pr.append(cs)
 
 
 def add_text(
@@ -126,36 +140,6 @@ def add_text(
     run.font.color.rgb = rgb(color)
     apply_typeface(run, font)
     return box
-
-
-def apply_typeface(run, font):
-    """Set Latin, East Asian, and complex-script font slots.
-
-    python-pptx only writes <a:latin> for run.font.name. PowerPoint uses
-    <a:ea> for Chinese glyphs, so without this the deck silently falls back
-    to the default Chinese font even though the XML appears to name a font.
-    """
-    run.font.name = font
-    # PPTX separates Latin and East Asian font slots. Keep Latin labels in
-    # their requested face, but force Chinese glyphs through the configured
-    # East Asian serif face.
-    east_asian = SERIF_EA
-    r_pr = run._r.get_or_add_rPr()
-    for tag in ("{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
-                "{http://schemas.openxmlformats.org/drawingml/2006/main}ea",
-                "{http://schemas.openxmlformats.org/drawingml/2006/main}cs"):
-        for child in list(r_pr):
-            if child.tag == tag:
-                r_pr.remove(child)
-    latin = OxmlElement("a:latin")
-    latin.set("typeface", font)
-    ea = OxmlElement("a:ea")
-    ea.set("typeface", east_asian)
-    cs = OxmlElement("a:cs")
-    cs.set("typeface", font)
-    r_pr.append(latin)
-    r_pr.append(ea)
-    r_pr.append(cs)
 
 
 def patch_theme_fonts(pptx_path: str):
@@ -247,7 +231,7 @@ def framed_slide(prs, section="KAMI", page=None):
     if page is not None:
         add_text(
             slide,
-            f"{page:02d} / 08",
+            f"{page:02d} / {DISPLAY_TOTAL:02d}",
             INNER_X + INNER_W - Inches(1.5),
             INNER_Y + INNER_H - Inches(0.38),
             Inches(1.0),
@@ -351,7 +335,7 @@ def section_header(slide, number, title, lede, page):
     )
     add_text(
         slide,
-        f"{page:02d} / 08",
+        f"{page:02d} / {DISPLAY_TOTAL:02d}",
         INNER_X + INNER_W - Inches(1.5),
         INNER_Y + INNER_H - Inches(0.38),
         Inches(1.0),
@@ -382,25 +366,21 @@ def archive_card(slide, left, top, width, height, title, body, label=None):
     add_text(slide, body, left + Inches(0.2), body_top + Inches(0.48), width - Inches(0.4), height - Inches(0.76), font=SANS, size=10.5, color=COPY, line_spacing=1.15)
 
 
-# ---------------------------------------------------------------------------
-# Slides
-# ---------------------------------------------------------------------------
-
-def slide_cover(prs):
-    s = framed_slide(prs, "REPUBLICAN NEWSPAPER EDITION", 1)
+def slide_cover(prs, spec):
+    slide = framed_slide(prs, spec["section"], spec["page"])
     title_plaque(
-        s,
+        slide,
         INNER_X + Inches(0.72),
         INNER_Y + Inches(0.78),
         Inches(7.0),
         Inches(2.8),
-        "KAMI · 特刊 DEMO",
-        "把 AI 文档\n排成报纸号外",
-        "黑色铅字 / 旧报纸底 / 剪报框线",
+        spec["kicker"],
+        spec["title"],
+        spec["subtitle"],
     )
     add_text(
-        s,
-        "Just tell Claude what you need:\n“帮我生成一份白皮书” / “生成一份项目方案” / “帮我写一份推荐信” / “做一套汇报 slides”",
+        slide,
+        spec["body"],
         INNER_X + Inches(8.18),
         INNER_Y + Inches(1.0),
         Inches(3.45),
@@ -410,11 +390,27 @@ def slide_cover(prs):
         color=COPY,
         line_spacing=1.12,
     )
-    metric_card(s, INNER_X + Inches(8.18), INNER_Y + Inches(2.82), Inches(1.55), "05", "demo set", "docs + slides")
-    metric_card(s, INNER_X + Inches(9.9), INNER_Y + Inches(2.82), Inches(1.55), "01", "visual rule", "black ink")
+    metric_card(
+        slide,
+        INNER_X + Inches(8.18),
+        INNER_Y + Inches(2.82),
+        Inches(1.55),
+        spec["metrics"][0]["value"],
+        spec["metrics"][0]["label"],
+        spec["metrics"][0]["note"],
+    )
+    metric_card(
+        slide,
+        INNER_X + Inches(9.9),
+        INNER_Y + Inches(2.82),
+        Inches(1.55),
+        spec["metrics"][1]["value"],
+        spec["metrics"][1]["label"],
+        spec["metrics"][1]["note"],
+    )
     add_text(
-        s,
-        "2026.04 · Kami Fork",
+        slide,
+        spec["meta"],
         INNER_X + Inches(0.74),
         INNER_Y + Inches(5.7),
         Inches(4.0),
@@ -426,30 +422,26 @@ def slide_cover(prs):
     )
 
 
-def slide_principle(prs):
-    s = framed_slide(prs, "METHOD", 2)
-    section_header(
-        s,
-        1,
-        "生成原理",
-        "好看的本质不是每次重新设计，而是把内容填进稳定模板。",
-        2,
-    )
+def slide_principle(prs, spec):
+    slide = framed_slide(prs, spec["section"], spec["page"])
+    section_header(slide, spec["number"], spec["title"], spec["lede"], spec["page"])
     x0 = INNER_X + Inches(0.72)
     y = INNER_Y + Inches(2.05)
     w = Inches(2.52)
-    for idx, (title, body) in enumerate(
-        [
-            ("路由", "先判断语言与文档类型：one-pager、long-doc、letter、slides。"),
-            ("整理", "把 raw material 拆成事实、数字、判断和行动，而不是直接堆文字。"),
-            ("填充", "使用固定骨架承载内容，避免 AI 每次自由发挥版式。"),
-            ("校验", "构建脚本检查页数、字体、占位符与 CSS 约束。"),
-        ]
-    ):
-        archive_card(s, x0 + (w + Inches(0.35)) * idx, y, w, Inches(2.45), title, body, f"STEP {idx + 1:02d}")
+    for idx, card in enumerate(spec["cards"]):
+        archive_card(
+            slide,
+            x0 + (w + Inches(0.35)) * idx,
+            y,
+            w,
+            Inches(2.45),
+            card["title"],
+            card["body"],
+            card["label"],
+        )
     add_text(
-        s,
-        "固定版式 + design token + 字体层级 + 构建校验",
+        slide,
+        spec["summary"],
         INNER_X + Inches(1.3),
         INNER_Y + Inches(5.26),
         Inches(10.0),
@@ -461,117 +453,92 @@ def slide_principle(prs):
     )
 
 
-def slide_visual_language(prs):
-    s = framed_slide(prs, "DESIGN TOKENS", 3)
-    section_header(
-        s,
-        2,
-        "民国报纸视觉语言",
-        "不做复古海报，不做彩色杂志，只把专业文档整理成可信的报纸特刊。",
-        3,
-    )
-    swatches = [
-        ("Black Ink", NAVY, "#161411", "报头 / 框线 / 反白条"),
-        ("Newsprint", PAPER, "#E8DFC9", "正文纸面"),
-        ("Clipping", IVORY, "#F5EBD3", "剪报块"),
-        ("Warm Rule", RULE, "#B9AA91", "细线和分隔"),
-    ]
-    for i, (name, color, hex_value, use) in enumerate(swatches):
+def slide_visual_language(prs, spec):
+    slide = framed_slide(prs, spec["section"], spec["page"])
+    section_header(slide, spec["number"], spec["title"], spec["lede"], spec["page"])
+    fill_map = {
+        "#161411": NAVY,
+        "#E8DFC9": PAPER,
+        "#F5EBD3": IVORY,
+        "#B9AA91": RULE,
+    }
+    for i, swatch in enumerate(spec["swatches"]):
         left = INNER_X + Inches(0.78) + Inches(2.8) * i
         top = INNER_Y + Inches(2.15)
-        add_shape(s, MSO_SHAPE.RECTANGLE, left, top, Inches(2.2), Inches(1.15), color, NAVY_SOFT if i else IVORY, 0.5)
-        add_text(s, name, left, top + Inches(1.35), Inches(2.2), Inches(0.2), font=MONO, size=8, color=STONE, tracking=True, align=PP_ALIGN.CENTER)
-        add_text(s, hex_value, left, top + Inches(1.65), Inches(2.2), Inches(0.25), font=SERIF, size=15, color=NAVY, align=PP_ALIGN.CENTER)
-        add_text(s, use, left, top + Inches(1.98), Inches(2.2), Inches(0.24), font=SANS, size=9, color=MUTED, align=PP_ALIGN.CENTER)
+        add_shape(
+            slide,
+            MSO_SHAPE.RECTANGLE,
+            left,
+            top,
+            Inches(2.2),
+            Inches(1.15),
+            fill_map[swatch["hex"]],
+            NAVY_SOFT if i else IVORY,
+            0.5,
+        )
+        add_text(slide, swatch["name"], left, top + Inches(1.35), Inches(2.2), Inches(0.2), font=MONO, size=8, color=STONE, tracking=True, align=PP_ALIGN.CENTER)
+        add_text(slide, swatch["hex"], left, top + Inches(1.65), Inches(2.2), Inches(0.25), font=SERIF, size=15, color=NAVY, align=PP_ALIGN.CENTER)
+        add_text(slide, swatch["use"], left, top + Inches(1.98), Inches(2.2), Inches(0.24), font=SANS, size=9, color=MUTED, align=PP_ALIGN.CENTER)
     archive_card(
-        s,
+        slide,
         INNER_X + Inches(1.2),
         INNER_Y + Inches(5.05),
         Inches(10.5),
         Inches(0.88),
-        "装饰边界",
-        "只允许报头、日期线、反白栏目条、剪报框和一枚红印；不加入现代渐变和彩色杂志图。",
+        spec["callout"]["title"],
+        spec["callout"]["body"],
     )
 
 
-def slide_templates(prs):
-    s = framed_slide(prs, "TEMPLATES", 4)
-    section_header(
-        s,
-        3,
-        "现在能生成什么",
-        "中文 v1 的正式能力聚焦三类高频文档，简历和作品集已保留为补充样例。",
-        4,
-    )
-    cards = [
-        ("One-Pager", "公司介绍、项目方案、执行摘要。重点是 30 秒抓住核心。", "1 page"),
-        ("Long Doc", "白皮书、长文报告、年度总结。强调章节结构与证据链。", "multi"),
-        ("Letter", "正式信件、推荐信、推荐函。关系、证据、匹配、推荐。", "1 page"),
-        ("Resume", "固定坐标版简历样例，适合验证黑框报纸式布局。", "demo"),
-        ("Portfolio", "作品集样例，保留更多视觉叙事与项目卡片。", "demo"),
-    ]
+def slide_templates(prs, spec):
+    slide = framed_slide(prs, spec["section"], spec["page"])
+    section_header(slide, spec["number"], spec["title"], spec["lede"], spec["page"])
     x0 = INNER_X + Inches(0.75)
     y0 = INNER_Y + Inches(2.03)
-    for i, (title, body, tag) in enumerate(cards):
+    for i, card in enumerate(spec["cards"]):
         row = i // 3
         col = i % 3
         archive_card(
-            s,
+            slide,
             x0 + Inches(3.8) * col,
             y0 + Inches(1.62) * row,
             Inches(3.36),
             Inches(1.22),
-            title,
-            body,
-            tag.upper(),
+            card["title"],
+            card["body"],
+            card["label"],
         )
 
 
-def slide_prompt(prs):
-    s = framed_slide(prs, "NATURAL PROMPTS", 5)
-    section_header(
-        s,
-        4,
-        "不用 slash command",
-        "用户只要说任务，skill 根据意图选择模板。输出是文档，不是聊天里的格式建议。",
-        5,
-    )
-    prompts = [
-        ("帮我生成一份白皮书", "long-doc"),
-        ("生成一份项目方案", "one-pager"),
-        ("帮我写一份推荐信", "letter"),
-        ("帮我把这些内容排版成好看的 PDF", "infer"),
-        ("做一套汇报 slides", "slides"),
-    ]
-    for i, (text, route) in enumerate(prompts):
+def slide_prompt(prs, spec):
+    slide = framed_slide(prs, spec["section"], spec["page"])
+    section_header(slide, spec["number"], spec["title"], spec["lede"], spec["page"])
+    for i, prompt in enumerate(spec["prompts"]):
         top = INNER_Y + Inches(2.0 + i * 0.72)
-        add_shape(s, MSO_SHAPE.RECTANGLE, INNER_X + Inches(1.0), top, Inches(8.7), Inches(0.48), IVORY, RULE, 0.45)
-        add_text(s, f"“{text}”", INNER_X + Inches(1.25), top + Inches(0.14), Inches(6.6), Inches(0.18), font=SERIF, size=14, color=INK)
-        add_text(s, route, INNER_X + Inches(8.35), top + Inches(0.15), Inches(1.0), Inches(0.16), font=MONO, size=8, color=NAVY, tracking=True, align=PP_ALIGN.RIGHT)
-    add_shape(s, MSO_SHAPE.RECTANGLE, INNER_X + Inches(10.12), INNER_Y + Inches(2.0), Inches(1.4), Inches(3.38), NAVY)
-    add_text(s, "AUTO\nTRIGGER", INNER_X + Inches(10.27), INNER_Y + Inches(2.98), Inches(1.1), Inches(0.8), font=MONO, size=12, color=IVORY, align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE)
+        add_shape(slide, MSO_SHAPE.RECTANGLE, INNER_X + Inches(1.0), top, Inches(8.7), Inches(0.48), IVORY, RULE, 0.45)
+        add_text(slide, f"“{prompt['text']}”", INNER_X + Inches(1.25), top + Inches(0.14), Inches(6.6), Inches(0.18), font=SERIF, size=14, color=INK)
+        add_text(slide, prompt["route"], INNER_X + Inches(8.35), top + Inches(0.15), Inches(1.0), Inches(0.16), font=MONO, size=8, color=NAVY, tracking=True, align=PP_ALIGN.RIGHT)
+    add_shape(slide, MSO_SHAPE.RECTANGLE, INNER_X + Inches(10.12), INNER_Y + Inches(2.0), Inches(1.4), Inches(3.38), NAVY)
+    add_text(slide, spec["banner"], INNER_X + Inches(10.27), INNER_Y + Inches(2.98), Inches(1.1), Inches(0.8), font=MONO, size=12, color=IVORY, align=PP_ALIGN.CENTER, valign=MSO_ANCHOR.MIDDLE)
 
 
-def slide_density(prs):
-    s = framed_slide(prs, "LAYOUT RHYTHM", 6)
-    section_header(
-        s,
-        5,
-        "排版骨架不变",
-        "我们换的是时代气质，不是阅读效率。信息密度、留白与页数约束仍然可控。",
-        6,
-    )
-    metric_card(s, INNER_X + Inches(0.95), INNER_Y + Inches(2.08), Inches(2.2), "1", "one-pager", "严格单页")
-    metric_card(s, INNER_X + Inches(3.48), INNER_Y + Inches(2.08), Inches(2.2), "1", "letter", "严格单页")
-    metric_card(s, INNER_X + Inches(6.01), INNER_Y + Inches(2.08), Inches(2.2), "3", "demo long-doc", "章节展开")
-    metric_card(s, INNER_X + Inches(8.54), INNER_Y + Inches(2.08), Inches(2.2), "500+", "check rules", "字体 / CSS / 占位符")
+def slide_density(prs, spec):
+    slide = framed_slide(prs, spec["section"], spec["page"])
+    section_header(slide, spec["number"], spec["title"], spec["lede"], spec["page"])
+    offsets = [0.95, 3.48, 6.01, 8.54]
+    for metric, offset in zip(spec["metrics"], offsets, strict=True):
+        metric_card(
+            slide,
+            INNER_X + Inches(offset),
+            INNER_Y + Inches(2.08),
+            Inches(2.2),
+            metric["value"],
+            metric["label"],
+            metric["note"],
+        )
     add_bullets(
-        s,
-        [
-            "旧纸底不是装饰图，而是稳定色块。",
-            "题签和细线负责时代感，正文仍按专业文档阅读。",
-            "配置 serif 字体用于报纸气质，功能文字保持清晰。",
-        ],
+        slide,
+        spec["bullets"],
         INNER_X + Inches(1.1),
         INNER_Y + Inches(4.25),
         Inches(10.6),
@@ -580,30 +547,18 @@ def slide_density(prs):
     )
 
 
-def slide_pipeline(prs):
-    s = framed_slide(prs, "DELIVERY", 7)
-    section_header(
-        s,
-        6,
-        "交付链路",
-        "生成不止是写文件，还要让 PDF/PPTX 和预览资产都能被检查。",
-        7,
-    )
-    steps = [
-        ("HTML / PPTX", "内容进入固定模板"),
-        ("Build", "生成交付文件"),
-        ("Verify", "检查页数、字体、占位符"),
-        ("Preview", "导出 demo 预览"),
-    ]
+def slide_pipeline(prs, spec):
+    slide = framed_slide(prs, spec["section"], spec["page"])
+    section_header(slide, spec["number"], spec["title"], spec["lede"], spec["page"])
     y = INNER_Y + Inches(2.7)
-    for i, (title, body) in enumerate(steps):
+    for i, step in enumerate(spec["steps"]):
         x = INNER_X + Inches(0.9) + Inches(2.86) * i
-        archive_card(s, x, y, Inches(2.35), Inches(1.28), title, body, f"{i + 1:02d}")
-        if i < len(steps) - 1:
-            add_line(s, x + Inches(2.45), y + Inches(0.64), Inches(0.32), NAVY_SOFT, 1.0)
+        archive_card(slide, x, y, Inches(2.35), Inches(1.28), step["title"], step["body"], step["label"])
+        if i < len(spec["steps"]) - 1:
+            add_line(slide, x + Inches(2.45), y + Inches(0.64), Inches(0.32), NAVY_SOFT, 1.0)
     add_text(
-        s,
-        ".venv/bin/python scripts/build.py --verify one-pager\n.venv/bin/python scripts/build.py --check\n.venv/bin/python scripts/build.py slides",
+        slide,
+        "\n".join(spec["commands"]),
         INNER_X + Inches(1.3),
         INNER_Y + Inches(5.2),
         Inches(9.8),
@@ -616,11 +571,11 @@ def slide_pipeline(prs):
     )
 
 
-def slide_end(prs):
-    s = framed_slide(prs, "END", 8)
+def slide_end(prs, spec):
+    slide = framed_slide(prs, spec["section"], spec["page"])
     add_text(
-        s,
-        "好看的本质是稳定",
+        slide,
+        spec["title"],
         INNER_X + Inches(1.0),
         INNER_Y + Inches(2.4),
         Inches(10.8),
@@ -630,10 +585,10 @@ def slide_end(prs):
         color=NAVY,
         align=PP_ALIGN.CENTER,
     )
-    add_line(s, INNER_X + Inches(5.6), INNER_Y + Inches(3.5), Inches(1.2), NAVY, 1.3)
+    add_line(slide, INNER_X + Inches(5.6), INNER_Y + Inches(3.5), Inches(1.2), NAVY, 1.3)
     add_text(
-        s,
-        "固定版式 · design token · 字体层级 · 构建校验",
+        slide,
+        spec["body"],
         INNER_X + Inches(1.0),
         INNER_Y + Inches(3.95),
         Inches(10.8),
@@ -644,8 +599,8 @@ def slide_end(prs):
         align=PP_ALIGN.CENTER,
     )
     add_text(
-        s,
-        "Kami · Republican Manuscript Edition",
+        slide,
+        spec["meta"],
         INNER_X + Inches(1.0),
         INNER_Y + Inches(5.45),
         Inches(10.8),
@@ -663,14 +618,18 @@ def main():
     prs.slide_width = SLIDE_W
     prs.slide_height = SLIDE_H
 
-    slide_cover(prs)
-    slide_principle(prs)
-    slide_visual_language(prs)
-    slide_templates(prs)
-    slide_prompt(prs)
-    slide_density(prs)
-    slide_pipeline(prs)
-    slide_end(prs)
+    renderers = {
+        "cover": slide_cover,
+        "principle": slide_principle,
+        "visual-language": slide_visual_language,
+        "templates": slide_templates,
+        "natural-prompts": slide_prompt,
+        "density": slide_density,
+        "delivery": slide_pipeline,
+        "end": slide_end,
+    }
+    for slide in DECK:
+        renderers[slide["kind"]](prs, slide)
 
     prs.save("output.pptx")
     patch_theme_fonts("output.pptx")

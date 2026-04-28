@@ -65,9 +65,17 @@ python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py --check-fonts
+python3 scripts/build.py slides
 python3 scripts/build.py --verify slides
 python3 scripts/build.py --check
 ```
+
+`python3 scripts/build.py slides` 现在会同时生成：
+
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/`
+- `assets/demos/slides-online/slides-online-preview.py`
+- `assets/demos/slides-online/slides-online-preview.command`
 
 From repo root:
 

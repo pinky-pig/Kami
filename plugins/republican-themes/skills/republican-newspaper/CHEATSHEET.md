@@ -27,7 +27,7 @@
 | 生成一份报纸特刊 / 做一版号外 | `one-pager.html` |
 | 把白皮书排成旧报纸 / 深度报道 | `long-doc.html` |
 | 家书特刊 / 推荐信做成报纸风 | `letter.html` |
-| 民国报纸风 slides | `slides.py` |
+| 民国报纸风 slides | `slides.py` + `slides_spec.py` |
 
 ## 色板
 

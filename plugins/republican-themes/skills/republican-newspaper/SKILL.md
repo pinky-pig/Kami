@@ -32,7 +32,7 @@ Prefer Chinese output. If the user writes in Chinese, use Chinese templates and 
 
 | User language | Templates | References | Cheatsheet |
 |---|---|---|---|
-| Chinese (primary) | `one-pager.html` / `long-doc.html` / `letter.html` / `slides.py` | `references/*.md` | `CHEATSHEET.md` |
+| Chinese (primary) | `one-pager.html` / `long-doc.html` / `letter.html` / `slides.py` + `slides_spec.py` | `references/*.md` | `CHEATSHEET.md` |
 | English (legacy) | `*-en.html` | `references/*.en.md` | `CHEATSHEET.en.md` |
 
 ## Step 2 · Pick Document Type
@@ -42,7 +42,7 @@ Prefer Chinese output. If the user writes in Chinese, use Chinese templates and 
 | "号外 / 特刊 / 一版报纸 / 项目新闻版" | One-Pager | `one-pager.html` | single front page |
 | "白皮书 / 长文 / 年度总结 / 深度报道" | Long Doc | `long-doc.html` | multi-page special issue |
 | "家书 / 正式信件 / 推荐信 / 推荐函" | Letter | `letter.html` | letter clipping / correspondence special |
-| "slides / 汇报 slides / 演示稿" | Slides | `slides.py` | editorial slide deck |
+| "slides / 汇报 slides / 演示稿" | Slides | `slides.py` + `slides_spec.py` | editorial slide deck |
 
 If unsure, ask one concise question about the use case instead of guessing.
 
@@ -92,9 +92,12 @@ python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
 python3 scripts/build.py --check-fonts
+python3 scripts/build.py slides
 python3 scripts/build.py --verify slides
 python3 scripts/build.py --check
 ```
+
+`python3 scripts/build.py slides` 会同时写出 `assets/demos/demo-slides.pptx` 和 `assets/demos/slides-online/`。Slidev 预览脚本位于 `assets/demos/slides-online/` 内。
 
 If running from the repo root:
 

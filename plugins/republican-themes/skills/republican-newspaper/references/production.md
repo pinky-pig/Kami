@@ -231,7 +231,7 @@ add_text(s, "副标题 · 副说明", Inches(1.5), Inches(4.2), Inches(10.33), I
 prs.save('output.pptx')
 ```
 
-完整版见 `assets/templates/slides.py`。
+完整版见 `assets/templates/slides.py`；在线 deck 使用同一份 `assets/templates/slides_spec.py`，再由 `assets/templates/slidev/render_from_spec.py` 渲染到 Slidev。
 
 ### PPT 注意事项
 

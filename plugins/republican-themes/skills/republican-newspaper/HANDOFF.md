@@ -15,6 +15,8 @@
 | `references/design.md` | 完整视觉规范 |
 | `references/writing.md` | 报纸化写作口径 |
 | `assets/reference-images/` | 风格 2 参考图 |
+| `assets/templates/slides_spec.py` | PPTX / Slidev 共用 slide 内容源 |
+| `assets/templates/slidev/` | 在线 slides 构建骨架 |
 | `assets/templates/` | 可填充模板 |
 | `scripts/build.py` | 构建与 CSS/token 校验 |
 

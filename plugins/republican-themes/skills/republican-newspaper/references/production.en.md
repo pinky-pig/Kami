@@ -231,7 +231,7 @@ If the output shows `DejaVuSerif` / `Bitstream Vera` - your specified font didn'
 Project script `scripts/build.py` is the productized version of the three-step loop:
 
 ```bash
-python3 scripts/build.py               # all 12 examples
+python3 scripts/build.py               # all examples + slide bundles
 python3 scripts/build.py resume-en     # one target + page count + fonts
 python3 scripts/build.py --check       # scan for CSS rule violations
 ```
