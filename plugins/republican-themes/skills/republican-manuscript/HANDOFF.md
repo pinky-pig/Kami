@@ -35,7 +35,7 @@ Kaku（写代码）· Waza（练习惯）· **Kami（出文档）** 三部曲之
 
 - 所有 CN 模板和 CN demo 的 `<style>` 里都有 `@font-face { src: url("../fonts/京華老宋体v2.002.ttf") }`，相对路径挂载
 - 没字体 -> fallback 链自动接手: Source Han Serif SC -> Noto Serif CJK SC -> Songti SC -> Georgia
-- 英文模板 body 和标题都用 Newsreader serif，sans 只用于 UI 元素
+- 京华只保留给大字号中文 display；正文、说明和 UI 默认走 Tsanger / Newsreader，可追踪编号与路由再交给 JetBrains Mono
 
 ## 关键踩坑索引（详情在 production.md Part 4）
 

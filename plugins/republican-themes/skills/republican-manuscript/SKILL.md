@@ -13,11 +13,15 @@ Part of `Kaku · Waza · Kami` - Kaku writes code, Waza drills habits, **Kami de
 
 ## V1 scope
 
-- Officially supported: Chinese `one-pager`, `long-doc`, `letter`, `slides`
+- Officially supported: Chinese `one-pager`, `long-doc`, `letter`, `resume`, `portfolio`, `slides`
 - `slides` is now a dual-output path: generate both `slides.pptx` and a Slidev online deck
 - `slides_spec.py` is the single source of truth for slide content; `slides.py` and `slidev/render_from_spec.py` are renderers
 - Visual standard: Style 1, `#243851` archive-blue frame + `#EBE5DD` old-paper base
-- Pending migration: English styling, resume, portfolio
+- Typography contract: 京華老宋体 only serves Chinese display roles; Latin display falls back to Newsreader; readable body copy prefers `TsangerJinKai02-W04.ttf`, `Newsreader.woff2`, and `JetBrainsMono.woff2`
+- Default visual-slot contract: image-heavy regions start as solid color placeholders; real images are optional, and chart-like content should prefer `assets/diagrams/*.html`
+- Demo asset contract: generated mock images must land in `assets/demos/mock-assets/`; `assets/images/` is reserved for shared static theme assets
+- `resume / portfolio` are **not a second visual system**. Their reference is `assets/demos/demo-long-doc.html`: inherit the same archive-blue outer frame, paper sheet, top tag, page number, and dossier rhythm; only the content blocks get reorganized for career / case-study use.
+- Pending migration: English styling
 
 ## Natural prompt entry
 
@@ -26,8 +30,10 @@ No slash command is needed. If the user says any of the following, route directl
 - "帮我生成一份白皮书" -> `long-doc`
 - "生成一份项目方案" / "做一页项目方案" -> `one-pager`
 - "帮我写一份推荐信" / "写一封推荐函" -> `letter`
+- "帮我排一份简历" / "生成简历" -> `resume`
+- "帮我做作品集" / "生成 portfolio" -> `portfolio`
 - "做一套汇报 slides" / "生成一个 Slides" -> `slides`
-- "帮我把这些内容排版成好看的 PDF" -> infer the closest of `one-pager`, `long-doc`, `letter`
+- "帮我把这些内容排版成好看的 PDF" -> infer the closest of `one-pager`, `long-doc`, `letter`, `resume`, `portfolio`
 
 ## Step 1 · Decide the language
 
@@ -37,7 +43,7 @@ When ambiguous (e.g. a one-word command like "resume"), ask a one-liner rather t
 
 | User language | Templates | References | Cheatsheet |
 |---|---|---|---|
-| Chinese (primary) | `one-pager.html` / `long-doc.html` / `letter.html` | `references/*.md` | `CHEATSHEET.md` |
+| Chinese (primary) | `one-pager.html` / `long-doc.html` / `letter.html` / `resume.html` / `portfolio.html` | `references/*.md` | `CHEATSHEET.md` |
 | English (legacy) | `*-en.html` | `references/*.en.md` | `CHEATSHEET.en.md` |
 
 ## Step 2 · Pick the document type
@@ -47,9 +53,13 @@ When ambiguous (e.g. a one-word command like "resume"), ask a one-liner rather t
 | "one-pager / 方案 / 项目方案 / 执行摘要" | One-Pager | `one-pager.html` |
 | "white paper / 白皮书 / 长文 / 年度总结" | Long Doc | `long-doc.html` |
 | "formal letter / 信件 / 正式信件 / 推荐信 / 推荐函 / reference letter / recommendation letter / memo" | Letter | `letter.html` |
+| "resume / 简历 / 履历 / CV" | Resume | `resume.html` |
+| "portfolio / 作品集 / 案例集 / 项目集" | Portfolio | `portfolio.html` |
 | "slides / slide deck / 汇报 slides / 演示稿 / PPT" | Slides | `slides_spec.py` -> `slides.py` + `assets/templates/slidev/render_from_spec.py` |
 
-If the user asks for `resume / portfolio / English`, say those paths are still not the official v1 target of this fork.
+For `resume / portfolio`, always treat `assets/demos/demo-long-doc.html` as the visual reference. They are dossier variants, not standalone magazine / web / SaaS layouts.
+
+If the user asks for English, explain that v1's visual standard is Chinese-first and only the legacy English templates remain.
 
 If unsure, ask a one-liner about the scenario rather than guess.
 
@@ -114,7 +124,10 @@ The full spec files for reference:
 - Copy the template into your working directory; don't write HTML from scratch
 - **CSS stays untouched**, only edit the body
 - Content follows `writing.md` / `writing.en.md`: data over adjectives, distinctive phrasing over industry clichés
+- 图片位默认保留纯色占位，不把“模型必须会生图”当前提。只有用户明确提供图片，或明确要求生成图片时，再把占位替换成 `<img>`。
+- 只要视觉位本质上是在表达关系、流程、优先级，而不是摄影内容，就优先走 `assets/diagrams/` 里的 architecture / flowchart / quadrant，再考虑截图或插画。
 - For "推荐信 / 推荐函", use `letter.html`; structure the body as relationship -> evidence -> fit -> clear recommendation. Use the three evidence boxes for concrete achievements, not generic praise.
+- For `resume / portfolio`, keep the `demo-long-doc.html` chrome: archive-blue frame, paper sheet, dossier top tag, bottom-right page mark, and archival pacing. Rebuild section content as needed, but do not flatten them into a plain cream page with only a palette swap.
 - For `slides`, edit `slides_spec.py` first. `slides.py` owns the `.pptx`, `assets/templates/slidev/render_from_spec.py` turns the same schema into `slides.md`, and Slidev builds the online deck from that generated markdown.
 
 ## Step 5 · Build & verify
@@ -123,25 +136,31 @@ The full spec files for reference:
 python3 scripts/build.py --verify one-pager # verify content-filled Chinese demo
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
+python3 scripts/build.py --verify resume
+python3 scripts/build.py --verify portfolio
 python3 scripts/build.py --check            # CSS rule violations only (fast, no build)
-python3 scripts/build.py slides             # render slides.md from slides_spec.py + generate slides.pptx + assets/examples/slides-online/
+python3 scripts/build.py slides             # render slides.md from slides_spec.py + generate demo-slides.pptx + assets/demos/slides-online/
 cd assets/templates/slidev && pnpm run dev  # local presenter / online preview at http://localhost:3030
 ```
 
-`python3 scripts/build.py slides` 还会先从 `slides_spec.py` 渲染出 `assets/templates/slidev/slides.md`，然后再生成 `slides.pptx` 和 Slidev 在线版。不要手改 `slides.md`，它是生成物。构建完成后还会额外生成 `assets/examples/slides-online-preview.py` 和 `assets/examples/slides-online-preview.command`。如果要在本地浏览器里看构建后的静态 deck，用这两个入口之一；不要直接双击 `assets/examples/slides-online/index.html`，Chrome 下会因为 `file://` 的模块加载限制白屏。
+`python3 scripts/build.py slides` 还会先从 `slides_spec.py` 渲染出 `assets/templates/slidev/slides.md`，然后再生成 `assets/demos/demo-slides.pptx` 和 Slidev 在线版 `assets/demos/slides-online/`。不要手改 `slides.md`，它是生成物。构建完成后还会额外在 `assets/demos/slides-online/` 内生成 `slides-online-preview.py` 和 `slides-online-preview.command`。如果要在本地浏览器里看构建后的静态 deck，用这两个入口之一；不要直接双击 `assets/demos/slides-online/index.html`，Chrome 下会因为 `file://` 的模块加载限制白屏。
+
+如果需要生成 portfolio / slides 的 mock 图片、演示图片或临时视觉素材，一律写到 `assets/demos/mock-assets/`，并在重生成前清理该目录。不要把生成产物写回 `assets/images/`。
+即使是 demo 生成脚本，`portfolio` 默认也必须保留纯色占位和 `assets/diagrams/` 视觉位；不要为了“更好看”就在首页或项目页自动塞大图。真实 `<img>` 只能在用户明确提供图片，或明确要求展示图片能力时再启用。
 
 `--verify` now prefers content-filled demo HTMLs for the migrated Chinese trio. Visual anomalies (tag double rectangle, font fallback, page break issues) -> `production.md` / `production.en.md` Part 4.
 
 ## Fonts
 
 **Chinese**
-- Main serif: 京華老宋体v2.002.ttf (user-provided; keep license aligned with the font source)
+- Display serif: 京華老宋体v2.002.ttf (user-provided; only for large Chinese display roles)
+- Readable body / UI: TsangerJinKai02-W04.ttf
 - Fallback chain baked into templates: Source Han Serif SC -> Noto Serif CJK SC -> Songti SC -> Georgia
 
-**English**
-- Main serif: Newsreader (Google Fonts, open source) - used for both headlines and body
-- Sans: Inter (open source) - used for UI elements only (labels, eyebrows, meta)
-- Fallback: Charter (macOS) / Georgia (cross-platform), Helvetica Neue / system-ui
+**Latin / English**
+- Display + readable copy: Newsreader (Google Fonts, open source)
+- Mono / route labels / page marks: JetBrains Mono
+- Do not treat Inter as the manuscript default UI font anymore; hierarchy should be solved with scale, spacing, and case first
 
 Font files next to HTML and `@font-face` relative paths is the most stable setup.
 

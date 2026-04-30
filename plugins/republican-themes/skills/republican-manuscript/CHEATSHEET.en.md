@@ -66,8 +66,8 @@ Screen (px) ≈ pt × 1.33.
 ```css
 --serif: "Newsreader", "Source Serif 4", "Charter",
          Georgia, "Times New Roman", serif;
---sans:  "Inter", -apple-system, BlinkMacSystemFont,
-         "Helvetica Neue", Arial, sans-serif;
+--sans:  "Newsreader", "Source Serif 4", "Charter",
+         Georgia, "Times New Roman", serif;
 --mono:  "JetBrains Mono", "SF Mono", "Fira Code",
          Consolas, Monaco, monospace;
 ```

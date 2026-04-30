@@ -23,7 +23,7 @@
 1. 页面使用深蓝外框 `#243851` 包住旧纸内页 `#EBE5DD`，不用纯白
 2. 全文唯一主强调色是档案蓝 `#243851`
 3. 中性灰保持纸本暖灰倾向，拒绝现代冷蓝灰
-4. 仍保留 serif 主导的标题秩序，中文 serif 统一使用京華老宋体
+4. 仍保留 serif 主导的标题秩序，但京華老宋体只用于大字号中文 display，正文与 UI 优先 `TsangerJinKai02-W04` / `Newsreader` / `JetBrains Mono` 的可读栈
 5. Serif 字重固定 500，不用粗黑体
 6. 行距延续原版：标题 1.1-1.3，正文 1.4-1.55
 7. Tag 和边框使用实色，不用 `rgba()`
@@ -100,14 +100,17 @@ background: rgba(36, 56, 81, 0.18);
 
 ### 字体栈
 
-v1 不增加任何字体依赖，继续使用原 repo 字体：
+v1 不增加任何新字体依赖，继续使用 repo 内现有字体，并按 display / body / UI 分层：
 
 ```css
-/* 中文 serif */
-"KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+/* 中文 display serif：中文 glyph 走京华，Latin 回落 Newsreader */
+"KamiDisplayCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
 
-/* 中文 sans / UI */
-"Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+/* 正文 readable：中文走 Tsanger，英文走 Newsreader */
+"TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+
+/* 标签 / 编号 / 命令 */
+"JetBrains Mono", Consolas, monospace;
 
 /* 英文 serif / mono */
 "Newsreader", Georgia, serif;
@@ -131,6 +134,8 @@ v1 不增加任何字体依赖，继续使用原 repo 字体：
 原则不变：
 
 - 靠字号制造存在感，不靠 bold
+- 京華老宋体只用于姓名、页标题、章节标题、关键数字等 display 位
+- 正文、说明、标签、时间、英文句子优先走 Tsanger / Newsreader / JetBrains Mono 的可读栈
 - 目录、眉题、时间标签可以更疏朗
 - 正文不要过度模拟旧报刊字距
 

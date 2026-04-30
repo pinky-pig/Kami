@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!-- ==================================================================
-     PORTFOLIO TEMPLATE · parchment design system
+     PORTFOLIO TEMPLATE · republican manuscript style 1
      多页 A4 作品集 / 案例集 / 项目集
      结构：封面 -> About -> 若干项目页 -> Contact
-     每个项目 1-2 页，视觉重于文字
+     页面容器继承 one-pager 的双层线框：蓝底 + 纸页 + 内页框
      ================================================================== -->
 <html lang="zh-CN">
 <head>
@@ -16,65 +16,199 @@
     font-weight: 500;
     font-style: normal;
   }
+  @font-face {
+    font-family: "KamiDisplayCn";
+    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+  @font-face {
+    font-family: "TsangerReadableCn";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
 
   @page {
     size: A4;
-    margin: 12mm 15mm 12mm 15mm;
-    background: #f5f4ed;
-  }
-
-  @page:first {
     margin: 0;
+    background: #243851;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --parchment: #f5f4ed;
-    --ivory:     #faf9f5;
-    --near-black:#141413;
-    --dark-warm: #3d3d3a;
-    --charcoal:  #4d4c48;
-    --olive:     #5e5d59;
-    --stone:     #87867f;
-    --brand:     #1B365D;
-    --brand-deep:#a64f33;
-    --border:    #e8e6dc;
-    --border-soft:#efede4;
-    --tag-bg:    #E4ECF5;
+    --parchment: #EBE5DD;
+    --ivory:     #F3EFEB;
+    --near-black:#232222;
+    --dark-warm: #4A4947;
+    --charcoal:  #5A5856;
+    --olive:     #666361;
+    --stone:     #8B8782;
+    --brand:     #243851;
+    --frame-blue:#243851;
+    --blue-soft: #4D5B6D;
+    --paper-wash:#F6F1E8;
+    --paper-deep:#EFE5D8;
+    --border:    #D0C7BB;
+    --border-soft:#DDD5CB;
+    --tag-bg:    #D5DEE7;
+    --frame-gap: 10.5mm;
+    --display-serif: "KamiDisplayCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    --body-serif: "TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
   }
 
-  html, body {
-    background:
-      url("../images/paper-overlay.png") center / 72mm auto repeat,
-      var(--parchment);
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--frame-blue);
   }
 
   body {
     color: var(--near-black);
-    font-family: "KingHwa_OldSong", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    font-family: var(--body-serif);
     font-size: 10pt;
     line-height: 1.45;
   }
 
+  .cover,
+  section.about,
+  section.project,
+  section.more-works,
+  section.contact {
+    position: relative;
+    width: calc(210mm - (var(--frame-gap) * 2));
+    min-height: calc(297mm - (var(--frame-gap) * 2));
+    margin: var(--frame-gap) auto 0;
+    background:
+      url("../images/paper-overlay.png") center / 72mm auto repeat,
+      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
+    overflow: hidden;
+    break-after: page;
+  }
+
+  .cover::before,
+  section.about::before,
+  section.project::before,
+  section.more-works::before,
+  section.contact::before,
+  .cover::after,
+  section.about::after,
+  section.project::after,
+  section.more-works::after,
+  section.contact::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .cover::before,
+  section.about::before,
+  section.project::before,
+  section.more-works::before,
+  section.contact::before {
+    inset: 6mm;
+    top: 6mm;
+    right: 6mm;
+    bottom: 6mm;
+    left: 6mm;
+    border: 1pt solid var(--frame-blue);
+  }
+
+  .cover::after,
+  section.about::after,
+  section.project::after,
+  section.more-works::after,
+  section.contact::after {
+    inset: 8.5mm;
+    top: 8.5mm;
+    right: 8.5mm;
+    bottom: 8.5mm;
+    left: 8.5mm;
+    border: 0.45pt solid var(--blue-soft);
+  }
+
+  .cover > *,
+  section.about > *,
+  section.project > *,
+  section.more-works > *,
+  section.contact > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.contact {
+    margin-bottom: var(--frame-gap);
+    break-after: auto;
+  }
+
+  @media screen {
+    html {
+      width: auto;
+      min-height: 100%;
+      background: linear-gradient(180deg, #243851 0%, #1d2f45 100%);
+      padding: 18px;
+    }
+
+    body {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      background: transparent;
+      padding: 0;
+    }
+
+    .cover,
+    section.about,
+    section.project,
+    section.more-works,
+    section.contact {
+      margin: 0;
+      box-shadow: 0 18px 42px rgba(20, 20, 19, 0.14);
+      flex-shrink: 0;
+    }
+  }
+
+  @media print {
+    body {
+      background: var(--frame-blue);
+    }
+  }
+
   .serif {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    font-family: var(--display-serif);
   }
 
   /* ════════════ COVER ════════════ */
   .cover {
-    width: 100%;
-    height: 297mm;
     padding: 25mm 20mm;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    break-after: page;
   }
   .cover-top {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 10pt;
     color: var(--brand);
     letter-spacing: 2pt;
@@ -86,7 +220,7 @@
     gap: 14pt;
   }
   .cover-name {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 58pt;
     font-weight: 500;
     line-height: 1.05;
@@ -94,7 +228,7 @@
     letter-spacing: 2pt;
   }
   .cover-tagline {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 18pt;
     color: var(--olive);
     line-height: 1.4;
@@ -120,8 +254,7 @@
 
   /* ════════════ ABOUT ════════════ */
   section.about {
-    break-after: page;
-    padding: 10mm 0;
+    padding: 20mm;
   }
   .about-eyebrow {
     font-size: 9pt;
@@ -131,7 +264,7 @@
     margin-bottom: 8pt;
   }
   .about-title {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 32pt;
     font-weight: 500;
     line-height: 1.2;
@@ -140,7 +273,7 @@
     border-bottom: 1pt solid var(--brand);
   }
   .about-lead {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 15pt;
     line-height: 1.5;
     color: var(--dark-warm);
@@ -157,7 +290,7 @@
     margin-bottom: 10pt;
   }
   .about-body h3 {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 13pt;
     font-weight: 500;
     color: var(--near-black);
@@ -166,9 +299,7 @@
 
   /* ════════════ PROJECT PAGE ════════════ */
   .project {
-    break-before: page;
-    break-after: page;
-    padding: 8mm 0;
+    padding: 18mm 20mm;
   }
   .project-header {
     display: flex;
@@ -179,7 +310,7 @@
     border-bottom: 1pt solid var(--brand);
   }
   .project-num {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 42pt;
     font-weight: 500;
     color: var(--brand);
@@ -198,7 +329,7 @@
     margin-bottom: 3pt;
   }
   .project-title {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 22pt;
     font-weight: 500;
     color: var(--near-black);
@@ -219,7 +350,6 @@
     padding-top: 10pt;
   }
 
-  /* Tags row */
   .project-tags {
     display: flex;
     flex-wrap: wrap;
@@ -235,7 +365,6 @@
     border-radius: 3pt;
   }
 
-  /* Image / Visual */
   .project-hero {
     width: 100%;
     height: 110mm;
@@ -256,14 +385,13 @@
     object-fit: cover;
   }
 
-  /* 3 段式 */
   .project-body {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 16pt;
   }
   .project-block h3 {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 11pt;
     font-weight: 500;
     color: var(--brand);
@@ -280,7 +408,6 @@
     font-weight: 500;
   }
 
-  /* Results metrics row */
   .project-results {
     display: flex;
     gap: 14pt;
@@ -292,7 +419,7 @@
     flex: 1;
   }
   .result-value {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 18pt;
     font-weight: 500;
     color: var(--brand);
@@ -306,7 +433,6 @@
     line-height: 1.3;
   }
 
-  /* ════════════ 2-IMAGE VARIANT ════════════ */
   .project-visuals-2col {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -320,11 +446,10 @@
 
   /* ════════════ SELECTED WORKS LIST ════════════ */
   section.more-works {
-    break-before: page;
-    padding-top: 10mm;
+    padding: 20mm;
   }
   .more-works-title {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 24pt;
     font-weight: 500;
     margin-bottom: 16pt;
@@ -340,12 +465,12 @@
     align-items: baseline;
   }
   .work-year {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     color: var(--brand);
     font-size: 11pt;
   }
   .work-title-block .title {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 11pt;
     font-weight: 500;
     color: var(--near-black);
@@ -363,9 +488,7 @@
 
   /* ════════════ CONTACT ════════════ */
   section.contact {
-    break-before: page;
-    padding: 20mm 0;
-    min-height: 230mm;
+    padding: 20mm;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -378,7 +501,7 @@
     margin-bottom: 12pt;
   }
   .contact-title {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", Georgia, serif;
+    font-family: var(--display-serif);
     font-size: 48pt;
     font-weight: 500;
     line-height: 1.1;
@@ -474,13 +597,10 @@
     <span class="tag">{{标签 3}}</span>
   </div>
 
-  <!-- 主图 -->
   <div class="project-hero">
-    <!-- 替换为：<img src="project-01-hero.png" alt=""> -->
     [项目主图占位 · 替换为 &lt;img src="xxx.png"&gt;]
   </div>
 
-  <!-- 三段式正文 -->
   <div class="project-body">
     <div class="project-block">
       <h3>Context</h3>
@@ -496,7 +616,6 @@
     </div>
   </div>
 
-  <!-- 关键数据（可选）-->
   <div class="project-results">
     <div class="result-item">
       <div class="result-value">{{数字}}</div>
@@ -530,7 +649,6 @@
     <span class="tag">{{标签}}</span>
   </div>
 
-  <!-- 并排两图 -->
   <div class="project-visuals-2col">
     <div class="project-hero">[左图]</div>
     <div class="project-hero">[右图]</div>

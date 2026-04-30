@@ -14,11 +14,12 @@
 
 ## V1 Scope
 
-- 正式支持：中文 `One-Pager`、`Long Doc`、`Letter`、`Slides`，其中 `Letter` 覆盖正式信件、推荐信、推荐函
+- 正式支持：中文 `One-Pager`、`Long Doc`、`Letter`、`Resume`、`Portfolio`、`Slides`，其中 `Letter` 覆盖正式信件、推荐信、推荐函
 - `Slides` 默认同时生成 `PPTX` 和 `Slidev` 在线版
 - `Slides` 使用 `assets/templates/slides_spec.py` 作为单一 schema，再分别渲染到 `slides.py` 和 `slidev`
 - 视觉原则：深蓝外框 `#243851`、旧纸底 `#EBE5DD`、明显 padding、蓝色题签、档案式边框
-- 暂不主推：英文模板、简历、作品集
+- `Resume / Portfolio` 必须参考 `assets/demos/demo-long-doc.html`，它们是 dossier 变体，不是独立的第二套视觉系统
+- 暂不主推：英文模板
 
 ## Use Naturally
 
@@ -47,7 +48,7 @@ The skill auto-triggers from the request, no slash command needed. Chinese v1 ro
 1. 页面用深蓝外框包住旧纸内页，不再是普通白底文档
 2. 强调色只有档案蓝 `#243851`
 3. 中性灰偏纸本暖灰，不用冷蓝灰
-4. 中文 serif 使用京華老宋体，英文与功能文字继续使用 Newsreader / Source Han / system fallback
+4. 京華老宋体只用于大字号中文 display，正文与功能文字优先使用 Tsanger / Newsreader / JetBrains Mono 的可读栈
 5. Serif 字重固定 500，不用粗黑体
 6. 行距延续原版：标题 1.1-1.3，正文 1.4-1.55
 7. Tag 背景必须实色 hex，禁 `rgba()`
@@ -61,27 +62,30 @@ The skill auto-triggers from the request, no slash command needed. Chinese v1 ro
 python3 scripts/build.py --verify one-pager
 python3 scripts/build.py --verify long-doc
 python3 scripts/build.py --verify letter
+python3 scripts/build.py --verify resume
+python3 scripts/build.py --verify portfolio
 python3 scripts/build.py slides
 cd assets/templates/slidev && pnpm install && pnpm run dev
 python3 scripts/build.py --check
 ```
 
-`python3 scripts/build.py slides` 会先把 `assets/templates/slides_spec.py` 渲染成 Slidev 所需的 `assets/templates/slidev/slides.md`，再产出两份同主题的演示稿：`assets/examples/slides.pptx` 和 `assets/examples/slides-online/`。前者给 PowerPoint / Keynote，后者是可部署的静态 Slidev bundle，同时还会生成 `assets/examples/slides-online-preview.py` 和 `assets/examples/slides-online-preview.command` 作为本地浏览器预览入口。`--verify` 会优先校验无占位符的 demo 样例，适合做视觉与页数回归；`--check` 继续扫描 CSS 约束与已迁移模板的 token 漂移。
+`python3 scripts/build.py slides` 会先把 `assets/templates/slides_spec.py` 渲染成 Slidev 所需的 `assets/templates/slidev/slides.md`，再产出两份同主题的演示稿：`assets/demos/demo-slides.pptx` 和 `assets/demos/slides-online/`。前者给 PowerPoint / Keynote，后者是可部署的静态 Slidev bundle，同时还会在 `assets/demos/slides-online/` 内生成 `slides-online-preview.py` 和 `slides-online-preview.command` 作为本地浏览器预览入口。`--verify` 会优先校验无占位符的 demo 样例，适合做视觉与页数回归；`--check` 继续扫描 CSS 约束与已迁移模板的 token 漂移。
 
-不要直接双击 `assets/examples/slides-online/index.html` 用 `file://` 打开。Chrome 会因为 ES module / CORS 限制白屏。请改用：
+不要直接双击 `assets/demos/slides-online/index.html` 用 `file://` 打开。Chrome 会因为 ES module / CORS 限制白屏。请改用：
 
 ```bash
-python3 assets/examples/slides-online-preview.py
+python3 assets/demos/slides-online/slides-online-preview.py
 ```
 
 或者直接双击：
 
 ```text
-assets/examples/slides-online-preview.command
+assets/demos/slides-online/slides-online-preview.command
 ```
 
 ## Notes
 
 - 这不是运行时主题切换版，而是直接把当前 fork 改造成“民国文稿版”
 - v1 不做竖排正文、纹理贴图、印章贴图和高拟物海报化
-- 第二阶段若方向成立，再扩展到 `resume / portfolio` 或英文主题
+- `resume / portfolio` 继续跟随 `demo-long-doc.html` 的 page chrome 演进；如果它们看起来像“换色后的普通简历 / 作品集”，那就是偏了
+- 第二阶段若方向成立，再扩展英文主题

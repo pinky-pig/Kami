@@ -31,8 +31,8 @@ cd assets/templates/slidev && pnpm run dev
 
 `python3 scripts/build.py slides` now generates two slide deliverables:
 
-- `assets/examples/slides.pptx`
-- `assets/examples/slides-online/`
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/`
 
 The Slidev source lives in:
 

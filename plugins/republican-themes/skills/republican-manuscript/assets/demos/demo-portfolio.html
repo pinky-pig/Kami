@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     PORTFOLIO TEMPLATE · republican manuscript style 1
+     多页 A4 作品集 / 案例集 / 项目集
+     结构：封面 -> About -> 若干项目页 -> Contact
+     页面容器继承 one-pager 的双层线框：蓝底 + 纸页 + 内页框
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Elon Musk · 作品集</title>
+<style>
+  @font-face {
+    font-family: "KingHwa_OldSong";
+    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "KamiDisplayCn";
+    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+  @font-face {
+    font-family: "TsangerReadableCn";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #243851;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #EBE5DD;
+    --ivory:     #F3EFEB;
+    --near-black:#232222;
+    --dark-warm: #4A4947;
+    --charcoal:  #5A5856;
+    --olive:     #666361;
+    --stone:     #8B8782;
+    --brand:     #243851;
+    --frame-blue:#243851;
+    --blue-soft: #4D5B6D;
+    --paper-wash:#F6F1E8;
+    --paper-deep:#EFE5D8;
+    --border:    #D0C7BB;
+    --border-soft:#DDD5CB;
+    --tag-bg:    #D5DEE7;
+    --frame-gap: 10.5mm;
+    --display-serif: "KamiDisplayCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    --body-serif: "TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--frame-blue);
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--body-serif);
+    font-size: 10pt;
+    line-height: 1.45;
+  }
+
+  .cover,
+  section.about,
+  section.project,
+  section.more-works,
+  section.contact {
+    position: relative;
+    width: calc(210mm - (var(--frame-gap) * 2));
+    min-height: calc(297mm - (var(--frame-gap) * 2));
+    margin: var(--frame-gap) auto 0;
+    background:
+      url("../images/paper-overlay.png") center / 72mm auto repeat,
+      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
+    overflow: hidden;
+    break-after: page;
+  }
+
+  .cover::before,
+  section.about::before,
+  section.project::before,
+  section.more-works::before,
+  section.contact::before,
+  .cover::after,
+  section.about::after,
+  section.project::after,
+  section.more-works::after,
+  section.contact::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .cover::before,
+  section.about::before,
+  section.project::before,
+  section.more-works::before,
+  section.contact::before {
+    inset: 6mm;
+    top: 6mm;
+    right: 6mm;
+    bottom: 6mm;
+    left: 6mm;
+    border: 1pt solid var(--frame-blue);
+  }
+
+  .cover::after,
+  section.about::after,
+  section.project::after,
+  section.more-works::after,
+  section.contact::after {
+    inset: 8.5mm;
+    top: 8.5mm;
+    right: 8.5mm;
+    bottom: 8.5mm;
+    left: 8.5mm;
+    border: 0.45pt solid var(--blue-soft);
+  }
+
+  .cover > *,
+  section.about > *,
+  section.project > *,
+  section.more-works > *,
+  section.contact > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  section.contact {
+    margin-bottom: var(--frame-gap);
+    break-after: auto;
+  }
+
+  @media screen {
+    html {
+      width: auto;
+      min-height: 100%;
+      background: linear-gradient(180deg, #243851 0%, #1d2f45 100%);
+      padding: 18px;
+    }
+
+    body {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      background: transparent;
+      padding: 0;
+    }
+
+    .cover,
+    section.about,
+    section.project,
+    section.more-works,
+    section.contact {
+      margin: 0;
+      box-shadow: 0 18px 42px rgba(20, 20, 19, 0.14);
+      flex-shrink: 0;
+    }
+  }
+
+  @media print {
+    body {
+      background: var(--frame-blue);
+    }
+  }
+
+  .serif {
+    font-family: var(--display-serif);
+  }
+
+  /* ════════════ COVER ════════════ */
+  .cover {
+    padding: 25mm 20mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover-top {
+    font-family: var(--display-serif);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 2pt;
+    text-transform: uppercase;
+  }
+  .cover-center {
+    display: flex;
+    flex-direction: column;
+    gap: 14pt;
+  }
+  .cover-name {
+    font-family: var(--display-serif);
+    font-size: 58pt;
+    font-weight: 500;
+    line-height: 1.05;
+    color: var(--near-black);
+    letter-spacing: 2pt;
+  }
+  .cover-tagline {
+    font-family: var(--display-serif);
+    font-size: 18pt;
+    color: var(--olive);
+    line-height: 1.4;
+    max-width: 80%;
+  }
+  .cover-line {
+    width: 80pt;
+    height: 2pt;
+    background: var(--brand);
+    margin: 18pt 0 4pt 0;
+  }
+  .cover-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 10pt;
+    color: var(--stone);
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  /* ════════════ ABOUT ════════════ */
+  section.about {
+    padding: 20mm;
+  }
+  .about-eyebrow {
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 8pt;
+  }
+  .about-title {
+    font-family: var(--display-serif);
+    font-size: 32pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 20pt;
+    padding-bottom: 10pt;
+    border-bottom: 1pt solid var(--brand);
+  }
+  .about-lead {
+    font-family: var(--display-serif);
+    font-size: 15pt;
+    line-height: 1.5;
+    color: var(--dark-warm);
+    margin-bottom: 24pt;
+    max-width: 90%;
+  }
+  .about-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24pt;
+  }
+  .about-body p {
+    line-height: 1.5;
+    margin-bottom: 10pt;
+  }
+  .about-body h3 {
+    font-family: var(--display-serif);
+    font-size: 13pt;
+    font-weight: 500;
+    color: var(--near-black);
+    margin-bottom: 6pt;
+  }
+
+  /* ════════════ PROJECT PAGE ════════════ */
+  .project {
+    padding: 18mm 20mm;
+  }
+  .project-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 14pt;
+    padding-bottom: 10pt;
+    border-bottom: 1pt solid var(--brand);
+  }
+  .project-num {
+    font-family: var(--display-serif);
+    font-size: 42pt;
+    font-weight: 500;
+    color: var(--brand);
+    line-height: 1;
+    margin-right: 18pt;
+  }
+  .project-title-block {
+    flex: 1;
+    padding-top: 6pt;
+  }
+  .project-type {
+    font-size: 8.5pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 3pt;
+  }
+  .project-title {
+    font-family: var(--display-serif);
+    font-size: 22pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.2;
+    margin-bottom: 4pt;
+  }
+  .project-subtitle {
+    font-size: 11pt;
+    color: var(--olive);
+    line-height: 1.4;
+  }
+  .project-date {
+    text-align: right;
+    font-size: 9pt;
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+    min-width: 80pt;
+    padding-top: 10pt;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4pt;
+    margin-bottom: 14pt;
+  }
+  .tag {
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-size: 8pt;
+    font-weight: 500;
+    padding: 2pt 7pt;
+    border-radius: 3pt;
+  }
+
+  .project-hero {
+    width: 100%;
+    height: 110mm;
+    background: var(--ivory);
+    border: 0.5pt solid var(--border-soft);
+    border-radius: 6pt;
+    margin-bottom: 14pt;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--stone);
+    font-size: 10pt;
+  }
+  .project-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16pt;
+  }
+  .project-block h3 {
+    font-family: var(--display-serif);
+    font-size: 11pt;
+    font-weight: 500;
+    color: var(--brand);
+    margin-bottom: 4pt;
+    letter-spacing: 0.3pt;
+  }
+  .project-block p {
+    font-size: 9.5pt;
+    line-height: 1.45;
+    color: var(--dark-warm);
+  }
+  .project-block .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+
+  .project-results {
+    display: flex;
+    gap: 14pt;
+    margin-top: 14pt;
+    padding-top: 10pt;
+    border-top: 0.5pt dotted var(--border);
+  }
+  .result-item {
+    flex: 1;
+  }
+  .result-value {
+    font-family: var(--display-serif);
+    font-size: 18pt;
+    font-weight: 500;
+    color: var(--brand);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .result-label {
+    font-size: 8.5pt;
+    color: var(--olive);
+    margin-top: 2pt;
+    line-height: 1.3;
+  }
+
+  .project-visuals-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10pt;
+    margin-bottom: 14pt;
+  }
+  .project-visuals-2col .project-hero {
+    height: 80mm;
+    margin-bottom: 0;
+  }
+
+  /* ════════════ SELECTED WORKS LIST ════════════ */
+  section.more-works {
+    padding: 20mm;
+  }
+  .more-works-title {
+    font-family: var(--display-serif);
+    font-size: 24pt;
+    font-weight: 500;
+    margin-bottom: 16pt;
+    padding-bottom: 8pt;
+    border-bottom: 1pt solid var(--brand);
+  }
+  .work-item {
+    display: grid;
+    grid-template-columns: 40pt 1fr 80pt;
+    gap: 12pt;
+    padding: 8pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    align-items: baseline;
+  }
+  .work-year {
+    font-family: var(--display-serif);
+    color: var(--brand);
+    font-size: 11pt;
+  }
+  .work-title-block .title {
+    font-family: var(--display-serif);
+    font-size: 11pt;
+    font-weight: 500;
+    color: var(--near-black);
+  }
+  .work-title-block .desc {
+    font-size: 9pt;
+    color: var(--olive);
+    margin-top: 1pt;
+  }
+  .work-link {
+    text-align: right;
+    font-size: 8.5pt;
+    color: var(--stone);
+  }
+
+  /* ════════════ CONTACT ════════════ */
+  section.contact {
+    padding: 20mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .contact-eyebrow {
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 2pt;
+    text-transform: uppercase;
+    margin-bottom: 12pt;
+  }
+  .contact-title {
+    font-family: var(--display-serif);
+    font-size: 48pt;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 20pt;
+    color: var(--near-black);
+  }
+  .contact-line {
+    width: 80pt;
+    height: 2pt;
+    background: var(--brand);
+    margin-bottom: 24pt;
+  }
+  .contact-list {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+  }
+  .contact-list strong {
+    color: var(--stone);
+    font-weight: 500;
+    font-size: 10pt;
+    letter-spacing: 0.5pt;
+    margin-right: 12pt;
+    display: inline-block;
+    min-width: 70pt;
+    text-transform: uppercase;
+  }
+  .contact-list a {
+    color: var(--brand);
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════ COVER ════════════ -->
+<div class="cover">
+  <div class="cover-top">Selected Works 2024–2026</div>
+
+  <div class="cover-center">
+    <div class="cover-name">Elon Musk<br>Portfolio</div>
+    <div class="cover-tagline">以制造、软件、能源与机器人为主轴的产品与工程作品叙事</div>
+    <div class="cover-line"></div>
+  </div>
+
+  <div class="cover-meta">
+    <div>
+      <strong>Product / Engineering / Capital Allocation</strong><br>
+      Austin, Texas
+    </div>
+    <div style="text-align: right;">
+      elon.mock@tesla-demo.ai<br>
+      tesla-mock.ai · x.com/elonmusk
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ ABOUT ════════════ -->
+<section class="about">
+  <div class="about-eyebrow">About</div>
+  <div class="about-title">把难以经营的复杂系统，整理成可复用的平台能力</div>
+  <div class="about-lead">
+    我长期关注那些需要同时处理资本密度、制造节拍与软件速度的问题。真正让我感兴趣的，不是单个产品爆发，而是能否把多条曲线压进同一套 operating system。
+  </div>
+  <div class="about-body">
+    <div>
+      <h3>经历</h3>
+      <p>过去二十年，我持续在汽车、航天、能源与 AI 基础设施之间切换角色，但方法始终一致：先定义关键瓶颈，再把产品、工厂、供应链和叙事连成一体。</p>
+    </div>
+    <div>
+      <h3>关注</h3>
+      <p>当前重点是把 Robotaxi、Megapack 与 Optimus 放进同一套资源调度逻辑里。我的方法不是追求每条线都最激进，而是让每条线都能为下一条线释放杠杆。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PROJECT 01 ════════════ -->
+<section class="project">
+  <div class="project-header">
+    <div class="project-num">01</div>
+    <div class="project-title-block">
+      <div class="project-type">Mobility Platform / Operations</div>
+      <div class="project-title">Tesla Robotaxi Fleet OS</div>
+      <div class="project-subtitle">把自动驾驶、调度、充电与城市运营，整理成可复制的 Robotaxi 业务模板。</div>
+    </div>
+    <div class="project-date">2025.04 — 2026.12</div>
+  </div>
+
+  <div class="project-tags">
+    <span class="tag">Robotaxi</span>
+    <span class="tag">Fleet Ops</span>
+    <span class="tag">Autonomy</span>
+  </div>
+
+  <div class="project-hero">
+    [项目主图占位 · 替换为 &lt;img src="xxx.png"&gt;]
+  </div>
+
+  <div class="project-body">
+    <div class="project-block">
+      <h3>Context</h3>
+      <p>如果自动驾驶只能卖车端功能，它的商业天花板会非常低。这个项目的目的，是把驾驶能力变成持续运营业务，用户包括通勤乘客、车队运营者和城市试点团队。</p>
+    </div>
+    <div class="project-block">
+      <h3>Approach</h3>
+      <p>关键决定是先跑高密度城市的小范围运营，而不是一开始追求大范围覆盖。所有调度、充电、清洁与异常处置都被视为产品的一部分，而不是后勤环节。</p>
+    </div>
+    <div class="project-block">
+      <h3>Outcome</h3>
+      <p>Mock 口径下，Robotaxi 试点覆盖 <span class="hl">12 个城市</span>，高峰时段车辆利用率达到 <span class="hl">72%</span>，并把自动驾驶收入从一次性售价切换到持续运营收入。</p>
+    </div>
+  </div>
+
+  <div class="project-results">
+    <div class="result-item">
+      <div class="result-value">12</div>
+      <div class="result-label">试点城市</div>
+    </div>
+    <div class="result-item">
+      <div class="result-value">72%</div>
+      <div class="result-label">高峰利用率</div>
+    </div>
+    <div class="result-item">
+      <div class="result-value">18k</div>
+      <div class="result-label">厂内部署</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PROJECT 02 (双图版式) ════════════ -->
+<section class="project">
+  <div class="project-header">
+    <div class="project-num">02</div>
+    <div class="project-title-block">
+      <div class="project-type">Industrial Robotics</div>
+      <div class="project-title">Optimus Factory Deployment</div>
+      <div class="project-subtitle">让 Optimus 先在自家工厂替代重复劳动，再把经验外溢到工业客户。</div>
+    </div>
+    <div class="project-date">2025.08 — 2026.12</div>
+  </div>
+
+  <div class="project-tags">
+    <span class="tag">工业替代率</span>
+    <span class="tag">部署节拍</span>
+  </div>
+
+  <div class="project-visuals-2col">
+    <div class="project-hero">[左图]</div>
+    <div class="project-hero">[右图]</div>
+  </div>
+
+  <div class="project-body">
+    <div class="project-block">
+      <h3>Context</h3>
+      <p>Optimus 如果一开始就直接讲家庭机器人，会陷入体验不稳定与单位经济性不清晰的问题。因此它更适合作为厂内搬运、分拣、巡检设备切入。</p>
+    </div>
+    <div class="project-block">
+      <h3>Approach</h3>
+      <p>先用夜班搬运与工站巡检场景建立标准作业，再把机器人能力写回工位、物料与安全规则中，让部署过程本身变成工厂优化的一部分。</p>
+    </div>
+    <div class="project-block">
+      <h3>Outcome</h3>
+      <p>Mock 口径下，厂内部署规模提升到 <span class="hl">1.8 万台</span>，重复工时替代比例达到 <span class="hl">23%</span>，为后续外部工业销售建立可信样板。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ MORE WORKS（可选） ════════════ -->
+<section class="more-works">
+  <div class="more-works-title">更多作品</div>
+
+  <div class="work-item">
+    <span class="work-year">2025</span>
+    <div class="work-title-block">
+      <div class="title">Megapack Pipeline Control</div>
+      <div class="desc">把储能项目排产、交付窗口与电池分配放在一张图里看。</div>
+    </div>
+    <div class="work-link">Internal Mock</div>
+  </div>
+
+  <div class="work-item">
+    <span class="work-year">2024</span>
+    <div class="work-title-block">
+      <div class="title">Factory Switch Dashboard</div>
+      <div class="desc">把平台切线期的良率、库存与返工压缩成管理层单页。</div>
+    </div>
+    <div class="work-link">Planning</div>
+  </div>
+
+  <div class="work-item">
+    <span class="work-year">2023</span>
+    <div class="work-title-block">
+      <div class="title">Dojo Capacity Ledger</div>
+      <div class="desc">用于平衡训练算力投资、模型节拍和车端上线窗口的内部账本。</div>
+    </div>
+    <div class="work-link">Operator View</div>
+  </div>
+</section>
+
+<!-- ════════════ CONTACT ════════════ -->
+<section class="contact">
+  <div class="contact-eyebrow">Let's Talk</div>
+  <div class="contact-title">如果你也在经营高资本密度的复杂系统，欢迎交流。</div>
+  <div class="contact-line"></div>
+  <div class="contact-list">
+    <div><strong>Email</strong><a href="mailto:elon.mock@tesla-demo.ai">elon.mock@tesla-demo.ai</a></div>
+    <div><strong>Phone</strong>+1 737 555 0147</div>
+    <div><strong>Website</strong><a href="https://tesla-mock.ai">https://x.com/elonmusk</a></div>
+    <div><strong>X</strong><a href="https://x.com/elonmusk">@elonmusk</a></div>
+  </div>
+</section>
+
+</body>
+</html>

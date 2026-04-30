@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     ONE-PAGER TEMPLATE · republican manuscript style 1
+     单页 A4 方案 / 项目提案 / 执行摘要
+     视觉：深蓝外框、米纸内页、明显 padding、蓝色题签与档案边框
+     目标：页数必须 == 1
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Tesla 2027 一页纸</title>
+<style>
+  @font-face {
+    font-family: "KingHwa_OldSong";
+    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerReadableCn";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+    background: #243851;
+  }
+
+  :root {
+    --parchment:  #EBE5DD;
+    --ivory:      #F3EFEB;
+    --brand:      #243851;
+    --near-black: #232222;
+    --dark-warm:  #4A4947;
+    --charcoal:   #5A5856;
+    --olive:      #666361;
+    --stone:      #8B8782;
+
+    --frame-blue: #243851;
+    --blue-soft:  #4D5B6D;
+    --paper-wash: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --rule:       #CABBA7;
+    --rule-solid: #CABBA7;
+    --panel-fill: #F7F2EA;
+    --tag-bg:     #D5DEE7;
+    --reading-text: "TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--frame-blue);
+    color: var(--near-black);
+    font-family: var(--reading-text);
+  }
+
+  body {
+    padding: 10.5mm;
+    margin: 0 auto;
+  }
+
+  .folio {
+    position: relative;
+    min-height: 276mm;
+    padding: 13.5mm 13mm 10.5mm;
+    background:
+      url("../images/paper-overlay.png") center / 72mm auto repeat,
+      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
+    overflow: hidden;
+  }
+
+  .folio::before,
+  .folio::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .folio::before {
+    inset: 6mm;
+    top: 6mm;
+    right: 6mm;
+    bottom: 6mm;
+    left: 6mm;
+    border: 1pt solid var(--frame-blue);
+  }
+
+  .folio::after {
+    inset: 8.5mm;
+    top: 8.5mm;
+    right: 8.5mm;
+    bottom: 8.5mm;
+    left: 8.5mm;
+    border: 0.45pt solid var(--blue-soft);
+  }
+
+  .sheet-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns: 1.5fr 0.92fr;
+    gap: 10pt;
+    margin-bottom: 9pt;
+  }
+
+  .title-plaque {
+    position: relative;
+    min-height: 84pt;
+    padding: 11pt 14pt 12pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
+  }
+
+  .title-plaque::before,
+  .title-plaque::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .title-plaque::before {
+    inset: 6pt;
+    top: 6pt;
+    right: 6pt;
+    bottom: 6pt;
+    left: 6pt;
+    border: 0.85pt solid #F3EFEB;
+  }
+
+  .title-plaque::after {
+    inset: 9pt;
+    top: 9pt;
+    right: 9pt;
+    bottom: 9pt;
+    left: 9pt;
+    border: 0.4pt solid #D5DEE7;
+  }
+
+  .eyebrow,
+  .section-head .en,
+  .timeline .kicker,
+  .remark .label,
+  .footer {
+    font-family: var(--reading-text);
+  }
+
+  .eyebrow {
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 1.8pt;
+    text-transform: uppercase;
+    margin-bottom: 7pt;
+    color: #E4E9EE;
+  }
+
+  h1 {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 23.5pt;
+    line-height: 1.14;
+    letter-spacing: 0.6pt;
+    font-weight: 500;
+    margin-bottom: 6pt;
+  }
+
+  .subtitle {
+    font-size: 9.4pt;
+    line-height: 1.4;
+    color: #F3EFEB;
+  }
+
+  .side-card {
+    border: 1pt solid var(--frame-blue);
+    padding: 9pt 10pt 8pt;
+    background: var(--panel-fill);
+  }
+
+  .side-label {
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    color: var(--frame-blue);
+    margin-bottom: 8pt;
+  }
+
+  .side-title {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 13pt;
+    line-height: 1.25;
+    font-weight: 500;
+    margin-bottom: 7pt;
+  }
+
+  .side-meta {
+    font-size: 8.1pt;
+    line-height: 1.55;
+    color: var(--stone);
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7pt;
+    margin-bottom: 9pt;
+  }
+
+  .metric {
+    min-height: 52pt;
+    border: 0.9pt solid var(--frame-blue);
+    padding: 8pt 7pt 7pt;
+    background: var(--panel-fill);
+    break-inside: avoid;
+  }
+
+  .metric-value {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 18.5pt;
+    line-height: 1;
+    color: var(--frame-blue);
+    font-weight: 500;
+    margin-bottom: 5pt;
+  }
+
+  .metric-label {
+    font-size: 8pt;
+    line-height: 1.35;
+    color: var(--dark-warm);
+  }
+
+  .lead-panel {
+    position: relative;
+    border: 1pt solid var(--frame-blue);
+    padding: 10pt 12pt 10pt 16pt;
+    margin-bottom: 8pt;
+    background: var(--ivory);
+  }
+
+  .lead-panel::before {
+    content: "";
+    position: absolute;
+    left: 7pt;
+    top: 11pt;
+    bottom: 11pt;
+    width: 3pt;
+    background: var(--frame-blue);
+  }
+
+  .lead-panel p {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 10.9pt;
+    line-height: 1.5;
+    color: var(--near-black);
+  }
+
+  .hl {
+    color: var(--frame-blue);
+    font-weight: 500;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8pt;
+    margin-bottom: 8pt;
+  }
+
+  .section-card {
+    border: 0.95pt solid var(--frame-blue);
+    padding: 0 10pt 8pt;
+    background: var(--ivory);
+    break-inside: avoid;
+  }
+
+  .section-head {
+    margin: -1pt -10pt 7pt;
+    padding: 6pt 10pt 5pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
+  }
+
+  .section-head .cn {
+    display: block;
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 12pt;
+    line-height: 1.1;
+    font-weight: 500;
+    margin-bottom: 3pt;
+  }
+
+  .section-head .en {
+    display: block;
+    font-size: 7.4pt;
+    line-height: 1.35;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+  }
+
+  .section-card p,
+  .section-card li {
+    font-size: 8.55pt;
+    line-height: 1.46;
+    color: var(--dark-warm);
+  }
+
+  .section-card p {
+    margin-bottom: 6pt;
+  }
+
+  ul.dash {
+    list-style: none;
+  }
+
+  ul.dash li {
+    position: relative;
+    padding-left: 11pt;
+    margin-bottom: 4pt;
+  }
+
+  ul.dash li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    color: var(--frame-blue);
+  }
+
+  .timeline {
+    border: 1pt solid var(--frame-blue);
+    margin-bottom: 8pt;
+    background: var(--ivory);
+  }
+
+  .timeline-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 10pt 5pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
+  }
+
+  .timeline-title .cn {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 12pt;
+    line-height: 1.1;
+    font-weight: 500;
+  }
+
+  .timeline-title .en {
+    font-size: 7.4pt;
+    line-height: 1.35;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+    color: #D5DEE7;
+  }
+
+  .timeline-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8pt;
+    padding: 8pt 10pt 10pt;
+  }
+
+  .tl-step {
+    border: 0.45pt solid var(--rule-solid);
+    padding: 7pt 8pt;
+    break-inside: avoid;
+  }
+
+  .tl-year {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 11pt;
+    line-height: 1.2;
+    color: var(--frame-blue);
+    font-weight: 500;
+    margin-bottom: 4pt;
+  }
+
+  .tl-head {
+    font-size: 8.7pt;
+    line-height: 1.35;
+    color: var(--near-black);
+    font-weight: 600;
+    margin-bottom: 3pt;
+  }
+
+  .tl-body {
+    font-size: 8pt;
+    line-height: 1.4;
+    color: var(--stone);
+  }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1.28fr 0.92fr;
+    gap: 8pt;
+    margin-bottom: 8pt;
+  }
+
+  .compact-list {
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+  }
+
+  .compact-list .head {
+    background: var(--frame-blue);
+    color: var(--ivory);
+    padding: 6pt 10pt 5pt;
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 12pt;
+    line-height: 1.1;
+    font-weight: 500;
+  }
+
+  .compact-list .rows {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 9pt;
+    row-gap: 4pt;
+    padding: 8pt 10pt 9pt;
+  }
+
+  .compact-list p {
+    font-size: 8.3pt;
+    line-height: 1.4;
+    color: var(--dark-warm);
+  }
+
+  .remark {
+    border: 1pt solid var(--frame-blue);
+    padding: 9pt 12pt;
+    background: var(--ivory);
+  }
+
+  .remark .label {
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 1.6pt;
+    text-transform: uppercase;
+    color: var(--frame-blue);
+    margin-bottom: 7pt;
+  }
+
+  .remark .quote {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 10.2pt;
+    line-height: 1.5;
+    color: var(--near-black);
+    margin-bottom: 8pt;
+  }
+
+  .remark .note {
+    border-top: 0.45pt solid var(--rule-solid);
+    padding-top: 7pt;
+    font-size: 8pt;
+    line-height: 1.4;
+    color: var(--stone);
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--frame-blue);
+    font-size: 7.5pt;
+    line-height: 1.35;
+    font-weight: 500;
+    padding: 1pt 5pt;
+    border-radius: 2pt;
+    margin-right: 3pt;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    line-height: 1.35;
+    letter-spacing: 0.4pt;
+    color: var(--stone);
+  }
+</style>
+</head>
+<body>
+<main class="folio">
+  <div class="sheet-content">
+    <header class="header">
+      <section class="title-plaque">
+        <div class="eyebrow">TESLA COMPANY BRIEF</div>
+        <h1>把 Tesla 从
+车企看成平台</h1>
+        <div class="subtitle">给投委会的 mock 执行摘要</div>
+      </section>
+
+      <aside class="side-card">
+        <div class="side-label">Archive Note</div>
+        <div class="side-title">Tesla, Inc. · 2027 Growth Story</div>
+        <div class="side-meta">
+          版本：Mock / V1.0<br>
+          日期：2026.04.28<br>
+          分类：公司简报
+        </div>
+      </aside>
+    </header>
+
+    <section class="metrics" aria-label="关键指标">
+      <div class="metric">
+        <div class="metric-value">620 万</div>
+        <div class="metric-label">年化交付目标</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">438 GWh</div>
+        <div class="metric-label">储能在手储备</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">12 城</div>
+        <div class="metric-label">Robotaxi 试点城市</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">1.8 万</div>
+        <div class="metric-label">Optimus 厂内部署</div>
+      </div>
+    </section>
+
+    <section class="lead-panel">
+      <p>判断核心不是 Tesla 能卖出多少辆车，而是它能否把 <span class="hl">制造、软件、储能、机器人</span> 四条曲线压到同一张经营报表里。</p>
+    </section>
+
+    <section class="two-col">
+      <article class="section-card">
+        <div class="section-head">
+          <span class="cn">为什么现在看 Tesla</span>
+          <span class="en">What Changed</span>
+        </div>
+        <p>市场过去把 Tesla 视为高波动汽车股，但 2027 年更合理的视角是多业务平台公司。</p>
+        <ul class="dash">
+          <li>成熟车型提供现金流，新平台负责打开下一轮毛利结构。</li>
+          <li>Mock 口径下，储能在手项目达 <span class="hl">438GWh</span>，足以对冲部分汽车周期波动。</li>
+          <li>最大风险不是需求，而是工厂切线、自动驾驶监管和电池分配。</li>
+        </ul>
+      </article>
+
+      <article class="section-card">
+        <div class="section-head">
+          <span class="cn">接下来 18 个月</span>
+          <span class="en">What Matters</span>
+        </div>
+        <p>真正需要跟踪的不是单月销量，而是 Robotaxi 试点、Megapack 节拍和 Optimus 厂内部署是否同步兑现。</p>
+        <ul class="dash">
+          <li>整车交付负责现金流，软件收入负责拉高生命周期价值。</li>
+          <li>储能业务决定季度波动是否可被磨平。</li>
+          <li>机器人先证明工厂内价值，再去讲外部市场。</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="timeline">
+      <div class="timeline-title">
+        <span class="cn">主线演进</span>
+        <span class="en">Roadmap</span>
+      </div>
+      <div class="timeline-grid">
+        <div class="tl-step">
+          <div class="tl-year">2026 H2</div>
+          <div class="tl-head">Factory Switch</div>
+          <div class="tl-body">得州与上海分工明确，新平台切线不牺牲成熟车型节奏。</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-year">2027 H1</div>
+          <div class="tl-head">Pilot Launch</div>
+          <div class="tl-body">Robotaxi 先在高密度城市跑通调度、充电、清洁闭环。</div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-year">2027 H2</div>
+          <div class="tl-head">Scale Review</div>
+          <div class="tl-body">Megapack 与 Optimus 的兑现节奏开始进入同一张经营看板。</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-grid">
+      <div class="compact-list">
+        <div class="head">五个检查点 / 风险前瞻</div>
+        <div class="rows">
+          <p>工厂切线期良率是否稳定爬坡</p>
+          <p>Robotaxi 可用时长能否跑出正向运营杠杆</p>
+          <p>Megapack 项目是否形成季度稳定节拍</p>
+          <p>Optimus 是否先在自家工厂替代重复工时</p>
+        </div>
+      </div>
+
+      <aside class="remark">
+        <div class="label">Filed Remark</div>
+        <div class="quote">Tesla 的价值不再取决于一款爆款车，而取决于多条业务曲线是否被统一调度。</div>
+        <div class="note">如果四条曲线分别独立讲故事，市场会只给汽车股估值；只有它们共享制造、算力与软件资产时，平台叙事才成立。</div>
+      </aside>
+    </section>
+
+    <footer class="footer">
+      <span>INTERNAL MOCK / DEMO USE ONLY</span>
+      <span>01 / tesla-mock@kami.local</span>
+    </footer>
+  </div>
+</main>
+</body>
+</html>

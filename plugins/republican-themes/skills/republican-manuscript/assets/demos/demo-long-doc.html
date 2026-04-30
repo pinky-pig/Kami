@@ -1,8 +1,13 @@
 <!DOCTYPE html>
+<!-- ==================================================================
+     LONG DOCUMENT TEMPLATE · republican manuscript style 1
+     多页 A4 白皮书 / 长文 / 年度总结
+     视觉：每页深蓝外框 + 米纸内页 + 档案题签
+     ================================================================== -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>旧档案数字化与检索系统白皮书</title>
+<title>Tesla 2027 平台化增长白皮书</title>
 <style>
   @font-face {
     font-family: "KingHwa_OldSong";
@@ -10,42 +15,70 @@
     font-weight: 500;
     font-style: normal;
   }
+  @font-face {
+    font-family: "TsangerReadableCn";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
 
   @page {
     size: A4;
     margin: 0;
-    background: #2f4868;
+    background: #243851;
   }
 
   :root {
-    --navy: #2f4868;
-    --navy-soft: #607593;
-    --paper: #f6f1e8;
-    --paper-warm: #ebe0d1;
-    --ink: #212327;
-    --copy: #42474f;
-    --muted: #757b84;
-    --rule: #cabaa5;
+    --parchment:  #EBE5DD;
+    --ivory:      #F3EFEB;
+    --brand:      #243851;
+    --near-black: #232222;
+    --dark-warm:  #4A4947;
+    --charcoal:   #5A5856;
+    --olive:      #666361;
+    --stone:      #8B8782;
+
+    --frame-blue: #243851;
+    --blue-soft:  #4D5B6D;
+    --paper-wash: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --rule:       #CABBA7;
+    --panel-fill: #F7F2EA;
+    --tag-bg:     #D5DEE7;
+    --reading-text: "TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html, body {
+  html,
+  body {
     width: 210mm;
     margin: 0 auto;
-    background: var(--navy);
-    color: var(--ink);
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    background: var(--frame-blue);
+    color: var(--near-black);
+    font-family: var(--reading-text);
+    font-size: 10.2pt;
+    line-height: 1.5;
   }
 
-  body {
-    margin: 0 auto;
+  .sans,
+  .topline,
+  .meta,
+  .label,
+  .chapter-num,
+  .toc-page,
+  .page-no,
+  table,
+  code,
+  pre {
+    font-family: var(--reading-text);
   }
 
   .folio {
     min-height: 297mm;
-    padding: 10.5mm;
-    background: var(--navy);
+    padding: 7mm;
+    background: var(--frame-blue);
     break-after: page;
   }
 
@@ -55,182 +88,222 @@
 
   .sheet {
     position: relative;
-    min-height: 276mm;
+    min-height: 283mm;
     padding: 14mm 13mm 12mm;
     background:
       url("../images/paper-overlay.png") center / 72mm auto repeat,
-      radial-gradient(circle at 16% 14%, rgba(255, 255, 255, 0.42), transparent 23%),
-      radial-gradient(circle at 83% 18%, rgba(222, 210, 194, 0.28), transparent 26%),
-      linear-gradient(135deg, #f7f2ea 0%, #f2ebe0 45%, #eee4d8 100%);
+      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
     overflow: hidden;
   }
 
-  .sheet::before,
-  .sheet::after {
-    content: "";
+  .sheet-frame,
+  .sheet-frame-inner {
     position: absolute;
-    inset: 6mm;
-    border: 1pt solid var(--navy);
     pointer-events: none;
+    z-index: 2;
   }
 
-  .sheet::after {
-    inset: 8.4mm;
-    border-width: 0.45pt;
-    border-color: var(--navy-soft);
+  .sheet-frame {
+    inset: 4.5mm;
+    top: 4.5mm;
+    right: 4.5mm;
+    bottom: 4.5mm;
+    left: 4.5mm;
+    border: 1.05pt solid var(--frame-blue);
+  }
+
+  .sheet-frame-inner {
+    inset: 7.1mm;
+    top: 7.1mm;
+    right: 7.1mm;
+    bottom: 7.1mm;
+    left: 7.1mm;
+    border: 0.55pt solid var(--blue-soft);
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
   }
 
   .page-no {
     position: absolute;
     right: 14mm;
     bottom: 10mm;
+    z-index: 1;
     font-size: 8pt;
+    line-height: 1.35;
     letter-spacing: 0.8pt;
-    color: var(--muted);
+    color: var(--stone);
+  }
+
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 8.3pt;
+    line-height: 1.45;
+    color: var(--stone);
+    margin-bottom: 12mm;
+  }
+
+  .blue-tag {
+    position: relative;
+    display: inline-block;
+    background: var(--frame-blue);
+    color: var(--ivory);
+    padding: 7pt 10pt;
+    font-size: 7.8pt;
+    line-height: 1.35;
+    letter-spacing: 1.7pt;
+    text-transform: uppercase;
+  }
+
+  .blue-tag::before {
+    content: "";
+    position: absolute;
+    inset: 5pt;
+    top: 5pt;
+    right: 5pt;
+    bottom: 5pt;
+    left: 5pt;
+    border: 0.55pt solid #F3EFEB;
   }
 
   .cover {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
   }
 
-  .cover-head {
+  .cover > .content:first-child {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-
-  .cover-tag {
-    background: var(--navy);
-    color: var(--paper);
-    padding: 7pt 10pt;
-    font-size: 7.8pt;
-    letter-spacing: 1.7pt;
-    text-transform: uppercase;
-    position: relative;
-  }
-
-  .cover-tag::before {
-    content: "";
-    position: absolute;
-    inset: 5pt;
-    border: 0.55pt solid rgba(255,255,255,0.72);
-  }
-
-  .cover-class {
-    text-align: right;
-    font-size: 8.5pt;
-    line-height: 1.65;
-    color: var(--muted);
+    flex-direction: column;
+    flex: 1;
   }
 
   .cover-main {
-    margin-top: 24mm;
+    margin-top: auto;
+    margin-bottom: auto;
     display: grid;
-    grid-template-columns: 1.2fr 0.58fr;
+    grid-template-columns: 1.22fr 0.58fr;
     gap: 14pt;
     align-items: stretch;
   }
 
   .cover-plaque {
     position: relative;
-    background: var(--navy);
-    color: var(--paper);
-    padding: 18pt 20pt;
     min-height: 160pt;
+    padding: 18pt 20pt;
+    background: var(--frame-blue);
+    color: var(--ivory);
   }
 
   .cover-plaque::before,
   .cover-plaque::after {
     content: "";
     position: absolute;
+    pointer-events: none;
+  }
+
+  .cover-plaque::before {
     inset: 7pt;
-    border: 0.9pt solid rgba(255, 255, 255, 0.8);
+    top: 7pt;
+    right: 7pt;
+    bottom: 7pt;
+    left: 7pt;
+    border: 0.9pt solid #F3EFEB;
   }
 
   .cover-plaque::after {
     inset: 10pt;
-    border-width: 0.45pt;
-    border-color: rgba(255, 255, 255, 0.55);
+    top: 10pt;
+    right: 10pt;
+    bottom: 10pt;
+    left: 10pt;
+    border: 0.45pt solid #D5DEE7;
   }
 
-  .cover-plaque .kicker {
+  .kicker {
+    font-family: var(--reading-text);
     font-size: 8pt;
+    line-height: 1.35;
     letter-spacing: 1.9pt;
     text-transform: uppercase;
-    opacity: 0.82;
+    color: #D5DEE7;
     margin-bottom: 12pt;
   }
 
-  .cover-plaque h1 {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
+  .cover-title {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 31pt;
-    line-height: 1.22;
+    line-height: 1.18;
     font-weight: 500;
     letter-spacing: 0.8pt;
     margin-bottom: 10pt;
   }
 
-  .cover-plaque p {
+  .cover-sub {
+    font-family: var(--reading-text);
     font-size: 10.6pt;
-    line-height: 1.68;
-    opacity: 0.95;
+    line-height: 1.55;
+    color: #F3EFEB;
   }
 
   .cover-side {
-    border: 1pt solid var(--navy);
+    border: 1pt solid var(--frame-blue);
     padding: 12pt;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--panel-fill);
   }
 
   .cover-side .label {
     font-size: 7.6pt;
+    line-height: 1.35;
     letter-spacing: 1.6pt;
     text-transform: uppercase;
-    color: var(--navy);
+    color: var(--frame-blue);
     margin-bottom: 8pt;
   }
 
   .cover-side .value {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 14pt;
-    line-height: 1.5;
-    color: var(--ink);
+    line-height: 1.45;
+    color: var(--near-black);
   }
 
   .cover-footer {
     display: flex;
     justify-content: space-between;
     align-items: end;
-    margin-top: 24mm;
+    gap: 16pt;
+    margin-top: 0;
   }
 
   .cover-note {
     max-width: 112mm;
-    border-top: 1pt solid var(--navy);
-    border-bottom: 0.45pt solid var(--navy-soft);
+    border-top: 1pt solid var(--frame-blue);
+    border-bottom: 0.45pt solid var(--blue-soft);
     padding: 8pt 0 10pt;
     font-size: 9.4pt;
-    line-height: 1.68;
-    color: var(--copy);
+    line-height: 1.55;
+    color: var(--dark-warm);
   }
 
   .cover-meta {
     text-align: right;
     font-size: 9pt;
-    line-height: 1.75;
-    color: var(--muted);
+    line-height: 1.55;
+    color: var(--stone);
   }
 
   .header-band {
     position: relative;
     margin-bottom: 12pt;
     padding-bottom: 9pt;
-    border-bottom: 1pt solid var(--navy);
+    border-bottom: 1pt solid var(--frame-blue);
   }
 
   .header-band::after {
@@ -239,302 +312,516 @@
     left: 0;
     right: 0;
     bottom: -3pt;
-    border-bottom: 0.45pt solid var(--navy-soft);
+    border-bottom: 0.45pt solid var(--blue-soft);
   }
 
-  .header-band .eyebrow {
+  .chapter-num {
     font-size: 8pt;
+    line-height: 1.35;
     letter-spacing: 1.6pt;
     text-transform: uppercase;
-    color: var(--navy);
+    color: var(--frame-blue);
     margin-bottom: 6pt;
   }
 
-  .header-band h2 {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
+  h1 {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 24pt;
     line-height: 1.18;
     font-weight: 500;
-    color: var(--ink);
+    color: var(--near-black);
+  }
+
+  h2 {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 14pt;
+    line-height: 1.25;
+    font-weight: 500;
+    color: var(--near-black);
+    margin: 14pt 0 6pt;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-size: 11.5pt;
+    line-height: 1.3;
+    font-weight: 500;
+    color: var(--dark-warm);
+    margin: 12pt 0 4pt;
+    break-after: avoid;
+  }
+
+  p {
+    font-size: 10.2pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: 8pt;
+  }
+
+  .lead {
+    font-size: 11.6pt;
+    line-height: 1.55;
+    color: var(--near-black);
+    margin-bottom: 12pt;
+  }
+
+  .hl {
+    color: var(--frame-blue);
+    font-weight: 500;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8pt;
+    margin-top: 14pt;
+  }
+
+  .toc-item {
+    display: grid;
+    grid-template-columns: 34pt 1fr 28pt;
+    align-items: baseline;
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+  }
+
+  .toc-num {
+    background: var(--frame-blue);
+    color: var(--ivory);
+    padding: 7pt 8pt;
+    font-size: 9pt;
+    line-height: 1.35;
+  }
+
+  .toc-title {
+    padding: 7pt 10pt;
+    font-size: 11pt;
+    line-height: 1.35;
+    color: var(--near-black);
+  }
+
+  .toc-page {
+    padding: 7pt 8pt;
+    text-align: right;
+    color: var(--stone);
+    font-size: 9pt;
+    line-height: 1.35;
   }
 
   .two-col {
     display: grid;
-    grid-template-columns: 0.82fr 1.18fr;
+    grid-template-columns: 0.84fr 1.16fr;
     gap: 10pt;
   }
 
   .panel {
-    border: 1pt solid var(--navy);
-    padding: 0 11pt 10pt;
-    background: rgba(255, 255, 255, 0.16);
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+    padding: 10pt 12pt;
+    break-inside: avoid;
   }
 
-  .panel .panel-title {
-    margin: -1pt -11pt 9pt;
-    padding: 7pt 11pt 6pt;
-    background: var(--navy);
-    color: var(--paper);
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
-    font-size: 13pt;
-  }
-
-  .panel .panel-sub {
-    font-size: 7.5pt;
-    letter-spacing: 1.3pt;
-    text-transform: uppercase;
-    opacity: 0.78;
-    margin-top: 2pt;
-  }
-
-  .toc-item {
-    display: flex;
-    justify-content: space-between;
-    gap: 8pt;
-    padding: 7pt 0;
-    border-bottom: 0.5pt solid var(--rule);
-    font-size: 9pt;
-    color: var(--copy);
-  }
-
-  .toc-item .num {
-    color: var(--navy);
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
-    min-width: 18pt;
-  }
-
-  .toc-item .page {
-    color: var(--muted);
-  }
-
-  .summary {
-    font-size: 9.4pt;
-    line-height: 1.7;
-    color: var(--copy);
-  }
-
-  .summary .lead {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
-    font-size: 12.2pt;
-    line-height: 1.6;
-    color: var(--ink);
-    margin-bottom: 10pt;
-  }
-
-  .summary .hl {
-    color: var(--navy);
-  }
-
-  .summary ul {
-    margin-left: 14pt;
-    margin-top: 8pt;
-  }
-
-  .summary li {
+  .panel-title {
+    font-size: 12.5pt;
+    line-height: 1.25;
+    color: var(--frame-blue);
     margin-bottom: 6pt;
+    font-weight: 500;
   }
 
-  .section-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10pt;
-    margin-bottom: 10pt;
+  ul,
+  ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 18pt;
+    line-height: 1.5;
+    color: var(--dark-warm);
   }
 
-  .section-card {
-    border: 1pt solid var(--navy);
-    padding: 0 11pt 10pt;
-    background: rgba(255,255,255,0.14);
+  li {
+    margin-bottom: 4pt;
   }
 
-  .section-card .title {
-    margin: -1pt -11pt 9pt;
-    padding: 7pt 11pt 6pt;
-    background: var(--navy);
-    color: var(--paper);
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
-    font-size: 13pt;
+  li::marker {
+    color: var(--frame-blue);
   }
 
-  .section-card p,
-  .section-card li {
-    font-size: 9pt;
-    line-height: 1.6;
-    color: var(--copy);
-  }
-
-  .section-card ul {
-    margin-left: 14pt;
-    margin-top: 7pt;
-  }
-
+  blockquote,
   .quote {
-    border: 1pt solid var(--navy);
-    padding: 11pt 13pt;
-    background: rgba(255,255,255,0.18);
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
-    font-size: 11.2pt;
-    line-height: 1.68;
-    color: var(--ink);
+    position: relative;
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+    margin: 12pt 0;
+    padding: 11pt 14pt 11pt 20pt;
+    color: var(--dark-warm);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+
+  blockquote::before,
+  .quote::before {
+    content: "";
+    position: absolute;
+    left: 10pt;
+    top: 11pt;
+    bottom: 11pt;
+    width: 3pt;
+    background: var(--frame-blue);
+  }
+
+  .cite {
+    display: block;
+    font-family: var(--reading-text);
+    font-size: 8.5pt;
+    line-height: 1.4;
+    color: var(--stone);
+    margin-top: 5pt;
   }
 
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 9pt;
-    font-size: 8.9pt;
-    color: var(--copy);
-  }
-
-  th, td {
-    border: 0.7pt solid var(--rule);
-    padding: 7pt 8pt;
-    vertical-align: top;
+    font-size: 9pt;
+    line-height: 1.45;
+    margin: 10pt 0;
+    break-inside: avoid;
+    background: var(--ivory);
+    border: 1pt solid var(--frame-blue);
   }
 
   th {
-    background: rgba(47, 72, 104, 0.09);
-    color: var(--navy);
-    font-weight: 600;
+    background: var(--frame-blue);
+    color: var(--ivory);
+    text-align: left;
+    font-weight: 500;
+    padding: 6pt 8pt;
   }
 
-  .footer-line {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 12pt;
+  td {
+    border-top: 0.45pt solid var(--rule);
+    padding: 6pt 8pt;
+    color: var(--dark-warm);
+    vertical-align: top;
+  }
+
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+    font-size: 8.3pt;
+    line-height: 1.45;
+    background: var(--ivory);
+    border: 1pt solid var(--frame-blue);
+    padding: 9pt 12pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--charcoal);
+    break-inside: avoid;
+  }
+
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, monospace;
+    font-size: 8.5pt;
+    background: var(--tag-bg);
+    color: var(--frame-blue);
+    padding: 1pt 4pt;
+  }
+
+  .callout,
+  .takeaway {
+    position: relative;
+    border: 1pt solid var(--frame-blue);
+    background: var(--ivory);
+    padding: 10pt 14pt 10pt 20pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+
+  .callout::before,
+  .takeaway::before {
+    content: "";
+    position: absolute;
+    left: 10pt;
+    top: 10pt;
+    bottom: 10pt;
+    width: 3pt;
+    background: var(--frame-blue);
+  }
+
+  .label {
     font-size: 8pt;
-    color: var(--muted);
-    letter-spacing: 0.7pt;
+    line-height: 1.35;
+    color: var(--frame-blue);
+    letter-spacing: 1.4pt;
     text-transform: uppercase;
+    margin-bottom: 5pt;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--frame-blue);
+    font-family: var(--reading-text);
+    font-size: 8pt;
+    line-height: 1.35;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 2pt;
+    margin-right: 4pt;
   }
 </style>
 </head>
 <body>
-  <section class="folio">
-    <div class="sheet cover">
-      <div class="cover-head">
-        <div class="cover-tag">White Paper · Internal Edition</div>
-        <div class="cover-class">档案治理专项<br>内部公开版</div>
+
+<!-- ═════════════ COVER ═════════════ -->
+<section class="folio">
+  <div class="sheet cover">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
+    <div class="content">
+      <div class="topline">
+        <div class="blue-tag">WHITE PAPER · INTERNAL EDITION</div>
+        <div class="meta">经营白皮书<br>内部演示版 / Mock Data</div>
       </div>
 
       <div class="cover-main">
         <div class="cover-plaque">
-          <div class="kicker">Archive Knowledge System</div>
-          <h1>旧档案数字化与<br>检索系统白皮书</h1>
-          <p>把纸本卷宗、会议纪要与历史图片统一整理成可追溯、可检索、可交接的机构知识底座。</p>
+          <div class="kicker">TESLA PLATFORM DOSSIER</div>
+          <div class="cover-title">Tesla 2027 平台化增长<br>与资源调度白皮书</div>
+          <div class="cover-sub">给投委会与经营团队的一份判断文档：为什么马斯克正在把整车、Robotaxi、储能、Optimus 与 AI 算力压进同一套经营系统。</div>
         </div>
-        <div class="cover-side">
+
+        <aside class="cover-side">
           <div>
             <div class="label">Filed Under</div>
-            <div class="value">档案工程组<br>资料治理专班</div>
+            <div class="value">Strategy / Capital Allocation<br>Tesla · Musk Operating Model</div>
           </div>
           <div>
             <div class="label">Version</div>
             <div class="value">V1.0<br>2026.04</div>
           </div>
+        </aside>
+      </div>
+    </div>
+
+    <div class="content cover-footer">
+      <p class="cover-note">本文聚焦 Tesla 未来 18 个月最关键的四条曲线：制造切线、Robotaxi 试点、Megapack 交付节拍与 Optimus 厂内部署。读完以后，读者应能判断 Tesla 是否值得被继续按单一车企估值。</p>
+      <div class="cover-meta">
+        作者：Kami Demo Desk<br>
+        发布：Republican Manuscript Skill<br>
+        页数：6 页
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ TOC ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
+    <div class="content">
+      <div class="header-band">
+        <div class="chapter-num">Table of Contents</div>
+        <h1>目录</h1>
+      </div>
+
+      <div class="toc-grid">
+        <div class="toc-item">
+          <span class="toc-num">01</span>
+          <span class="toc-title">执行摘要</span>
+          <span class="toc-page">03</span>
+        </div>
+        <div class="toc-item">
+          <span class="toc-num">02</span>
+          <span class="toc-title">背景与问题定义</span>
+          <span class="toc-page">04</span>
+        </div>
+        <div class="toc-item">
+          <span class="toc-num">03</span>
+          <span class="toc-title">方法与发现</span>
+          <span class="toc-page">06</span>
+        </div>
+        <div class="toc-item">
+          <span class="toc-num">04</span>
+          <span class="toc-title">结论与建议</span>
+          <span class="toc-page">09</span>
+        </div>
+        <div class="toc-item">
+          <span class="toc-num">05</span>
+          <span class="toc-title">附录</span>
+          <span class="toc-page">11</span>
         </div>
       </div>
-
-      <div class="cover-footer">
-        <div class="cover-note">本白皮书聚焦三件事：旧档案为什么值得重做、第一阶段该如何收敛范围、怎样让资料真正从“保存对象”变成“工作底座”。</div>
-        <div class="cover-meta">分类：档案治理 / 知识系统<br>页数：示意三页</div>
-      </div>
     </div>
-  </section>
+    <div class="page-no">KAMI DOC · 2</div>
+  </div>
+</section>
 
-  <section class="folio">
-    <div class="sheet">
+<!-- ═════════════ CHAPTER 01 ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
+    <div class="content">
       <div class="header-band">
-        <div class="eyebrow">Contents & Executive Summary</div>
-        <h2>目录与摘要</h2>
+        <div class="chapter-num">01 · Executive Summary</div>
+        <h1>执行摘要</h1>
       </div>
+
+      <p class="lead">Tesla 下一阶段最重要的不是再多卖几辆车，而是能否把 <span class="hl">制造、软件、储能、机器人</span> 四条增长曲线放进同一张经营报表。马斯克真正下注的是资源调度能力，而不是单个爆款产品。</p>
 
       <div class="two-col">
-        <section class="panel">
-          <div class="panel-title">目录<div class="panel-sub">Table of Contents</div></div>
-          <div class="toc-item"><span class="num">01</span><span>执行摘要</span><span class="page">03</span></div>
-          <div class="toc-item"><span class="num">02</span><span>问题与背景</span><span class="page">04</span></div>
-          <div class="toc-item"><span class="num">03</span><span>方案设计</span><span class="page">06</span></div>
-          <div class="toc-item"><span class="num">04</span><span>实施建议</span><span class="page">08</span></div>
-          <div class="toc-item"><span class="num">05</span><span>附录与术语</span><span class="page">10</span></div>
-        </section>
+        <aside class="panel">
+          <div class="panel-title">核心 Takeaways</div>
+          <ol>
+            <li>Mock 口径下，两地工厂合计年化产能已到 <span class="hl">5.8M</span>，目标是把交付能力推进到 <span class="hl">6.2M</span> 而不牺牲良率。</li>
+            <li>储能在手项目储备达到 <span class="hl">438GWh</span>，说明 Tesla 已经拥有能平滑整车周期波动的第二现金流引擎。</li>
+            <li>如果 Robotaxi 试点城市、Megapack 节拍与 Optimus 厂内部署能在 2027 年同步兑现，Tesla 将更像平台型经营体而非单一汽车股。</li>
+          </ol>
+        </aside>
 
-        <section class="panel summary">
-          <div class="panel-title">执行摘要<div class="panel-sub">Executive Summary</div></div>
-          <p class="lead">这份文档的核心判断是：机构档案不是“堆起来保存”的材料，而是 <span class="hl">被整理后可以继续工作的证据链</span>。</p>
-          <ul>
-            <li>数字化的价值不在扫描本身，而在索引、元数据和版本追踪。</li>
-            <li>先建立“找得到、对得上”的基础能力，再扩展“可分析、可引用”的进阶能力。</li>
-            <li>第一阶段应围绕高频制度文件、项目纪要与年度材料，而不是一开始追求全量清库。</li>
-          </ul>
-        </section>
+        <article>
+          <h2>本文档回答的问题</h2>
+          <p>现在需要这份文档，是因为市场仍然用汽车行业的线性框架理解 Tesla，但公司内部资源分配已经明显转向平台逻辑。决策者读完以后，不应只盯交付量，而应把工厂切线效率、城市运营能力、储能节拍和机器人内部替代率并列跟踪。</p>
+          <div class="takeaway">
+            <div class="label">Filed Question</div>
+            1. Tesla 的四条增长曲线是否真的共享同一套资源池？<br>2. 哪些指标最能提前暴露平台叙事能否成立？<br>3. 未来 18 个月管理层应该按什么顺序验证这些假设？
+          </div>
+        </article>
       </div>
-
-      <div class="quote" style="margin-top: 10pt;">档案系统的任务不是把纸张变成图片，而是把历史变成今天仍然可被调用的事实依据。</div>
-      <div class="page-no">02</div>
     </div>
-  </section>
+    <div class="page-no">KAMI DOC · 3</div>
+  </div>
+</section>
 
-  <section class="folio">
-    <div class="sheet">
+<!-- ═════════════ CHAPTER 02 ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
+    <div class="content">
       <div class="header-band">
-        <div class="eyebrow">Design & Rollout</div>
-        <h2>方案设计与实施建议</h2>
+        <div class="chapter-num">02 · Background</div>
+        <h1>背景与问题定义</h1>
       </div>
 
-      <div class="section-grid">
-        <section class="section-card">
-          <div class="title">问题与背景</div>
-          <p>当前档案散落在纸本卷宗、扫描 PDF、共享盘目录和个人硬盘中。文件命名不统一，检索高度依赖人工记忆，任何一次交接都会让同一批资料重新“失踪”一遍。</p>
-          <ul>
-            <li>没有统一主索引，查询路径过长</li>
-            <li>扫描件无法回答“哪一版生效”这类工作问题</li>
-            <li>跨部门引用缺少可追溯来源</li>
-          </ul>
-        </section>
+      <p class="lead">这一章要解决的问题是：为什么 Tesla 不能再被简单地看作一家高波动汽车公司。只有先把业务结构理解对，后面的估值和执行判断才不会偏掉。</p>
 
-        <section class="section-card">
-          <div class="title">三层结构</div>
-          <p>第一层做扫描与 OCR，第二层做目录与元数据，第三层做检索与引用界面。每一层都追求清楚和稳定，而不是一开始追求全能平台。</p>
-          <ul>
-            <li>元数据字段先收敛到时间、机构、主题、责任人、版本</li>
-            <li>高频材料优先入库，保证试点库能被真实使用</li>
-            <li>抽检与复核流程要和入库同步发生</li>
-          </ul>
-        </section>
+      <h2>当前现状</h2>
+      <p>过去一年里，Tesla 的经营重心已经明显扩展到整车之外。Mock 口径下，整车年化交付能力约 <span class="hl">5.8M</span>，储能在手储备达到 <span class="hl">438GWh</span>，Robotaxi 首波试点规划覆盖 <span class="hl">12 个城市</span>，Optimus 厂内部署目标来到 <span class="hl">18k</span> 台。这四组数字放在一起看，才是马斯克当前真正的资源分配图。</p>
+
+      <h2>核心问题</h2>
+      <p>核心问题在于，外部观察者仍然倾向于只看交车数，而内部最稀缺的资源其实是电池、算力、产线窗口与管理带宽。如果继续用单一整车指标来评估 Tesla，就会低估储能和 Robotaxi 对现金流与估值框架的重塑，也会误判工厂切线期的真实风险。</p>
+
+      <blockquote>
+        Tesla 最关键的竞争力不是某个产品点，而是把多条复杂曲线压进同一套 operating system；谁只看单月销量，谁就会错过真正的杠杆。
+        <span class="cite">— Mock 经营观察，2026.04.30</span>
+      </blockquote>
+
+      <h2>衡量标准</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>当前水平</th>
+            <th>目标水平</th>
+            <th>差距</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>年化交付能力</td>
+            <td>5.8M</td>
+            <td>6.2M</td>
+            <td>+0.4M，且切线期良率不能失稳</td>
+          </tr>
+          <tr>
+            <td>储能在手储备</td>
+            <td>438GWh</td>
+            <td>520GWh</td>
+            <td>+82GWh，且电池分配不能挤压整车节拍</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="page-no">KAMI DOC · 4</div>
+  </div>
+</section>
+
+<!-- ═════════════ CHAPTER 03 ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
+    <div class="content">
+      <div class="header-band">
+        <div class="chapter-num">03 · Methodology</div>
+        <h1>方法与发现</h1>
       </div>
 
-      <section class="panel">
-        <div class="panel-title">实施建议<div class="panel-sub">Rollout Checklist</div></div>
-        <table>
-          <tr>
-            <th>阶段</th>
-            <th>动作</th>
-            <th>验收标准</th>
-          </tr>
-          <tr>
-            <td>试点建库</td>
-            <td>选一个部门的年度资料，跑通命名、OCR、索引与抽检</td>
-            <td>目录完整率 > 95%</td>
-          </tr>
-          <tr>
-            <td>检索验证</td>
-            <td>按主题、时间与责任人交叉查询</td>
-            <td>命中率与来源可追溯</td>
-          </tr>
-          <tr>
-            <td>扩展纳入</td>
-            <td>把新增馆藏按同一规程逐步并入</td>
-            <td>不再另起第二套体系</td>
-          </tr>
-        </table>
-      </section>
+      <p class="lead">本章说明我们如何把 Tesla 的多业务经营拆开再重新拼回去。最重要的发现是：四条曲线看似分散，实际上都在争夺同一组共享资产。</p>
 
-      <div class="footer-line">
-        <span>旧档案数字化与检索系统白皮书</span>
-        <span>03</span>
+      <h2>研究方法</h2>
+      <p>文档采用 mock 研究口径，综合了 Tesla 公开叙事、Musk 的经营风格、工厂与储能业务节拍假设，以及当前模板中已有的演示数据。分析方法不是预测季度财报，而是观察电池、工厂、城市运营和算力如何被共同调度。</p>
+
+      <pre><code>board = {
+  'factory_switch': ['yield', 'buffer_days', 'rework_rate'],
+  'robotaxi_ops': ['active_hours', 'charge_turnaround', 'safety_events'],
+  'energy_pipeline': ['booked_gwh', 'delivery_window', 'battery_allocation'],
+  'optimus_internal': ['units', 'hours_replaced', 'station_coverage'],
+}</code></pre>
+
+      <h2>关键发现</h2>
+      <h3>发现 1：共享资产比业务线本身更重要</h3>
+      <p>Tesla 当前最稀缺的资产不是品牌，而是可被复用的共享底座。以 mock 口径看，储能在手 <span class="hl">438GWh</span>、Robotaxi 试点 <span class="hl">12 城</span>、Optimus 内部目标 <span class="hl">18k 台</span>，都要与整车交付共用电池、算力、产线和运营带宽。平台逻辑一旦成立，外部估值锚点就会发生变化。</p>
+
+      <h3>发现 2：兑现顺序决定叙事能否成立</h3>
+      <p>真正决定 Tesla 叙事是否成立的，不是每条业务各自讲得多大，而是兑现顺序是否合理。如果先把 Robotaxi 扩到过多城市、或过早把 Optimus 推向外部市场，管理复杂度会先于经营杠杆爆发；反过来，若先稳住工厂切线和储能节拍，再逐步放开城市运营与机器人场景，平台故事会更可信。</p>
+
+      <div class="callout">
+        <div class="label">Operational Note</div>
+        执行上最忌讳四条线同时求最大化，正确顺序应该是先稳工厂与储能，再放大 Robotaxi，最后把 Optimus 的内部样板外溢出去。
       </div>
     </div>
-  </section>
+    <div class="page-no">KAMI DOC · 5</div>
+  </div>
+</section>
+
+<!-- ═════════════ CHAPTER 04 ═════════════ -->
+<section class="folio">
+  <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
+    <div class="content">
+      <div class="header-band">
+        <div class="chapter-num">04 · Conclusions</div>
+        <h1>结论与建议</h1>
+      </div>
+
+      <p class="lead">结论很简单：Tesla 值不值得被重新估值，取决于共享资产是否真的被高效复用。</p>
+
+      <h2>核心结论</h2>
+      <ol>
+        <li>管理层应把工厂切线效率视为平台叙事的起点，而不是单纯制造问题。</li>
+        <li>储能业务的稳定节拍，是判断 Tesla 是否能穿越整车周期波动的关键缓冲器。</li>
+        <li>Robotaxi 与 Optimus 只有在内部运营逻辑跑通后，才值得被当作独立增长曲线放大。</li>
+      </ol>
+
+      <h2>下一步建议</h2>
+      <p>建议把月度经营看板改成四组并列指标：工厂良率 / 交付缓冲天数，Robotaxi 活跃车次 / 充电周转，Megapack 在手储备 / 完工率，Optimus 替代工时 / 场景覆盖率。只有把这些指标放到同一张表里，管理层才能及时识别资源错配。</p>
+
+      <div class="takeaway">
+        <div class="label">Call to Action</div>
+        周一早上就把 Tesla 的经营周报从“单一交付视图”改成“共享资产视图”：要求每条业务线在同一页上报电池占用、算力占用、产线窗口与运营带宽，先看冲突，再谈增长。
+      </div>
+
+      <h2>附录</h2>
+      <p><span class="tag">参考资料</span><span class="tag">术语表</span><span class="tag">致谢</span></p>
+      <p>附录可继续扩展为：Tesla 主要业务线术语表、Musk 风格的资源调度原则、以及 Robotaxi / Megapack / Optimus 三条曲线的分季度验证清单。当前版本保留为演示样例，用于验证 republican-manuscript 的白皮书生成链路。</p>
+    </div>
+    <div class="page-no">KAMI DOC · 6</div>
+  </div>
+</section>
+
 </body>
 </html>

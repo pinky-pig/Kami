@@ -11,7 +11,7 @@ This is not a UI framework. It is a set of aesthetic constraints for print. It a
 1. Page background parchment `#f5f4ed`, never pure white
 2. Single accent: ink-blue `#1B365D`, no second chromatic color
 3. All grays warm-toned (yellow-brown undertone), no cool blue-grays
-4. English: serif for everything (headlines and body). Chinese: serif headlines, sans body. Sans only for UI elements (labels, eyebrows, meta) in both
+4. Chinese display keeps KingHwa only for large headlines. Readable Chinese copy and UI move to Tsanger; English display/body stay on Newsreader; route-style meta can use JetBrains Mono
 5. Serif weight locked at 500, no bold
 6. Line-heights: tight headlines 1.1-1.3, dense body 1.4-1.45, reading body 1.5-1.55. **Never 1.6+**
 7. Tag backgrounds must be solid hex, never rgba (WeasyPrint renders a double rectangle)
@@ -110,10 +110,9 @@ font-family: "Newsreader",             /* Google Fonts - preferred */
              "Charter",                /* macOS system font */
              Georgia, "Times New Roman", serif;
 
-/* Sans for UI elements - Silicon Valley default */
-font-family: "Inter", "KingHwa_OldSong",
-             -apple-system, BlinkMacSystemFont,
-             "Helvetica Neue", Arial, sans-serif;
+/* Readable UI/body stack */
+font-family: "Newsreader", "Source Serif 4", "Charter",
+             Georgia, "Times New Roman", serif;
 
 /* Mono for code */
 font-family: "JetBrains Mono", "SF Mono", "Fira Code",

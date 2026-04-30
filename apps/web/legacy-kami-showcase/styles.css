@@ -1,41 +1,41 @@
 @font-face {
     font-family: "Newsreader";
-    src: url("../../plugins/kami-themes/skills/republican-manuscript/assets/fonts/Newsreader.woff2") format("woff2");
+    src: url("../../../plugins/republican-themes/skills/republican-manuscript/assets/fonts/Newsreader.woff2") format("woff2");
     font-weight: 400 500;
     font-style: normal;
     font-display: swap;
   }
 @font-face {
     font-family: "Inter";
-    src: url("../../plugins/kami-themes/skills/republican-manuscript/assets/fonts/Inter.woff2") format("woff2");
+    src: url("../../../plugins/republican-themes/skills/republican-manuscript/assets/fonts/Inter.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
   }
   @font-face {
     font-family: "Inter";
-    src: url("../../plugins/kami-themes/skills/republican-manuscript/assets/fonts/Inter-500.woff2") format("woff2");
+    src: url("../../../plugins/republican-themes/skills/republican-manuscript/assets/fonts/Inter-500.woff2") format("woff2");
     font-weight: 500;
     font-style: normal;
     font-display: swap;
   }
   @font-face {
     font-family: "Inter";
-    src: url("../../plugins/kami-themes/skills/republican-manuscript/assets/fonts/Inter-600.woff2") format("woff2");
+    src: url("../../../plugins/republican-themes/skills/republican-manuscript/assets/fonts/Inter-600.woff2") format("woff2");
     font-weight: 600;
     font-style: normal;
     font-display: swap;
   }
   @font-face {
     font-family: "JetBrains Mono";
-    src: url("../../plugins/kami-themes/skills/republican-manuscript/assets/fonts/JetBrainsMono.woff2") format("woff2");
+    src: url("../../../plugins/republican-themes/skills/republican-manuscript/assets/fonts/JetBrainsMono.woff2") format("woff2");
     font-weight: 400 500;
     font-style: normal;
     font-display: swap;
   }
   @font-face {
     font-family: "KingHwa_OldSong";
-    src: url("../../plugins/kami-themes/skills/republican-manuscript/assets/fonts/京華老宋体v2.002.ttf") format("truetype");
+    src: url("../../../plugins/republican-themes/skills/republican-manuscript/assets/fonts/京華老宋体v2.002.ttf") format("truetype");
     font-weight: 500;
     font-display: swap;
   }
@@ -850,7 +850,7 @@
     border: 14px solid var(--brand);
     border-radius: 2px;
     background:
-      url("../../plugins/kami-themes/skills/republican-manuscript/assets/images/paper-overlay.png") center / 180px auto repeat,
+      url("../../../plugins/republican-themes/skills/republican-manuscript/assets/images/paper-overlay.png") center / 180px auto repeat,
       linear-gradient(135deg, #f6f1e8 0%, var(--parchment) 48%, #efe5d8 100%);
     overflow: hidden;
   }

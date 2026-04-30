@@ -6,7 +6,7 @@ Run from this directory via:
   python3 slides.py
 
 The script writes output.pptx. scripts/build.py moves it to
-assets/examples/slides.pptx when invoked as `python3 scripts/build.py slides`.
+assets/demos/demo-slides.pptx when invoked as `python3 scripts/build.py slides`.
 """
 
 from __future__ import annotations
@@ -40,10 +40,15 @@ STONE = RGBColor(0x8B, 0x87, 0x82)
 RULE = RGBColor(0xD0, 0xC7, 0xBB)
 TAG = RGBColor(0xD5, 0xDE, 0xE7)
 
-SERIF = "KingHwa_OldSong"
+SERIF = "display"
+SERIF_LATIN = "Newsreader"
 SERIF_EA = "京華老宋体"
-SANS = "Source Han Sans SC"
-MONO = "JetBrains Mono"
+SERIF_FALLBACK_EA = "Source Han Serif SC"
+SANS = "body"
+SANS_LATIN = "Newsreader"
+SANS_EA = "TsangerJinKai02-W04"
+MONO = "mono"
+MONO_LATIN = "JetBrains Mono"
 
 SLIDE_W = Inches(13.333)
 SLIDE_H = Inches(7.5)
@@ -54,6 +59,12 @@ INNER_W = SLIDE_W - PAD * 2
 INNER_H = SLIDE_H - PAD * 2
 TEXTURE = Path(__file__).resolve().parent.parent / "images" / "paper-overlay.png"
 DECK_BY_KIND = {slide["kind"]: slide for slide in DECK}
+COVER_PLAQUE_LEFT = INNER_X + Inches(0.72)
+COVER_PLAQUE_TOP = INNER_Y + Inches(1.78)
+COVER_COPY_LEFT = INNER_X + Inches(8.18)
+COVER_COPY_TOP = INNER_Y + Inches(2.02)
+COVER_METRIC_TOP = INNER_Y + Inches(3.84)
+COVER_META_TOP = INNER_Y + Inches(5.7)
 
 
 # ---------------------------------------------------------------------------
@@ -62,6 +73,33 @@ DECK_BY_KIND = {slide["kind"]: slide for slide in DECK}
 
 def rgb(color: RGBColor) -> RGBColor:
     return color
+
+
+def asset_image_path(filename: str) -> Path:
+    root = Path(__file__).resolve().parent.parent
+    candidates = [
+        root / "demos" / "mock-assets" / filename,
+        root / "images" / filename,
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
+
+
+def visual_slot_copy(slide: dict) -> tuple[str, str, str]:
+    diagram = slide.get("diagram")
+    label = slide.get("visual_label")
+    if not label:
+        label = f"DIAGRAM SLOT · {diagram.upper()}" if diagram else "VISUAL SLOT"
+    title = slide.get("visual_title") or ("优先使用现有 diagrams" if diagram else "默认纯色占位")
+    note = slide.get("visual_note")
+    if not note:
+        if diagram:
+            note = f"优先嵌入 assets/diagrams/{diagram}.html 的 SVG；没有图就继续保留纯色占位。"
+        else:
+            note = "若需要图表，优先改用 assets/diagrams；若需要真实图片，再填 image。"
+    return label, title, note
 
 
 def add_shape(slide, shape_type, left, top, width, height, fill, line=None, weight=1):
@@ -111,12 +149,31 @@ def add_text(
     p.line_spacing = line_spacing
     run = p.add_run()
     run.text = text.upper() if tracking else text
-    run.font.name = font
     run.font.size = Pt(size)
     run.font.bold = bold
     run.font.color.rgb = rgb(color)
     apply_typeface(run, font)
     return box
+
+
+def latin_font(font: str) -> str:
+    if font == SERIF:
+        return SERIF_LATIN
+    if font == SANS:
+        return SANS_LATIN
+    if font == MONO:
+        return MONO_LATIN
+    return font
+
+
+def east_asian_font(font: str) -> str:
+    if font == SERIF:
+        return SERIF_EA
+    if font == SANS:
+        return SANS_EA
+    if font == MONO:
+        return MONO_LATIN
+    return SERIF_FALLBACK_EA
 
 
 def apply_typeface(run, font):
@@ -126,10 +183,12 @@ def apply_typeface(run, font):
     <a:ea> for Chinese glyphs, so without this the deck silently falls back
     to the default Chinese font even though the XML appears to name a font.
     """
-    run.font.name = font
+    latin_typeface = latin_font(font)
     # PPTX separates Latin and East Asian font slots. Keep Latin labels in
-    # their requested face, but force all Chinese glyphs through KingHwa.
-    east_asian = SERIF_EA
+    # their requested face, and map Chinese glyphs by semantic role so body
+    # copy stays readable while display serif keeps the manuscript tone.
+    east_asian = east_asian_font(font)
+    run.font.name = latin_typeface
     r_pr = run._r.get_or_add_rPr()
     for tag in ("{http://schemas.openxmlformats.org/drawingml/2006/main}latin",
                 "{http://schemas.openxmlformats.org/drawingml/2006/main}ea",
@@ -138,18 +197,18 @@ def apply_typeface(run, font):
             if child.tag == tag:
                 r_pr.remove(child)
     latin = OxmlElement("a:latin")
-    latin.set("typeface", font)
+    latin.set("typeface", latin_typeface)
     ea = OxmlElement("a:ea")
     ea.set("typeface", east_asian)
     cs = OxmlElement("a:cs")
-    cs.set("typeface", font)
+    cs.set("typeface", latin_typeface)
     r_pr.append(latin)
     r_pr.append(ea)
     r_pr.append(cs)
 
 
 def patch_theme_fonts(pptx_path: str):
-    """Make the deck theme default to KingHwa for Chinese text as well."""
+    """Make theme defaults match the manuscript font-role split."""
     path = Path(pptx_path)
     tmp = path.with_suffix(".tmp.pptx")
     with zipfile.ZipFile(path, "r") as src, zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as dst:
@@ -157,9 +216,9 @@ def patch_theme_fonts(pptx_path: str):
             data = src.read(item.filename)
             if item.filename == "ppt/theme/theme1.xml":
                 text = data.decode("utf-8")
-                text = text.replace('<a:ea typeface=""/>', f'<a:ea typeface="{SERIF_EA}"/>')
-                text = text.replace('script="Hans" typeface="宋体"', f'script="Hans" typeface="{SERIF_EA}"')
-                text = text.replace('script="Hant" typeface="新細明體"', f'script="Hant" typeface="{SERIF_EA}"')
+                text = text.replace('<a:ea typeface=""/>', f'<a:ea typeface="{SANS_EA}"/>')
+                text = text.replace('script="Hans" typeface="宋体"', f'script="Hans" typeface="{SANS_EA}"')
+                text = text.replace('script="Hant" typeface="新細明體"', f'script="Hant" typeface="{SANS_EA}"')
                 data = text.encode("utf-8")
             dst.writestr(item, data)
     tmp.replace(path)
@@ -381,8 +440,8 @@ def slide_cover(prs):
     s = framed_slide(prs, slide["section"], slide["page"])
     title_plaque(
         s,
-        INNER_X + Inches(0.72),
-        INNER_Y + Inches(0.78),
+        COVER_PLAQUE_LEFT,
+        COVER_PLAQUE_TOP,
         Inches(7.0),
         Inches(2.8),
         slide["kicker"],
@@ -392,8 +451,8 @@ def slide_cover(prs):
     add_text(
         s,
         slide["body"],
-        INNER_X + Inches(8.18),
-        INNER_Y + Inches(1.0),
+        COVER_COPY_LEFT,
+        COVER_COPY_TOP,
         Inches(3.45),
         Inches(1.46),
         font=SANS,
@@ -403,8 +462,8 @@ def slide_cover(prs):
     )
     metric_card(
         s,
-        INNER_X + Inches(8.18),
-        INNER_Y + Inches(2.82),
+        COVER_COPY_LEFT,
+        COVER_METRIC_TOP,
         Inches(1.55),
         slide["metrics"][0]["value"],
         slide["metrics"][0]["label"],
@@ -413,7 +472,7 @@ def slide_cover(prs):
     metric_card(
         s,
         INNER_X + Inches(9.9),
-        INNER_Y + Inches(2.82),
+        COVER_METRIC_TOP,
         Inches(1.55),
         slide["metrics"][1]["value"],
         slide["metrics"][1]["label"],
@@ -423,7 +482,7 @@ def slide_cover(prs):
         s,
         slide["meta"],
         INNER_X + Inches(0.74),
-        INNER_Y + Inches(5.7),
+        COVER_META_TOP,
         Inches(4.0),
         Inches(0.22),
         font=MONO,
@@ -459,6 +518,106 @@ def slide_principle(prs):
         size=24,
         color=NAVY,
         align=PP_ALIGN.CENTER,
+    )
+
+
+def slide_image_focus(prs, key):
+    slide = DECK_BY_KIND[key]
+    s = framed_slide(prs, slide["section"], slide["page"])
+    section_header(
+        s,
+        slide["number"],
+        slide["title"],
+        slide["lede"],
+        slide["page"],
+    )
+    image_box_left = INNER_X + Inches(0.78)
+    image_box_top = INNER_Y + Inches(2.02)
+    image_box_width = Inches(6.10)
+    image_box_height = Inches(3.34)
+    add_shape(s, MSO_SHAPE.RECTANGLE, image_box_left, image_box_top, image_box_width, image_box_height, IVORY, NAVY_SOFT, 0.7)
+    image_name = slide.get("image")
+    image_path = asset_image_path(image_name) if image_name else None
+    if image_path and image_path.exists():
+        s.shapes.add_picture(str(image_path), image_box_left, image_box_top, width=image_box_width, height=Inches(2.96))
+        add_text(
+            s,
+            slide["caption"],
+            image_box_left + Inches(0.18),
+            image_box_top + Inches(3.02),
+            image_box_width - Inches(0.36),
+            Inches(0.16),
+            font=MONO,
+            size=7.5,
+            color=STONE,
+            tracking=True,
+        )
+    else:
+        label, title, note = visual_slot_copy(slide)
+        add_shape(s, MSO_SHAPE.RECTANGLE, image_box_left, image_box_top, image_box_width, image_box_height, TAG, NAVY, 0.8)
+        add_text(
+            s,
+            label,
+            image_box_left + Inches(0.20),
+            image_box_top + Inches(0.20),
+            image_box_width - Inches(0.40),
+            Inches(0.18),
+            font=MONO,
+            size=8,
+            color=NAVY,
+            tracking=True,
+        )
+        add_text(
+            s,
+            title,
+            image_box_left + Inches(0.28),
+            image_box_top + Inches(1.05),
+            Inches(4.70),
+            Inches(1.05),
+            font=SERIF,
+            size=27,
+            color=INK,
+            line_spacing=1.05,
+        )
+        add_text(
+            s,
+            note,
+            image_box_left + Inches(0.28),
+            image_box_top + Inches(2.38),
+            image_box_width - Inches(0.60),
+            Inches(0.54),
+            font=SANS,
+            size=11,
+            color=COPY,
+            line_spacing=1.18,
+        )
+    metric_card(
+        s,
+        INNER_X + Inches(7.18),
+        INNER_Y + Inches(2.10),
+        Inches(2.08),
+        slide["metrics"][0]["value"],
+        slide["metrics"][0]["label"],
+        slide["metrics"][0]["note"],
+    )
+    metric_card(
+        s,
+        INNER_X + Inches(9.44),
+        INNER_Y + Inches(2.10),
+        Inches(2.08),
+        slide["metrics"][1]["value"],
+        slide["metrics"][1]["label"],
+        slide["metrics"][1]["note"],
+    )
+    add_bullets(
+        s,
+        slide["bullets"],
+        INNER_X + Inches(7.18),
+        INNER_Y + Inches(3.72),
+        Inches(4.10),
+        Inches(1.62),
+        size=11,
+        color=COPY,
     )
 
 
@@ -648,11 +807,11 @@ def main():
 
     slide_cover(prs)
     slide_principle(prs)
-    slide_visual_language(prs)
+    slide_image_focus(prs, "image-focus-factory")
+    slide_image_focus(prs, "image-focus-robotaxi")
+    slide_image_focus(prs, "image-focus-energy")
+    slide_image_focus(prs, "image-focus-optimus")
     slide_templates(prs)
-    slide_prompt(prs)
-    slide_density(prs)
-    slide_pipeline(prs)
     slide_end(prs)
 
     prs.save("output.pptx")

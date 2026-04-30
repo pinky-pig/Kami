@@ -10,58 +10,261 @@
     font-weight: 500;
     font-style: normal;
   }
-
+  @font-face {
+    font-family: "KamiDisplayCn";
+    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+  @font-face {
+    font-family: "TsangerReadableCn";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
 @page {
     size: A4;
-    margin: 9mm 13mm 9mm 13mm;
-    background: #f5f4ed;
+    margin: 0;
+    background: #243851;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --parchment: #f5f4ed;
-    --ivory:     #faf9f5;
-    --sand:      #e8e6dc;
-    --border:    #e8e6dc;
-    --border-soft: #efede4;
-    --near-black: #141413;
-    --dark-warm: #3d3d3a;
-    --olive:     #5e5d59;
-    --stone:     #87867f;
-    --brand:     #1B365D;
-    --brand-tint: #EEF2F7;          /* solid equivalent of rgba(1B365D, 0.08), avoids tag double-rectangle bug */
-    --brand-tint-strong: #E4ECF5;   /* solid equivalent of rgba(1B365D, 0.14) */
+    --parchment: #EBE5DD;
+    --ivory:     #F3EFEB;
+    --sand:      #D0C7BB;
+    --border:    #D0C7BB;
+    --border-soft: #DDD5CB;
+    --near-black: #232222;
+    --dark-warm: #4A4947;
+    --olive:     #666361;
+    --stone:     #8B8782;
+    --brand:     #243851;
+    --frame-blue: #243851;
+    --blue-soft:  #4D5B6D;
+    --paper-wash: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --brand-tint: #D5DEE7;
+    --brand-tint-strong: #CFD8E2;
+    --display-serif: "KamiDisplayCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    --ui-sans: "TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
   }
 
-  html, body {
-    background:
-      url("../images/paper-overlay.png") center / 72mm auto repeat,
-      var(--parchment);
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--frame-blue);
   }
 
   body {
     color: var(--near-black);
-    font-family: "KingHwa_OldSong", "Noto Serif CJK SC", "DejaVu Serif", "PingFang SC", Georgia, serif;
+    font-family: var(--ui-sans);
     font-size: 9.2pt;
     line-height: 1.38;
     letter-spacing: 0.15pt;
   }
 
-  .serif {
-    font-family: "KingHwa_OldSong", "DejaVu Serif", "Noto Serif CJK SC", Georgia, serif;
+  .resume-page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 4.5mm;
+    background: var(--frame-blue);
+    overflow: hidden;
+    break-after: page;
+  }
+
+  .resume-page:last-of-type {
+    break-after: auto;
+  }
+
+  .resume-sheet {
+    position: relative;
+    min-height: 288mm;
+    padding: 7.5mm 10mm 6.5mm;
+    background:
+      url("../images/paper-overlay.png") center / 72mm auto repeat,
+      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
+    overflow: hidden;
+  }
+
+  .resume-sheet-frame,
+  .resume-sheet-frame-inner {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .resume-sheet-frame {
+    inset: 3.2mm;
+    top: 3.2mm;
+    right: 3.2mm;
+    bottom: 3.2mm;
+    left: 3.2mm;
+    border: 1pt solid var(--frame-blue);
+  }
+
+  .resume-sheet-frame-inner {
+    inset: 5.5mm;
+    top: 5.5mm;
+    right: 5.5mm;
+    bottom: 5.5mm;
+    left: 5.5mm;
+    border: 0.45pt solid var(--blue-soft);
+  }
+
+  .resume-sheet > :not(.resume-sheet-frame):not(.resume-sheet-frame-inner) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12pt;
+    margin-bottom: 4.2mm;
+    font-size: 7.6pt;
+    line-height: 1.4;
+    letter-spacing: 0.45pt;
+    color: var(--stone);
+  }
+
+  .blue-tag {
+    position: relative;
+    display: inline-block;
+    background: var(--frame-blue);
+    color: var(--ivory);
+    padding: 5pt 8pt;
+    font-size: 7.1pt;
+    line-height: 1.3;
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .blue-tag::before {
+    content: "";
+    position: absolute;
+    inset: 4pt;
+    top: 4pt;
+    right: 4pt;
+    bottom: 4pt;
+    left: 4pt;
+    border: 0.5pt solid #F3EFEB;
+  }
+
+  .page-no {
+    position: absolute;
+    right: 11.2mm;
+    bottom: 7.1mm;
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 0.8pt;
+    color: var(--stone);
+  }
+
+  @media screen {
+    html {
+      background: linear-gradient(180deg, #243851 0%, #1d2f45 100%);
+      padding: 18px 0;
+    }
+
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      background: transparent;
+    }
+
+    .resume-page { box-shadow: 0 18px 42px rgba(20, 20, 19, 0.14); flex-shrink: 0; }
+  }
+
+  @media print {
+    body { background: var(--frame-blue); }
+  }
+
+  .serif { font-family: var(--display-serif); }
+
+  .name,
+  .metric-value,
+  .section-title,
+  .tl-year,
+  .proj-name,
+  .os-name,
+  .ai-card-head,
+  .twitter-strip .handle,
+  .inf-block-title {
+    font-family: var(--display-serif);
+  }
+
+  .tagline,
+  .contact,
+  .metric-label,
+  .section-title .sub,
+  .summary,
+  .tl-head,
+  .tl-body,
+  .proj-kind,
+  .proj-role,
+  .proj-label,
+  .proj-text,
+  .team-culture,
+  .os-intro,
+  .os-desc,
+  .os-star,
+  .os-highlight,
+  .ai-card-body,
+  .twitter-strip .follower,
+  .twitter-strip .desc,
+  .inf-block-title .small,
+  .art-title,
+  .talk-title,
+  .art-stats,
+  .talk-venue,
+  .art-date,
+  .art-stats .lang-cn,
+  .art-stats .lang-en {
+    font-family: var(--ui-sans);
   }
 
   a { color: var(--brand); text-decoration: none; }
 
   /* HEADER */
   .header {
+    position: relative;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-    padding-bottom: 3mm;
-    margin-bottom: 3mm;
-    border-bottom: 0.5pt solid #e3baa9;
+    padding-bottom: 3.2mm;
+    margin-bottom: 3.6mm;
+    border-bottom: 1pt solid var(--frame-blue);
+  }
+  .header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1.4mm;
+    border-bottom: 0.45pt solid var(--blue-soft);
   }
   .header > div:first-child { flex-shrink: 0; }
   .name {
@@ -96,7 +299,7 @@
     line-height: 1.5;
     margin-bottom: -0.5mm;
   }
-  .contact a { color: var(--dark-warm); }
+  .contact a { color: var(--brand); }
   .contact .loc { color: var(--olive); font-weight: 500; }
 
   /* METRICS */
@@ -150,7 +353,7 @@
   }
 
   section:first-of-type .section-title { margin-top: 0; }
-  .page-break > .section-title { margin-top: 0; }
+  .page-break .resume-sheet > section:first-child > .section-title { margin-top: 0; }
 
   /* Unify gap from section-title bottom border to first content's first line = 3mm
      (section-title margin-bottom 1.8mm + first-child top spacing 1.2mm) */
@@ -202,7 +405,7 @@
   .proj-kind { font-size: 11pt; color: var(--olive); }
   .proj-role {
     font-size: 8.7pt; color: var(--brand); font-weight: 500;
-    margin-left: auto; background: #EEF2F7;
+    margin-left: auto; background: var(--brand-tint);
     padding: 0.4mm 1.2mm; border-radius: 2pt; letter-spacing: 0.05pt;
   }
   .proj-lines { display: table; width: 100%; }
@@ -272,7 +475,7 @@
     margin-top: 2.5mm;
     padding: 1.8mm 2.8mm;
     background: var(--brand-tint);
-    border: 0.4pt solid #D6E1EE;
+    border: 0.4pt solid var(--blue-soft);
     border-radius: 2pt;
     font-size: 9pt; line-height: 1.40;
     color: var(--near-black);
@@ -423,6 +626,55 @@
   }
   .edu-row .major { color: var(--olive); font-size: 9.5pt; }
   .edu-row .date { color: var(--stone); font-variant-numeric: tabular-nums; font-size: 9pt; }
+
+  /* TYPOGRAPHY REBALANCE */
+  .name,
+  .metric-value,
+  .section-title,
+  .tl-year,
+  .proj-name,
+  .os-name,
+  .ai-card-head,
+  .twitter-strip .handle,
+  .inf-block-title,
+  .edu-row .school {
+    font-family: var(--display-serif);
+  }
+
+  .tagline,
+  .contact,
+  .metric-label,
+  .section-title .sub,
+  .summary,
+  .tl-head,
+  .tl-body,
+  .proj-kind,
+  .proj-role,
+  .proj-label,
+  .proj-text,
+  .team-culture,
+  .os-intro,
+  .os-desc,
+  .os-star,
+  .os-highlight,
+  .ai-card-body,
+  .twitter-strip .follower,
+  .twitter-strip .desc,
+  .inf-block-title .small,
+  .art-title,
+  .talk-title,
+  .art-stats,
+  .talk-venue,
+  .art-date,
+  .talk-date,
+  .skill-label,
+  .skill-body,
+  .edu-row .major,
+  .edu-row .date,
+  .art-stats .lang-cn,
+  .art-stats .lang-en {
+    font-family: var(--ui-sans);
+  }
 </style>
 </head>
 <body>
@@ -439,6 +691,14 @@
 
 
 <!-- ═══════════ PAGE 1 ═══════════ -->
+<div class="resume-page">
+<div class="resume-sheet">
+<div class="resume-sheet-frame" aria-hidden="true"></div>
+<div class="resume-sheet-frame-inner" aria-hidden="true"></div>
+<div class="topline">
+  <div class="blue-tag">Career Dossier · Internal Edition</div>
+  <div>Profile Ledger · Page 1 / 2</div>
+</div>
 
 <div class="header">
   <div>
@@ -550,11 +810,21 @@
     </div>
   </div>
 </section>
+<div class="page-no">KAMI DOC · 1</div>
+</div>
+</div>
 
 
 <!-- ═══════════ PAGE 2 ═══════════ -->
-
-<section class="page-break">
+<div class="resume-page page-break">
+<div class="resume-sheet">
+<div class="resume-sheet-frame" aria-hidden="true"></div>
+<div class="resume-sheet-frame-inner" aria-hidden="true"></div>
+<div class="topline">
+  <div class="blue-tag">Evidence Appendix · Internal Edition</div>
+  <div>Selected Work / Public Signals · Page 2 / 2</div>
+</div>
+<section>
   <div class="section-title">开源项目 &amp; 独立开发者<span class="sub">{{时间跨度}} · {{一句副标题}}</span></div>
 
   <div class="os-intro">
@@ -706,6 +976,9 @@
     <div class="date">{{起止时间}}</div>
   </div>
 </section>
+<div class="page-no">KAMI DOC · 2</div>
+</div>
+</div>
 
 </body>
 </html>

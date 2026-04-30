@@ -73,7 +73,7 @@ cd assets/templates/slidev && pnpm run dev
 python3 scripts/build.py --check
 ```
 
-`python3 scripts/build.py slides` 会先从 `slides_spec.py` 渲染 `assets/templates/slidev/slides.md`，再同时生成 `assets/examples/slides.pptx` 和 `assets/examples/slides-online/`。不要手改 `slides.md`，它是生成物。
+`python3 scripts/build.py slides` 会先从 `slides_spec.py` 渲染 `assets/templates/slidev/slides.md`，再同时生成 `assets/demos/demo-slides.pptx` 和 `assets/demos/slides-online/`。不要手改 `slides.md`，它是生成物；预览脚本位于 `assets/demos/slides-online/` 内。
 
 ## Feedback Protocol
 

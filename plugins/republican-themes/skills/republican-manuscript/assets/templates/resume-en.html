@@ -6,9 +6,7 @@
 <style>
   @font-face { font-family: "Newsreader"; src: url("../fonts/Newsreader.woff2") format("woff2"); font-weight: 400; font-style: normal; }
   @font-face { font-family: "Newsreader"; src: url("../fonts/Newsreader.woff2") format("woff2"); font-weight: 500; font-style: normal; }
-  @font-face { font-family: "Inter"; src: url("../fonts/Inter.woff2") format("woff2"); font-weight: 400; font-style: normal; }
-  @font-face { font-family: "Inter"; src: url("../fonts/Inter-500.woff2") format("woff2"); font-weight: 500; font-style: normal; }
-  @font-face { font-family: "Inter"; src: url("../fonts/Inter-600.woff2") format("woff2"); font-weight: 600; font-style: normal; }
+  @font-face { font-family: "Newsreader"; src: url("../fonts/Newsreader.woff2") format("woff2"); font-weight: 600; font-style: normal; }
   @font-face { font-family: "JetBrains Mono"; src: url("../fonts/JetBrainsMono.woff2") format("woff2"); font-weight: 400; font-style: normal; }
   @font-face { font-family: "JetBrains Mono"; src: url("../fonts/JetBrainsMono.woff2") format("woff2"); font-weight: 500; font-style: normal; }
 
@@ -36,8 +34,8 @@
 
     --serif: "Newsreader", "Source Serif 4", "Source Serif Pro", "Charter",
              Georgia, "Times New Roman", serif;
-    --sans:  "Inter", -apple-system, BlinkMacSystemFont,
-             "Helvetica Neue", Arial, sans-serif;
+    --sans:  "Newsreader", "Source Serif 4", "Source Serif Pro", "Charter",
+             Georgia, "Times New Roman", serif;
     --mono:  "JetBrains Mono", "SF Mono", "Fira Code",
              Consolas, Monaco, monospace;
   }
@@ -50,6 +48,43 @@
     font-size: 9.4pt;
     line-height: 1.42;
     letter-spacing: 0;
+  }
+
+  @media screen {
+    html {
+      background: linear-gradient(180deg, #ece7df 0%, #e5ded3 100%);
+      padding: 18px 0;
+    }
+
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      background: transparent;
+    }
+
+    .resume-page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 11mm 13mm;
+      background:
+        url("../images/paper-overlay.png") center / 72mm auto repeat,
+        var(--parchment);
+      box-shadow: 0 18px 42px rgba(20, 20, 19, 0.14);
+      flex-shrink: 0;
+    }
+
+    .resume-page.page-break {
+      margin-top: 0;
+      padding-top: 11mm;
+      border-top: none;
+    }
+  }
+
+  @media print {
+    html, body { background: var(--parchment); }
   }
 
   .serif { font-family: var(--serif); }
@@ -147,7 +182,8 @@
     letter-spacing: 0.2pt;
   }
   section:first-of-type .section-title { margin-top: 0; }
-  .page-break > .section-title { margin-top: 0; }
+  .page-break > .section-title,
+  .page-break > section:first-child > .section-title { margin-top: 0; }
 
   /* SUMMARY */
   .summary { font-size: 9.4pt; line-height: 1.48; color: var(--near-black); }
@@ -403,6 +439,7 @@
 
 
 <!-- ═══════════ PAGE 1 ═══════════ -->
+<div class="resume-page">
 
 <div class="header">
   <div>
@@ -522,11 +559,12 @@
     </div>
   </div>
 </section>
+</div>
 
 
 <!-- ═══════════ PAGE 2 ═══════════ -->
-
-<section class="page-break">
+<div class="resume-page page-break">
+<section>
   <div class="section-title">Open Source &amp; Indie Work<span class="sub">{{TIME_RANGE}} · {{SUBTITLE}}</span></div>
 
   <div class="os-intro">
@@ -678,6 +716,7 @@
     <div class="date">{{DATE_RANGE}}</div>
   </div>
 </section>
+</div>
 
 </body>
 </html>

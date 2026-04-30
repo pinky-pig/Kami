@@ -15,6 +15,13 @@
     font-weight: 500;
     font-style: normal;
   }
+  @font-face {
+    font-family: "TsangerReadableCn";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
 
   @page {
     size: A4;
@@ -39,6 +46,7 @@
     --rule:       #CABBA7;
     --panel-fill: #F7F2EA;
     --tag-bg:     #D5DEE7;
+    --reading-text: "TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -49,7 +57,7 @@
     margin: 0 auto;
     background: var(--frame-blue);
     color: var(--near-black);
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    font-family: var(--reading-text);
     font-size: 10.2pt;
     line-height: 1.5;
   }
@@ -64,12 +72,12 @@
   table,
   code,
   pre {
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-family: var(--reading-text);
   }
 
   .folio {
     min-height: 297mm;
-    padding: 10.5mm;
+    padding: 7mm;
     background: var(--frame-blue);
     break-after: page;
   }
@@ -80,7 +88,7 @@
 
   .sheet {
     position: relative;
-    min-height: 276mm;
+    min-height: 283mm;
     padding: 14mm 13mm 12mm;
     background:
       url("../images/paper-overlay.png") center / 72mm auto repeat,
@@ -88,21 +96,29 @@
     overflow: hidden;
   }
 
-  .sheet::before,
-  .sheet::after {
-    content: "";
+  .sheet-frame,
+  .sheet-frame-inner {
     position: absolute;
     pointer-events: none;
+    z-index: 2;
   }
 
-  .sheet::before {
-    inset: 6mm;
-    border: 1pt solid var(--frame-blue);
+  .sheet-frame {
+    inset: 4.5mm;
+    top: 4.5mm;
+    right: 4.5mm;
+    bottom: 4.5mm;
+    left: 4.5mm;
+    border: 1.05pt solid var(--frame-blue);
   }
 
-  .sheet::after {
-    inset: 8.4mm;
-    border: 0.45pt solid var(--blue-soft);
+  .sheet-frame-inner {
+    inset: 7.1mm;
+    top: 7.1mm;
+    right: 7.1mm;
+    bottom: 7.1mm;
+    left: 7.1mm;
+    border: 0.55pt solid var(--blue-soft);
   }
 
   .content {
@@ -114,6 +130,7 @@
     position: absolute;
     right: 14mm;
     bottom: 10mm;
+    z-index: 1;
     font-size: 8pt;
     line-height: 1.35;
     letter-spacing: 0.8pt;
@@ -146,17 +163,27 @@
     content: "";
     position: absolute;
     inset: 5pt;
+    top: 5pt;
+    right: 5pt;
+    bottom: 5pt;
+    left: 5pt;
     border: 0.55pt solid #F3EFEB;
   }
 
   .cover {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+  }
+
+  .cover > .content:first-child {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
   .cover-main {
-    margin-top: 24mm;
+    margin-top: auto;
+    margin-bottom: auto;
     display: grid;
     grid-template-columns: 1.22fr 0.58fr;
     gap: 14pt;
@@ -180,16 +207,24 @@
 
   .cover-plaque::before {
     inset: 7pt;
+    top: 7pt;
+    right: 7pt;
+    bottom: 7pt;
+    left: 7pt;
     border: 0.9pt solid #F3EFEB;
   }
 
   .cover-plaque::after {
     inset: 10pt;
+    top: 10pt;
+    right: 10pt;
+    bottom: 10pt;
+    left: 10pt;
     border: 0.45pt solid #D5DEE7;
   }
 
   .kicker {
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-family: var(--reading-text);
     font-size: 8pt;
     line-height: 1.35;
     letter-spacing: 1.9pt;
@@ -199,6 +234,7 @@
   }
 
   .cover-title {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 31pt;
     line-height: 1.18;
     font-weight: 500;
@@ -207,7 +243,7 @@
   }
 
   .cover-sub {
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-family: var(--reading-text);
     font-size: 10.6pt;
     line-height: 1.55;
     color: #F3EFEB;
@@ -232,6 +268,7 @@
   }
 
   .cover-side .value {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 14pt;
     line-height: 1.45;
     color: var(--near-black);
@@ -242,7 +279,7 @@
     justify-content: space-between;
     align-items: end;
     gap: 16pt;
-    margin-top: 24mm;
+    margin-top: 0;
   }
 
   .cover-note {
@@ -288,6 +325,7 @@
   }
 
   h1 {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 24pt;
     line-height: 1.18;
     font-weight: 500;
@@ -295,6 +333,7 @@
   }
 
   h2 {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 14pt;
     line-height: 1.25;
     font-weight: 500;
@@ -304,6 +343,7 @@
   }
 
   h3 {
+    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
     font-size: 11.5pt;
     line-height: 1.3;
     font-weight: 500;
@@ -431,7 +471,7 @@
 
   .cite {
     display: block;
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-family: var(--reading-text);
     font-size: 8.5pt;
     line-height: 1.4;
     color: var(--stone);
@@ -520,7 +560,7 @@
     display: inline-block;
     background: var(--tag-bg);
     color: var(--frame-blue);
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-family: var(--reading-text);
     font-size: 8pt;
     line-height: 1.35;
     font-weight: 500;
@@ -535,6 +575,8 @@
 <!-- ═════════════ COVER ═════════════ -->
 <section class="folio">
   <div class="sheet cover">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
     <div class="content">
       <div class="topline">
         <div class="blue-tag">{{WHITE PAPER · INTERNAL EDITION}}</div>
@@ -575,6 +617,8 @@
 <!-- ═════════════ TOC ═════════════ -->
 <section class="folio">
   <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
     <div class="content">
       <div class="header-band">
         <div class="chapter-num">Table of Contents</div>
@@ -616,6 +660,8 @@
 <!-- ═════════════ CHAPTER 01 ═════════════ -->
 <section class="folio">
   <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
     <div class="content">
       <div class="header-band">
         <div class="chapter-num">01 · Executive Summary</div>
@@ -651,6 +697,8 @@
 <!-- ═════════════ CHAPTER 02 ═════════════ -->
 <section class="folio">
   <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
     <div class="content">
       <div class="header-band">
         <div class="chapter-num">02 · Background</div>
@@ -703,6 +751,8 @@
 <!-- ═════════════ CHAPTER 03 ═════════════ -->
 <section class="folio">
   <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
     <div class="content">
       <div class="header-band">
         <div class="chapter-num">03 · Methodology</div>
@@ -735,6 +785,8 @@
 <!-- ═════════════ CHAPTER 04 ═════════════ -->
 <section class="folio">
   <div class="sheet">
+    <div class="sheet-frame" aria-hidden="true"></div>
+    <div class="sheet-frame-inner" aria-hidden="true"></div>
     <div class="content">
       <div class="header-band">
         <div class="chapter-num">04 · Conclusions</div>

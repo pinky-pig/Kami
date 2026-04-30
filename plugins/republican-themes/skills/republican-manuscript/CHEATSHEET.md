@@ -4,9 +4,10 @@
 
 ## V1 范围
 
-- 正式支持：中文 `one-pager`、`long-doc`、`letter`、`slides`
+- 正式支持：中文 `one-pager`、`long-doc`、`letter`、`resume`、`portfolio`、`slides`
 - 风格目标：深蓝外框、旧纸内页、明显 padding、蓝色题签、档案式边框
-- 暂不主推：英文模板、简历、作品集
+- `resume / portfolio` 不是第二套视觉系统，必须参考 `assets/demos/demo-long-doc.html`
+- 暂不主推：英文模板
 
 ## 八条铁律
 
@@ -26,8 +27,10 @@
 | 帮我生成一份白皮书 | `long-doc.html` |
 | 生成一份项目方案 / 做一页项目方案 | `one-pager.html` |
 | 帮我写一份推荐信 / 写一封推荐函 | `letter.html` |
+| 帮我排一份简历 / 生成简历 | `resume.html` |
+| 帮我做作品集 / 生成 portfolio | `portfolio.html` |
 | 做一套汇报 slides / 生成一个 Slides | `slides_spec.py` -> `slides.py` + `slidev/render_from_spec.py` |
-| 帮我把这些内容排版成好看的 PDF | 先判断 `one-pager` / `long-doc` / `letter` |
+| 帮我把这些内容排版成好看的 PDF | 先判断 `one-pager` / `long-doc` / `letter` / `resume` / `portfolio` |
 
 ## 色板
 
@@ -88,6 +91,7 @@
 | One-Pager | `@page margin: 0`，深蓝外框；内页约 10.5mm 外 padding + 13mm 内容 padding |
 | Long Doc | `@page margin: 0`，每页深蓝外框；内页约 10.5mm 外 padding + 13mm 内容 padding |
 | Letter | `@page margin: 0`，深蓝外框；内页约 11mm 外 padding + 15mm 内容 padding |
+| Resume / Portfolio | 仍然沿用 `demo-long-doc.html` 的深蓝外框、旧纸内页、题签和页码；只允许为了内容密度微调内边距 |
 
 ## 常用 CSS 片段
 
@@ -189,4 +193,4 @@ body {
 | 中文正文 | serif 或 sans 跟模板既有规则走，别混杂太多样式 |
 | 装饰 | 最多一处“题签感”，别扩散到整页 |
 
-不在表里，就回到一句话：**版式骨架沿用 kami，时代气质交给深蓝外框、旧纸内页和档案题签。**
+不在表里，就回到一句话：**版式骨架沿用 kami；`resume / portfolio` 也必须先看 `demo-long-doc.html`，再决定内容怎么塞进去。**

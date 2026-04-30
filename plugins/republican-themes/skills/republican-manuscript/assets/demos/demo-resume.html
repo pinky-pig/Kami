@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>林若川 · 简历</title>
+<title>伊隆·马斯克 · 简历</title>
 <style>
   @font-face {
     font-family: "KingHwa_OldSong";
@@ -10,558 +10,975 @@
     font-weight: 500;
     font-style: normal;
   }
-
-  @page {
+  @font-face {
+    font-family: "KamiDisplayCn";
+    src: url("../fonts/京華老宋体v2.002.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+  @font-face {
+    font-family: "TsangerReadableCn";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "Newsreader";
+    src: url("../fonts/Newsreader.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+  }
+@page {
     size: A4;
     margin: 0;
     background: #243851;
   }
 
-  :root {
-    --navy: #243851;
-    --navy-soft: #4D5B6D;
-    --paper: #EBE5DD;
-    --paper-light: #F6F1E8;
-    --paper-deep: #EFE5D8;
-    --ivory: #F3EFEB;
-    --ink: #232222;
-    --copy: #4A4947;
-    --muted: #8B8782;
-    --rule: #CABBA7;
-    --tag: #D5DEE7;
-  }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #EBE5DD;
+    --ivory:     #F3EFEB;
+    --sand:      #D0C7BB;
+    --border:    #D0C7BB;
+    --border-soft: #DDD5CB;
+    --near-black: #232222;
+    --dark-warm: #4A4947;
+    --olive:     #666361;
+    --stone:     #8B8782;
+    --brand:     #243851;
+    --frame-blue: #243851;
+    --blue-soft:  #4D5B6D;
+    --paper-wash: #F6F1E8;
+    --paper-deep: #EFE5D8;
+    --brand-tint: #D5DEE7;
+    --brand-tint-strong: #CFD8E2;
+    --display-serif: "KamiDisplayCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    --ui-sans: "TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+  }
 
   html,
   body {
     width: 210mm;
     min-height: 297mm;
     margin: 0 auto;
-    background: var(--navy);
-    color: var(--ink);
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    background: var(--frame-blue);
   }
 
   body {
-    padding: 10.5mm;
+    color: var(--near-black);
+    font-family: var(--ui-sans);
+    font-size: 9.2pt;
+    line-height: 1.38;
+    letter-spacing: 0.15pt;
   }
 
-  .folio {
+  .resume-page {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 4.5mm;
+    background: var(--frame-blue);
+    overflow: hidden;
+    break-after: page;
+  }
+
+  .resume-page:last-of-type {
+    break-after: auto;
+  }
+
+  .resume-sheet {
     position: relative;
-    width: 189mm;
-    height: 276mm;
+    min-height: 288mm;
+    padding: 7.5mm 10mm 6.5mm;
     background:
       url("../images/paper-overlay.png") center / 72mm auto repeat,
-      linear-gradient(135deg, var(--paper-light) 0%, var(--paper) 48%, var(--paper-deep) 100%);
+      linear-gradient(135deg, var(--paper-wash) 0%, var(--parchment) 48%, var(--paper-deep) 100%);
     overflow: hidden;
   }
 
-  .folio::before,
-  .folio::after {
-    content: "";
+  .resume-sheet-frame,
+  .resume-sheet-frame-inner {
     position: absolute;
     pointer-events: none;
+    z-index: 2;
   }
 
-  .folio::before {
-    inset: 6mm;
-    border: 1pt solid var(--navy);
+  .resume-sheet-frame {
+    inset: 3.2mm;
+    top: 3.2mm;
+    right: 3.2mm;
+    bottom: 3.2mm;
+    left: 3.2mm;
+    border: 1pt solid var(--frame-blue);
   }
 
-  .folio::after {
-    inset: 8.5mm;
-    border: 0.45pt solid var(--navy-soft);
+  .resume-sheet-frame-inner {
+    inset: 5.5mm;
+    top: 5.5mm;
+    right: 5.5mm;
+    bottom: 5.5mm;
+    left: 5.5mm;
+    border: 0.45pt solid var(--blue-soft);
   }
 
-  .card,
-  .metric,
-  .summary,
-  .footer {
-    position: absolute;
+  .resume-sheet > :not(.resume-sheet-frame):not(.resume-sheet-frame-inner) {
+    position: relative;
     z-index: 1;
   }
 
-  .plaque {
-    background: var(--navy);
-    color: var(--ivory);
+  .topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12pt;
+    margin-bottom: 4.2mm;
+    font-size: 7.6pt;
+    line-height: 1.4;
+    letter-spacing: 0.45pt;
+    color: var(--stone);
   }
 
-  .plaque::before,
-  .plaque::after {
-    content: "";
-    position: absolute;
-    pointer-events: none;
-  }
-
-  .plaque::before {
-    inset: 6pt;
-    border: 0.85pt solid #F3EFEB;
-  }
-
-  .plaque::after {
-    inset: 9pt;
-    border: 0.45pt solid #D5DEE7;
-  }
-
-  .name-card {
-    left: 13mm;
-    top: 13mm;
-    width: 101mm;
-    height: 33mm;
-    padding: 10pt 14pt;
-  }
-
-  .contact-card {
-    left: 119mm;
-    top: 13mm;
-    width: 57mm;
-    height: 33mm;
-    border: 1pt solid var(--navy);
-    background: var(--ivory);
-    padding: 10pt 11pt;
-    text-align: right;
-  }
-
-  .eyebrow,
-  .label,
-  .tag,
-  .meta,
-  .footer,
-  .metric-label,
-  .section-en {
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
-  }
-
-  .eyebrow {
-    font-size: 7.3pt;
-    line-height: 1.35;
-    letter-spacing: 1.8pt;
-    text-transform: uppercase;
-    color: #D5DEE7;
-    margin-bottom: 6pt;
-  }
-
-  h1,
-  h2,
-  h3,
-  .metric-value {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
-    font-weight: 500;
-  }
-
-  h1 {
-    font-size: 27pt;
-    line-height: 1.08;
-    letter-spacing: 0.8pt;
-    margin-bottom: 5pt;
-  }
-
-  .role {
-    font-size: 9.2pt;
-    line-height: 1.35;
-    color: #F3EFEB;
-  }
-
-  .contact-card h2 {
-    font-size: 14pt;
-    line-height: 1.2;
-    margin-bottom: 7pt;
-  }
-
-  .contact-card .meta {
-    font-size: 8.2pt;
-    line-height: 1.45;
-    color: var(--muted);
-  }
-
-  .summary {
-    left: 13mm;
-    top: 51mm;
-    width: 163mm;
-    height: 18mm;
-    border: 1pt solid var(--navy);
-    background: var(--ivory);
-    padding: 8pt 12pt 8pt 18pt;
-  }
-
-  .summary::before {
-    content: "";
-    position: absolute;
-    left: 8pt;
-    top: 9pt;
-    bottom: 9pt;
-    width: 3pt;
-    background: var(--navy);
-  }
-
-  .summary p {
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", serif;
-    font-size: 10.2pt;
-    line-height: 1.45;
-    color: var(--ink);
-  }
-
-  .hl {
-    color: var(--navy);
-    font-weight: 500;
-  }
-
-  .metric {
-    top: 74mm;
-    width: 38.75mm;
-    height: 18mm;
-    border: 1pt solid var(--navy);
-    background: var(--ivory);
-    padding: 6pt 7pt;
-  }
-
-  .m1 { left: 13mm; }
-  .m2 { left: 54.42mm; }
-  .m3 { left: 95.84mm; }
-  .m4 { left: 137.25mm; }
-
-  .metric-value {
-    font-size: 16pt;
-    line-height: 1;
-    color: var(--navy);
-    margin-bottom: 4pt;
-  }
-
-  .metric-label {
-    font-size: 7.4pt;
-    line-height: 1.3;
-    color: var(--copy);
-  }
-
-  .section {
-    border: 1pt solid var(--navy);
-    background: var(--ivory);
-  }
-
-  .section-head {
+  .blue-tag {
     position: relative;
-    height: 11mm;
-    background: var(--navy);
+    display: inline-block;
+    background: var(--frame-blue);
     color: var(--ivory);
-    padding: 5pt 9pt;
-  }
-
-  .section-head h2 {
-    font-size: 11.6pt;
-    line-height: 1.1;
-  }
-
-  .section-en {
-    position: absolute;
-    right: 9pt;
-    top: 6pt;
-    font-size: 6.9pt;
-    line-height: 1.35;
-    letter-spacing: 1.5pt;
+    padding: 5pt 8pt;
+    font-size: 7.1pt;
+    line-height: 1.3;
+    letter-spacing: 1.4pt;
     text-transform: uppercase;
-    color: #D5DEE7;
-  }
-
-  .section-body {
-    padding: 7pt 9pt 8pt;
-  }
-
-  .experience {
-    left: 13mm;
-    top: 97mm;
-    width: 97mm;
-    height: 73mm;
-  }
-
-  .skills {
-    left: 115mm;
-    top: 97mm;
-    width: 61mm;
-    height: 73mm;
-  }
-
-  .projects {
-    left: 13mm;
-    top: 176mm;
-    width: 53mm;
-    height: 53mm;
-  }
-
-  .education {
-    left: 68.5mm;
-    top: 176mm;
-    width: 52mm;
-    height: 53mm;
-  }
-
-  .method {
-    left: 123mm;
-    top: 176mm;
-    width: 53mm;
-    height: 53mm;
-  }
-
-  .job {
-    border-bottom: 0.45pt solid var(--rule);
-    padding-bottom: 6pt;
-    margin-bottom: 6pt;
-  }
-
-  .job:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
-    margin-bottom: 0;
-  }
-
-  .job-title,
-  .edu-row {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-    margin-bottom: 3pt;
-  }
-
-  .job-title h3,
-  .edu-row h3 {
-    display: table-cell;
-    font-size: 10.2pt;
-    line-height: 1.25;
-    color: var(--ink);
-  }
-
-  .date {
-    display: table-cell;
-    width: 18mm;
-    text-align: right;
-    font-size: 7.5pt;
-    line-height: 1.35;
-    color: var(--muted);
     white-space: nowrap;
   }
 
-  p,
-  li {
-    font-size: 8pt;
-    line-height: 1.42;
-    color: var(--copy);
+  .blue-tag::before {
+    content: "";
+    position: absolute;
+    inset: 4pt;
+    top: 4pt;
+    right: 4pt;
+    bottom: 4pt;
+    left: 4pt;
+    border: 0.5pt solid #F3EFEB;
   }
 
-  ul {
-    list-style: none;
-    margin-top: 4pt;
+  .page-no {
+    position: absolute;
+    right: 11.2mm;
+    bottom: 7.1mm;
+    font-size: 7.6pt;
+    line-height: 1.35;
+    letter-spacing: 0.8pt;
+    color: var(--stone);
   }
 
-  li {
+  @media screen {
+    html {
+      background: linear-gradient(180deg, #243851 0%, #1d2f45 100%);
+      padding: 18px 0;
+    }
+
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      background: transparent;
+    }
+
+    .resume-page { box-shadow: 0 18px 42px rgba(20, 20, 19, 0.14); flex-shrink: 0; }
+  }
+
+  @media print {
+    body { background: var(--frame-blue); }
+  }
+
+  .serif { font-family: var(--display-serif); }
+
+  .name,
+  .metric-value,
+  .section-title,
+  .tl-year,
+  .proj-name,
+  .os-name,
+  .ai-card-head,
+  .twitter-strip .handle,
+  .inf-block-title {
+    font-family: var(--display-serif);
+  }
+
+  .tagline,
+  .contact,
+  .metric-label,
+  .section-title .sub,
+  .summary,
+  .tl-head,
+  .tl-body,
+  .proj-kind,
+  .proj-role,
+  .proj-label,
+  .proj-text,
+  .team-culture,
+  .os-intro,
+  .os-desc,
+  .os-star,
+  .os-highlight,
+  .ai-card-body,
+  .twitter-strip .follower,
+  .twitter-strip .desc,
+  .inf-block-title .small,
+  .art-title,
+  .talk-title,
+  .art-stats,
+  .talk-venue,
+  .art-date,
+  .art-stats .lang-cn,
+  .art-stats .lang-en {
+    font-family: var(--ui-sans);
+  }
+
+  a { color: var(--brand); text-decoration: none; }
+
+  /* HEADER */
+  .header {
     position: relative;
-    padding-left: 9pt;
-    margin-bottom: 2.4pt;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 3.2mm;
+    margin-bottom: 3.6mm;
+    border-bottom: 1pt solid var(--frame-blue);
   }
-
-  li::before {
-    content: "-";
+  .header::after {
+    content: "";
     position: absolute;
     left: 0;
-    color: var(--navy);
+    right: 0;
+    bottom: -1.4mm;
+    border-bottom: 0.45pt solid var(--blue-soft);
   }
-
-  .tags {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4pt;
-    margin-bottom: 10pt;
-  }
-
-  .tag {
-    background: var(--tag);
-    color: var(--navy);
-    font-size: 7.2pt;
-    line-height: 1.35;
-    padding: 2pt 4pt;
-    text-align: center;
-  }
-
-  .skill-note {
-    border-top: 0.45pt solid var(--rule);
-    padding-top: 7pt;
-    margin-top: 2pt;
-  }
-
-  .skill-note h3 {
-    font-size: 10.3pt;
-    line-height: 1.25;
-    margin-bottom: 4pt;
-  }
-
-  .edu-row {
-    border-bottom: 0.45pt solid var(--rule);
-    padding-bottom: 6pt;
-    margin-bottom: 6pt;
-  }
-
-  .edu-row:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
+  .header > div:first-child { flex-shrink: 0; }
+  .name {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", "Noto Serif CJK SC", Georgia, serif;
+    font-size: 26.5pt;
+    font-weight: 500;
+    letter-spacing: 1pt;
+    color: var(--near-black);
+    line-height: 1;
     margin-bottom: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 2.2mm;
+    white-space: nowrap;
   }
-
-  .edu-row p {
-    margin-top: 2pt;
+  .alias {
+    font-size: 12.5pt;
+    font-weight: 400;
+    color: var(--stone);
+    letter-spacing: 0.2pt;
   }
-
-  .quote {
-    border: 1pt solid var(--navy);
-    background: var(--ivory);
-    padding: 7pt 8pt;
-    margin-top: 7pt;
+  .alias::before {
+    content: "";
   }
+  .tagline { font-size: 9.5pt; color: var(--olive); line-height: 1.3; }
+  .tagline .accent { color: var(--brand); font-weight: 500; }
 
-  .quote .label {
-    color: var(--navy);
-    font-size: 7.2pt;
-    line-height: 1.35;
-    letter-spacing: 1.4pt;
-    text-transform: uppercase;
-    margin-bottom: 4pt;
-  }
-
-  .footer {
-    left: 13mm;
-    top: 238mm;
-    width: 163mm;
-    display: table;
-    table-layout: fixed;
-    font-size: 8pt;
-    line-height: 1.35;
-    letter-spacing: 0.6pt;
-    color: var(--muted);
-  }
-
-  .footer span {
-    display: table-cell;
-  }
-
-  .footer span:last-child {
+  .contact {
     text-align: right;
+    font-size: 9pt;
+    color: var(--stone);
+    line-height: 1.5;
+    margin-bottom: -0.5mm;
+  }
+  .contact a { color: var(--brand); }
+  .contact .loc { color: var(--olive); font-weight: 500; }
+
+  /* METRICS */
+  .metrics { display: flex; gap: 6mm; margin-bottom: 3mm; margin-left: 0; margin-right: 0; }
+  .metric {
+    flex: 1;
+    background: transparent;
+    padding: 1mm 0;
+    display: flex;
+    align-items: baseline;
+    gap: 1.8mm;
+    break-inside: avoid;
+  }
+  .metric-value {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", Georgia, serif;
+    font-size: 13pt;
+    font-weight: 500;
+    color: var(--brand);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric-label { font-size: 8.8pt; color: var(--olive); line-height: 1.2; }
+
+  .metric-value .unit {
+    font-size: 10.5pt;
+    margin-left: 0.3mm;
+    font-weight: 500;
+    color: var(--brand);
+  }
+
+  /* SECTION */
+  .section-title {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", "Noto Serif CJK SC", Georgia, serif;
+    font-size: 12.5pt;
+    font-weight: 500;
+    color: var(--near-black);
+    border-bottom: 1pt solid var(--brand);
+    padding: 0 0 1mm 0;
+    margin: 5mm 0 1.6mm 0;
+    display: flex;
+    align-items: baseline;
+    gap: 2mm;
+  }
+  .section-title .sub {
+    margin-left: auto;
+    font-family: "KingHwa_OldSong", "Noto Serif CJK SC", Georgia, serif;
+    font-weight: 400;
+    font-size: 8.7pt;
+    color: var(--stone);
+    letter-spacing: 0.3pt;
+  }
+
+  section:first-of-type .section-title { margin-top: 0; }
+  .page-break .resume-sheet > section:first-child > .section-title { margin-top: 0; }
+
+  /* Unify gap from section-title bottom border to first content's first line = 3mm
+     (section-title margin-bottom 1.8mm + first-child top spacing 1.2mm) */
+  .section-title + .skill-row { padding-top: 1.2mm; }
+  .section-title + .edu-row { padding-top: 1.2mm; }
+
+  /* SUMMARY */
+  .summary { font-size: 9.2pt; line-height: 1.40; color: var(--near-black); }
+  .summary .em-brand { color: var(--brand); }
+  .summary .hl { color: var(--brand); }
+
+  /* TIMELINE */
+  .timeline { display: flex; gap: 6mm; margin-bottom: 2mm; margin-left: 0; margin-right: 0; }
+  .tl-step {
+    flex: 1; background: transparent;
+    padding: 0.8mm 0;
+    break-inside: avoid;
+  }
+  .tl-top {
+    display: flex; align-items: baseline; gap: 1.5mm;
+    margin-bottom: 0.5mm;
+  }
+  .tl-year {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", Georgia, serif;
+    font-size: 11pt; font-weight: 500;
+    color: var(--brand); line-height: 1;
+  }
+  .tl-head {
+    font-size: 11pt; font-weight: 500;
+    color: var(--near-black);
+  }
+  .tl-body { font-size: 8.8pt; color: var(--olive); line-height: 1.40; letter-spacing: 0; }
+
+  /* PROJECTS */
+  .project {
+    padding: 1.2mm 0 1.2mm 0;
+    border-top: 0.4pt solid var(--border-soft);
+    break-inside: avoid;
+  }
+  .project:first-of-type { border-top: 0.4pt solid var(--border); padding-top: 1.2mm; }
+  .proj-head {
+    display: flex; align-items: baseline;
+    gap: 2mm; margin-bottom: 0.75mm;
+  }
+  .proj-name {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", "Noto Serif CJK SC", Georgia, serif;
+    font-size: 11pt; font-weight: 500; color: var(--near-black);
+  }
+  .proj-kind { font-size: 11pt; color: var(--olive); }
+  .proj-role {
+    font-size: 8.7pt; color: var(--brand); font-weight: 500;
+    margin-left: auto; background: var(--brand-tint);
+    padding: 0.4mm 1.2mm; border-radius: 2pt; letter-spacing: 0.05pt;
+  }
+  .proj-lines { display: table; width: 100%; }
+  .proj-row { display: table-row; }
+  .proj-label {
+    display: table-cell; width: 11mm;
+    font-size: 9pt; color: var(--brand);
+    font-weight: 600; letter-spacing: 0.2pt;
+    padding: 0.2mm 0 0.4mm 0; vertical-align: top;
+  }
+  .proj-text {
+    display: table-cell; font-size: 9pt;
+    color: var(--near-black); line-height: 1.40; letter-spacing: 0;
+    padding: 0 0 0.4mm 0.5mm;
+  }
+  .proj-text .hl { color: var(--brand); }
+
+  .team-culture {
+    margin-top: 2mm; padding: 1.5mm 2.5mm;
+    background: transparent;
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 2pt;
+    font-size: 9pt; color: var(--olive); line-height: 1.40;
+    break-inside: avoid;
+  }
+  .team-culture .hl { color: var(--brand); }
+
+  /* PAGE 2 FORCE BREAK */
+  .page-break { break-before: page; }
+
+  /* OPEN SOURCE — NEW ENHANCED LAYOUT */
+  .os-intro {
+    font-size: 9.2pt; line-height: 1.40; letter-spacing: 0;
+    color: var(--near-black);
+    padding: 0; margin: 1.2mm 0 2mm 0;
+    background: transparent;
+    break-inside: avoid;
+  }
+  .os-intro .hl { color: var(--brand); }
+  .os-intro .strong { color: var(--near-black); }
+
+  .os-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 8mm; row-gap: 1mm;
+  }
+  .os-item {
+    display: flex; align-items: baseline;
+    gap: 2mm; padding: 1mm 0 1mm 0;
+    border-bottom: 0.3pt dotted var(--border);
+    break-inside: avoid;
+  }
+  .os-name {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", Georgia, serif;
+    font-size: 10pt; font-weight: 500;
+    flex-shrink: 0; min-width: 14mm;
+  }
+  .os-name a { color: var(--brand); }
+  .os-desc { font-size: 9pt; color: var(--olive); line-height: 1.40; flex: 1; }
+  .os-star {
+    font-size: 8.7pt; color: var(--dark-warm);
+    font-weight: 600; white-space: nowrap; flex-shrink: 0; min-width: 7.5mm; text-align: right;
+  }
+  .os-star.big { color: var(--brand); font-size: 9.2pt; }
+
+  .os-highlight {
+    margin-top: 2.5mm;
+    padding: 1.8mm 2.8mm;
+    background: var(--brand-tint);
+    border: 0.4pt solid var(--blue-soft);
+    border-radius: 2pt;
+    font-size: 9pt; line-height: 1.40;
+    color: var(--near-black);
+    letter-spacing: 0;
+    break-inside: avoid;
+  }
+  .os-highlight .hl { color: var(--brand); }
+  .os-highlight .tag {
+    display: inline-block;
+    background: var(--brand); color: var(--ivory);
+    font-size: 7.8pt; font-weight: 600;
+    padding: 0.2mm 1.5mm; border-radius: 2pt;
+    margin-right: 1.2mm; letter-spacing: 0.2pt;
+    transform: translateY(-0.2mm);
+  }
+
+  /* AI CONVICTION — NEW SECTION */
+  .ai-conviction {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2.5mm;
+    margin-top: 1.2mm;
+  }
+  .ai-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0 2mm 0 0;
+    break-inside: avoid;
+  }
+  .ai-card-head {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", "Noto Serif CJK SC", Georgia, serif;
+    font-size: 9.8pt; font-weight: 500;
+    color: var(--near-black); margin-bottom: 0.9mm;
+    display: flex; align-items: baseline; gap: 1.5mm;
+  }
+  .ai-card-head .year {
+    color: var(--brand); font-weight: 600;
+    font-size: 9pt;
+  }
+  .ai-card-body {
+    font-size: 9pt; color: var(--olive);
+    line-height: 1.40; letter-spacing: 0;
+  }
+  .ai-card-body .hl { color: var(--brand); }
+  .ai-card-body .em-brand { color: var(--brand); }
+
+  /* INFLUENCE */
+  .twitter-strip {
+    background: transparent;
+    padding: 0; margin: 1.2mm 0 2mm 0;
+    display: flex; align-items: baseline; gap: 3mm;
+    break-inside: avoid;
+  }
+  .twitter-strip .handle {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", Georgia, serif;
+    font-size: 9.8pt; font-weight: 500; color: var(--brand);
+    flex-shrink: 0;
+  }
+  .twitter-strip .follower { font-size: 8.7pt; color: var(--stone); flex-shrink: 0; }
+  .twitter-strip .desc { font-size: 8.8pt; color: var(--olive); line-height: 1.40; letter-spacing: 0; flex: 1; }
+
+  .influence-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 5.5mm; }
+  .inf-block-title {
+    margin-top: 2.5mm;
+    font-family: "KingHwa_OldSong", "DejaVu Serif", "Noto Serif CJK SC", Georgia, serif;
+    font-size: 9.8pt; font-weight: 500;
+    color: var(--near-black);
+    margin-bottom: 1.5mm; padding-bottom: 0.5mm;
+    border-bottom: 0.3pt dotted var(--border);
+    display: flex; align-items: baseline; gap: 2mm;
+  }
+  .inf-block-title .small {
+    font-family: "KingHwa_OldSong", "Noto Serif CJK SC", Georgia, serif;
+    font-size: 8.5pt; color: var(--stone);
+    font-weight: 400; margin-left: 0; letter-spacing: 0.2pt;
+  }
+  .art-row {
+    padding: 1.6mm 0;
+    border-bottom: 0.3pt dotted var(--border-soft);
+  }
+  .talk-row {
+    display: flex; justify-content: space-between;
+    align-items: flex-start;
+    gap: 2mm; padding: 1.6mm 0;
+    border-bottom: 0.3pt dotted var(--border-soft);
+  }
+  .art-row:last-of-type, .talk-row:last-of-type { border-bottom: none; }
+  .art-header {
+    display: flex; align-items: baseline;
+    justify-content: space-between;
+    gap: 2mm; padding-right: 3mm;
+  }
+  .art-title, .talk-title {
+    font-size: 9pt; color: var(--near-black);
+    font-weight: 500; line-height: 1.40;
+    flex: 1 1 auto; min-width: 0;
+  }
+  .art-stats, .talk-venue {
+    font-size: 8.8pt; color: var(--stone);
+    line-height: 1.40; margin-top: 0.5mm; padding-left: 0; letter-spacing: 0;
+  }
+  .art-stats .em-brand {
+    color: var(--brand);
+  }
+  .art-date {
+    font-size: 8.8pt; color: var(--stone);
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+  }
+  .art-stats .lang-cn, .art-stats .lang-en {
+    display: inline-block;
+    font-size: 8.5pt; font-weight: 600;
+    margin-right: 0.5mm;
+    letter-spacing: 0.2pt;
+    color: var(--stone);
+  }
+  .talk-date {
+    font-size: 8.8pt; color: var(--stone); font-weight: 500;
+    white-space: nowrap; font-variant-numeric: tabular-nums;
+    padding-top: 0.3mm;
+  }
+
+  /* SKILLS */
+  .skill-row {
+    display: flex; gap: 2.5mm; padding: 1.7mm 0;
+    border-bottom: 0.3pt dotted var(--border);
+    align-items: baseline;
+  }
+  .skill-row:last-of-type { border-bottom: none; }
+  .skill-label {
+    font-size: 9pt; font-weight: 600;
+    color: var(--brand); letter-spacing: 0.3pt;
+    width: 22mm; flex-shrink: 0;
+    line-height: 1.36;
+  }
+  .skill-body { font-size: 9pt; color: var(--near-black); line-height: 1.40; letter-spacing: 0; flex: 1; }
+  .skill-body .em-brand { color: var(--brand); }
+
+  /* EDUCATION */
+  .edu-row {
+    display: flex; justify-content: space-between;
+    align-items: baseline; font-size: 9.5pt; padding: 1.7mm 0;
+  }
+  .edu-row .school {
+    font-family: "KingHwa_OldSong", "DejaVu Serif", "Noto Serif CJK SC", Georgia, serif;
+    font-weight: 500; font-size: 10.7pt;
+  }
+  .edu-row .major { color: var(--olive); font-size: 9.5pt; }
+  .edu-row .date { color: var(--stone); font-variant-numeric: tabular-nums; font-size: 9pt; }
+
+  /* TYPOGRAPHY REBALANCE */
+  .name,
+  .metric-value,
+  .section-title,
+  .tl-year,
+  .proj-name,
+  .os-name,
+  .ai-card-head,
+  .twitter-strip .handle,
+  .inf-block-title,
+  .edu-row .school {
+    font-family: var(--display-serif);
+  }
+
+  .tagline,
+  .contact,
+  .metric-label,
+  .section-title .sub,
+  .summary,
+  .tl-head,
+  .tl-body,
+  .proj-kind,
+  .proj-role,
+  .proj-label,
+  .proj-text,
+  .team-culture,
+  .os-intro,
+  .os-desc,
+  .os-star,
+  .os-highlight,
+  .ai-card-body,
+  .twitter-strip .follower,
+  .twitter-strip .desc,
+  .inf-block-title .small,
+  .art-title,
+  .talk-title,
+  .art-stats,
+  .talk-venue,
+  .art-date,
+  .talk-date,
+  .skill-label,
+  .skill-body,
+  .edu-row .major,
+  .edu-row .date,
+  .art-stats .lang-cn,
+  .art-stats .lang-en {
+    font-family: var(--ui-sans);
   }
 </style>
 </head>
 <body>
-<main class="folio">
-  <section class="card name-card plaque">
-    <div class="eyebrow">Resume · Product Design</div>
-    <h1>林若川</h1>
-    <div class="role">高级产品设计师 · B2B SaaS / 数据产品 / 设计系统</div>
-  </section>
 
-  <aside class="card contact-card">
-    <h2>上海 · 远程可协作</h2>
-    <div class="meta">lin@example.com<br>+86 138 0000 2026<br>portfolio.example.com</div>
-  </aside>
+<!-- =====================================================================
+     使用说明：
+     - 所有 实际内容 替换为实际内容
+     - 删除不适用的 section（如无开源/AI判断/对外影响力）
+     - 项目可加减，每个严格遵守 角色/动作/结果 三段式
+     - 改完验证：必须 2 页
+       python3 -c "from weasyprint import HTML; HTML('resume.html').write_pdf('out.pdf')"
+     - 内容策略详见 references/writing.md
+     ===================================================================== -->
 
-  <section class="summary">
-    <p>8 年产品设计经验，长期负责复杂后台、数据分析平台和内部 AI 工具。擅长把业务流程整理成 <span class="hl">可交付的信息架构、设计系统和跨团队工作流</span>。</p>
-  </section>
 
-  <section class="metric m1"><div class="metric-value">8 年</div><div class="metric-label">产品设计经验</div></section>
-  <section class="metric m2"><div class="metric-value">12+</div><div class="metric-label">中大型项目</div></section>
-  <section class="metric m3"><div class="metric-value">46%</div><div class="metric-label">核心流程耗时下降</div></section>
-  <section class="metric m4"><div class="metric-value">3 套</div><div class="metric-label">设计系统落地</div></section>
+<!-- ═══════════ PAGE 1 ═══════════ -->
+<div class="resume-page">
+<div class="resume-sheet">
+<div class="resume-sheet-frame" aria-hidden="true"></div>
+<div class="resume-sheet-frame-inner" aria-hidden="true"></div>
+<div class="topline">
+  <div class="blue-tag">Career Dossier · Internal Edition</div>
+  <div>Profile Ledger · Page 1 / 2</div>
+</div>
 
-  <section class="card section experience">
-    <div class="section-head"><h2>工作经历</h2><span class="section-en">Experience</span></div>
-    <div class="section-body">
-      <article class="job">
-        <div class="job-title">
-          <h3>高级产品设计师 · 明川数据</h3>
-          <span class="date">2022 - 至今</span>
+<div class="header">
+  <div>
+    <div class="name serif">伊隆·马斯克<span class="alias">Elon Musk</span></div>
+  </div>
+  <div class="contact">
+    <span style="color: var(--brand); font-size: 10.5pt; font-weight: 500;">产品 / 工程 / 资本配置</span>　·　<a href="https://github.com/elonmusk-mock">GitHub @elonmusk-mock</a>　·　<a href="https://x.com/elonmusk">X @elonmusk</a>　·　<a href="tel:+1 737 555 0147">+1 737 555 0147</a>　·　<a href="mailto:elon.mock@tesla-demo.ai">elon.mock@tesla-demo.ai</a>　·　55 岁在奥斯汀
+  </div>
+</div>
+
+<!-- 4 个最强的数字标签 -->
+<div class="metrics">
+  <div class="metric"><span class="metric-value serif">6<span class="unit">家公司</span></span><span class="metric-label">核心业务矩阵</span></div>
+  <div class="metric"><span class="metric-value serif">4<span class="unit">条增长曲线</span></span><span class="metric-label">制造 / 软件 / 能源 / 机器人</span></div>
+  <div class="metric"><span class="metric-value serif">22<span class="unit">年一线管理</span></span><span class="metric-label">连续经营周期</span></div>
+  <div class="metric"><span class="metric-value serif">14<span class="unit">万名直接员工</span></span><span class="metric-label">跨区域组织规模</span></div>
+</div>
+
+<section>
+  <div class="section-title">个人简介</div>
+  <div class="summary">
+    现任 Tesla / SpaceX / xAI 多业务负责人。长期把资本配置、产品定义、制造执行与 AI 叙事压到同一张经营报表里。
+  </div>
+</section>
+
+<section>
+  <div class="section-title">工作经历<span class="sub">2004 — 至今（从多项目创始人切换到平台型经营者）</span></div>
+
+  <!-- Timeline 3 步：长期演进信号 -->
+  <div class="timeline">
+    <div class="tl-step">
+      <div class="tl-top"><div class="tl-year serif">2004</div><div class="tl-head">进入 Tesla</div></div>
+      <div class="tl-body">从单点创业者转向长期经营者，开始把产品定义与资本效率联动考虑。</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-top"><div class="tl-year serif">2019</div><div class="tl-head">上海工厂成型</div></div>
+      <div class="tl-body">证明高密度制造与本地供应链可以在极短周期内跑出规模效率。</div>
+    </div>
+    <div class="tl-step">
+      <div class="tl-top"><div class="tl-year serif">2025</div><div class="tl-head">AI / 机器人并线</div></div>
+      <div class="tl-body">把自动驾驶、算力、机器人和储能并入同一套资源调度体系。</div>
+    </div>
+  </div>
+
+  <!-- 项目模板 - 重复此块 3-5 次 -->
+  <div class="project">
+    <div class="proj-head">
+      <span class="proj-name serif">Tesla 经营平台</span>
+      <span class="proj-kind">· 制造 / 软件 / 零售一体化</span>
+      <span class="proj-role">方向主导</span>
+    </div>
+    <div class="proj-lines">
+      <div class="proj-row">
+        <div class="proj-label">角色</div>
+        <div class="proj-text">负责把 Tesla 从单一整车增长模型，切成制造、软件、能源与机器人四条协同曲线，并亲自定义优先级。</div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label">动作</div>
+        <div class="proj-text">推动成熟车型稳现金流，新平台承接成本下探；同时把工厂软件、充电网络、FSD 数据闭环与电池产能当成共享资产来排布。</div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label">结果</div>
+        <div class="proj-text">Mock 口径下，年度交付目标提升至 <span class="hl">620 万辆</span>，并把储能在手储备推进到 <span class="hl">438GWh</span>，使资本市场开始用平台视角而非单一车企视角看待 Tesla。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="project">
+    <div class="proj-head">
+      <span class="proj-name serif">Robotaxi 试点业务</span>
+      <span class="proj-kind">· 自动驾驶运营</span>
+      <span class="proj-role">业务架构 owner</span>
+    </div>
+    <div class="proj-lines">
+      <div class="proj-row">
+        <div class="proj-label">角色</div>
+        <div class="proj-text">把 Robotaxi 从功能演示推进成城市级试点业务，关注的不是炫技而是可调度、可清洁、可充电、可复购。</div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label">动作</div>
+        <div class="proj-text">先跑封闭区域和固定路线，再按城市密度逐步放开；把安全事件、充电周转和高峰调度写进同一套日运营指标中。</div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label">结果</div>
+        <div class="proj-text">Mock 口径下，首波试点覆盖 <span class="hl">12 个城市</span>，高峰时段车辆利用率达到 <span class="hl">72%</span>，让自动驾驶收入开始与活跃车次直接相关。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="project">
+    <div class="proj-head">
+      <span class="proj-name serif">Optimus 厂内部署</span>
+      <span class="proj-kind">· 工业机器人</span>
+      <span class="proj-role">场景 owner</span>
+    </div>
+    <div class="proj-lines">
+      <div class="proj-row">
+        <div class="proj-label">角色</div>
+        <div class="proj-text">把 Optimus 从概念机推进到厂内真正可部署的搬运与巡检工具，优先证明内部价值，而不是先讲对外销量。</div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label">动作</div>
+        <div class="proj-text">优先替代夜班搬运、重复分拣和工站巡检，把机器人能力演进反向写进产线和物料标准化改造中。</div>
+      </div>
+      <div class="proj-row">
+        <div class="proj-label">结果</div>
+        <div class="proj-text">Mock 口径下，厂内部署规模达到 <span class="hl">1.8 万台</span>，替代 <span class="hl">23%</span> 的重复工时，为后续外部工业客户建立可信案例。</div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="page-no">KAMI DOC · 1</div>
+</div>
+</div>
+
+
+<!-- ═══════════ PAGE 2 ═══════════ -->
+<div class="resume-page page-break">
+<div class="resume-sheet">
+<div class="resume-sheet-frame" aria-hidden="true"></div>
+<div class="resume-sheet-frame-inner" aria-hidden="true"></div>
+<div class="topline">
+  <div class="blue-tag">Evidence Appendix · Internal Edition</div>
+  <div>Selected Work / Public Signals · Page 2 / 2</div>
+</div>
+<section>
+  <div class="section-title">开源项目 &amp; 独立开发者<span class="sub">2015 — 2026 · 把公开技术资产视为品牌与招聘飞轮的一部分</span></div>
+
+  <div class="os-intro">
+    <span class="hl">不是最传统意义上的开源作者，但持续用公开工具、公开接口与公开方法论放大工程影响力</span>，强调从 API、产能规划、运维工具到外部开发者体验的一体化经营。。GitHub 累计 <span class="strong">182k stars · 26k forks · 94k followers</span>。
+  </div>
+
+  <div class="os-grid">
+    <div class="os-item">
+      <span class="os-name serif"><a href="https://github.com/tesla-mock/fleet-api-toolkit">Fleet API Toolkit</a></span>
+      <span class="os-desc">Python / TypeScript · Fleet API 开发生态 · Tesla 开发者平台</span>
+      <span class="os-star big">★ 48k</span>
+    </div>
+    <div class="os-item">
+      <span class="os-name serif"><a href="https://github.com/tesla-mock/dojo-capacity-planner">Dojo Capacity Planner</a></span>
+      <span class="os-desc">把工厂算力排布、模型训练节拍与车端上线窗口放进同一份 capacity board。</span>
+      <span class="os-star big">★ 39k</span>
+    </div>
+    <div class="os-item">
+      <span class="os-name serif"><a href="https://github.com/tesla-mock/megapack-config-studio">Megapack Config Studio</a></span>
+      <span class="os-desc">面向储能投标团队的快速配置器，用来模拟项目规模、毛利与交付窗口。</span>
+      <span class="os-star">★ 28k</span>
+    </div>
+    <div class="os-item">
+      <span class="os-name serif"><a href="https://github.com/tesla-mock/factory-ops-notebook">Factory Ops Notebook</a></span>
+      <span class="os-desc">厂长与运营负责人共用的周报 notebook，把良率、周转与返工统一到单页视图。</span>
+      <span class="os-star">★ 21k</span>
+    </div>
+    <div class="os-item">
+      <span class="os-name serif"><a href="https://github.com/tesla-mock/vehicle-data-replay">Vehicle Data Replay</a></span>
+      <span class="os-desc">用于回放车端异常与自动驾驶事件的内部分析工具，帮助压缩定位时间。</span>
+      <span class="os-star">★ 17k</span>
+    </div>
+    <div class="os-item">
+      <span class="os-name serif"><a href="https://github.com/tesla-mock/energy-tender-model">Energy Tender Model</a></span>
+      <span class="os-desc">把储能项目报价、排产和电池分配约束联动建模的 mock 工具。</span>
+      <span class="os-star">★ 11k</span>
+    </div>
+  </div>
+
+  <div class="os-highlight">
+    <span class="tag">PUBLIC TOOLING</span>公开接口与 mock tooling 帮助 Tesla 在招聘、开发者生态和供应商协同上持续获得额外杠杆。
+  </div>
+</section>
+
+<section>
+  <div class="section-title">AI 判断与行动</div>
+  <div class="ai-conviction">
+    <div class="ai-card">
+      <div class="ai-card-head"><span class="year">2024</span>押注厂内机器人先于家庭机器人</div>
+      <div class="ai-card-body">
+        先用内部场景证明单位替代工时，再决定是否向外部客户扩张，避免把机器人过早推向消费叙事。
+      </div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-head"><span class="year">2025</span>把 Robotaxi 当作运营业务而非功能 feature</div>
+      <div class="ai-card-body">
+        要求团队把调度、充电、清洁和安全事件闭环一起设计，防止自动驾驶只停留在车端能力展示。
+      </div>
+    </div>
+    <div class="ai-card">
+      <div class="ai-card-head"><span class="year">2026</span>在储能周期里优先要可预测节拍</div>
+      <div class="ai-card-body">
+        在电池供给紧张时，把储能项目和整车业务放进同一张分配表，优先保留更稳的交付节拍。
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-title">对外影响力</div>
+
+  <div class="twitter-strip">
+    <span class="handle serif">X · <a href="https://x.com/elonmusk" style="color: var(--brand); border-bottom: none;">@elonmusk</a></span>
+    <span class="follower">2.1 亿 粉丝</span>
+    <span class="desc">持续输出产品发布、工厂进展、AI 判断与资本市场沟通，是最强的对外 narrative channel 之一。</span>
+  </div>
+
+  <div class="influence-grid">
+    <div>
+      <div class="inf-block-title">代表性技术长文<span class="small">Factory / AI / Energy</span></div>
+      <div class="art-row">
+        <div class="art-header">
+          <a class="art-title" href="https://tesla-mock.ai/notes/factory-switch" style="text-decoration: none;">《为什么工厂切线速度比销量更重要》</a>
+          <span class="art-date">2026.02</span>
         </div>
-        <p>负责企业经营分析工作台、权限体系与指标中心设计，连接业务、财务与数据团队。</p>
-        <ul>
-          <li>将 17 张分散报表整合为统一分析入口，月度复盘准备时间从 3 天降至 1.5 天。</li>
-          <li>重建指标命名、筛选、钻取与导出规则，减少跨团队口径争议。</li>
-        </ul>
-      </article>
-
-      <article class="job">
-        <div class="job-title">
-          <h3>产品设计师 · 云章协作</h3>
-          <span class="date">2019 - 2022</span>
+        <div class="art-stats">阅读 860 万 · 收藏 12 万 · 二次引用 4.3 万</div>
+      </div>
+      <div class="art-row">
+        <div class="art-header">
+          <a class="art-title" href="https://tesla-mock.ai/notes/robotaxi-unit-economics" style="text-decoration: none;">《Robotaxi 的单位经济性应该怎么看》</a>
+          <span class="art-date">2025.11</span>
         </div>
-        <p>主导企业协作套件的信息架构、审批流与移动端体验优化。</p>
-        <ul>
-          <li>设计审批模板市场，使管理员配置时间下降 38%。</li>
-          <li>推动组件库从 24 个基础组件扩展到 68 个业务组件。</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <section class="card section skills">
-    <div class="section-head"><h2>能力标签</h2><span class="section-en">Skills</span></div>
-    <div class="section-body">
-      <div class="tags">
-        <span class="tag">信息架构</span>
-        <span class="tag">复杂表单</span>
-        <span class="tag">数据可视化</span>
-        <span class="tag">设计系统</span>
-        <span class="tag">用户研究</span>
-        <span class="tag">Figma</span>
-        <span class="tag">HTML/CSS</span>
-        <span class="tag">AI 工作流</span>
-      </div>
-      <div class="skill-note">
-        <h3>方法偏好</h3>
-        <p>先定义对象和状态，再推进界面；先拉齐口径，再追求视觉细节。</p>
+        <div class="art-stats">阅读 540 万 · 点赞 8.7 万</div>
       </div>
     </div>
-  </section>
 
-  <section class="card section projects">
-    <div class="section-head"><h2>代表项目</h2><span class="section-en">Selected Work</span></div>
-    <div class="section-body">
-      <article class="job">
-        <div class="job-title"><h3>AI 运营工作台</h3><span class="date">2025</span></div>
-        <p>将工单摘要、风险提示和知识库检索整合到一个审阅台。</p>
-      </article>
-      <article class="job">
-        <div class="job-title"><h3>指标中心 2.0</h3><span class="date">2024</span></div>
-        <p>建立指标血缘、负责人、口径版本与变更记录。</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="card section education">
-    <div class="section-head"><h2>教育背景</h2><span class="section-en">Education</span></div>
-    <div class="section-body">
-      <div class="edu-row">
-        <h3>同济大学</h3>
-        <span class="date">2016 - 2019</span>
-        <p>设计学 · 硕士</p>
+    <div>
+      <div class="inf-block-title">受邀演讲<span class="small">Product / Operations</span></div>
+      <div class="talk-row">
+        <div>
+          <div class="talk-title">《把 Robotaxi 做成调度业务》</div>
+          <div class="talk-venue">Tesla AI Day · Austin</div>
+        </div>
+        <div class="talk-date">2025.09</div>
       </div>
-      <div class="edu-row">
-        <h3>浙江大学</h3>
-        <span class="date">2012 - 2016</span>
-        <p>工业设计 · 本科</p>
+      <div class="talk-row">
+        <div>
+          <div class="talk-title">《Optimus 为什么先在厂里工作》</div>
+          <div class="talk-venue">Manufacturing Summit · Shanghai</div>
+        </div>
+        <div class="talk-date">2026.03</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="card section method">
-    <div class="section-head"><h2>工作方式</h2><span class="section-en">Method</span></div>
-    <div class="section-body">
-      <p>重视对象、状态、权限、异常和交付节奏，让复杂后台能被长期维护。</p>
-      <div class="quote">
-        <div class="label">Filed Remark</div>
-        <p>“好的后台不是把信息堆出来，而是让下一位接手的人也能继续维护。”</p>
-      </div>
+<section>
+  <div class="section-title">核心能力</div>
+  <!-- 5 项固定结构，每项至少 1 处橙色高亮 -->
+  <div class="skill-row">
+    <div class="skill-label">资本配置</div>
+    <div class="skill-body">擅长把多条增长曲线压到同一张经营报表，用 <span class="em-brand">资源调度</span> 而不是单点 KPI 来做判断。</div>
+  </div>
+  <div class="skill-row">
+    <div class="skill-label">产品定义</div>
+    <div class="skill-body">能把抽象方向翻译成产品路线图，把 <span class="em-brand">功能、成本、节拍</span> 三个维度同时纳入定义。</div>
+  </div>
+  <div class="skill-row">
+    <div class="skill-label">制造执行</div>
+    <div class="skill-body">熟悉从工艺、产线到供应链的联动，强调 <span class="em-brand">切线效率与良率爬坡</span> 的优先级。</div>
+  </div>
+  <div class="skill-row">
+    <div class="skill-label">叙事管理</div>
+    <div class="skill-body">对外沟通不是简单营销，而是把复杂经营逻辑转成 <span class="em-brand">投资者可读的 narrative</span>。</div>
+  </div>
+  <div class="skill-row">
+    <div class="skill-label">组织切换</div>
+    <div class="skill-body">敢于在周期切换期重组团队与优先级，用 <span class="em-brand">组织结构服务业务结构</span>。</div>
+  </div>
+</section>
+
+<section style="break-inside: avoid;">
+  <div class="section-title">教育背景</div>
+  <div class="edu-row">
+    <div>
+      <span class="school serif">宾夕法尼亚大学</span>
+      <span class="major">　· 经济学 / 物理学 · 双学位 · 毕业后直接进入连续创业与长期经营</span>
     </div>
-  </section>
+    <div class="date">1990 — 1995</div>
+  </div>
+</section>
+<div class="page-no">KAMI DOC · 2</div>
+</div>
+</div>
 
-  <footer class="footer">
-    <span>RESUME · PRODUCT DESIGN</span>
-    <span>KAMI DEMO · 1 / 1</span>
-  </footer>
-</main>
 </body>
 </html>

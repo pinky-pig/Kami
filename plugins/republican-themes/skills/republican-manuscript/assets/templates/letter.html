@@ -16,6 +16,13 @@
     font-weight: 500;
     font-style: normal;
   }
+  @font-face {
+    font-family: "TsangerReadableCn";
+    src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+F900-FAFF, U+20000-2EBEF;
+  }
 
   @page {
     size: A4;
@@ -40,6 +47,7 @@
     --rule:       #CABBA7;
     --panel-fill: #F7F2EA;
     --tag-bg:     #D5DEE7;
+    --reading-text: "TsangerReadableCn", "Newsreader", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,7 +59,7 @@
     margin: 0 auto;
     background: var(--frame-blue);
     color: var(--near-black);
-    font-family: "KingHwa_OldSong", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    font-family: var(--reading-text);
   }
 
   body {
@@ -78,11 +86,19 @@
 
   .folio::before {
     inset: 6mm;
+    top: 6mm;
+    right: 6mm;
+    bottom: 6mm;
+    left: 6mm;
     border: 1pt solid var(--frame-blue);
   }
 
   .folio::after {
     inset: 8.2mm;
+    top: 8.2mm;
+    right: 8.2mm;
+    bottom: 8.2mm;
+    left: 8.2mm;
     border: 0.45pt solid var(--blue-soft);
   }
 
@@ -99,7 +115,7 @@
   .note,
   .attachments,
   .footer {
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-family: var(--reading-text);
   }
 
   .top {
@@ -126,11 +142,19 @@
 
   .tag-plaque::before {
     inset: 6pt;
+    top: 6pt;
+    right: 6pt;
+    bottom: 6pt;
+    left: 6pt;
     border: 0.85pt solid #F3EFEB;
   }
 
   .tag-plaque::after {
     inset: 9pt;
+    top: 9pt;
+    right: 9pt;
+    bottom: 9pt;
+    left: 9pt;
     border: 0.45pt solid #D5DEE7;
   }
 
@@ -236,6 +260,10 @@
     content: "";
     position: absolute;
     inset: 7pt;
+    top: 7pt;
+    right: 7pt;
+    bottom: 7pt;
+    left: 7pt;
     border: 0.45pt solid var(--rule);
     pointer-events: none;
   }
@@ -281,7 +309,7 @@
   .evidence-list div {
     border: 0.45pt solid var(--rule);
     padding: 6pt 7pt;
-    font-family: "Source Han Sans SC", "Noto Sans CJK SC", "PingFang SC", Arial, sans-serif;
+    font-family: var(--reading-text);
     font-size: 8.2pt;
     line-height: 1.4;
     color: var(--dark-warm);

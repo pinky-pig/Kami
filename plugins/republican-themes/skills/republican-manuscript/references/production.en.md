@@ -142,21 +142,21 @@ TAG_BG      = RGBColor(0xed, 0xd9, 0xce)
 | Subtitle | 24pt | Sans 400 |
 | H2 chapter | 32pt | Serif 500 |
 | H3 subtitle | 20pt | Serif 500 |
-| Body | 18pt | Sans 400 |
-| Caption | 14pt | Sans 400 |
-| Footer | 12pt | Sans 400 |
+| Body | 18pt | Readable body 400 |
+| Caption | 14pt | Readable body 400 |
+| Footer | 12pt | Readable body 400 |
 
 English stack on PowerPoint:
-- Serif: `Newsreader` -> `Charter` -> `Georgia`
-- Sans: `Inter` -> `Helvetica Neue` -> `Arial`
+- Display + readable copy: `Newsreader` -> `Charter` -> `Georgia`
+- Mono / route markers: `JetBrains Mono`
 
 ### Eight standard layouts
 
 1. **Cover**: parchment background, centered display title + brand-colored short line + subtitle / author / date
 2. **Contents**: parchment, left-aligned `01  Chapter title` (number serif brand-colored)
 3. **Chapter divider**: full brand ink-blue background, centered white title - the **only** fully chromatic slide in the deck
-4. **Content slide**: eyebrow (sans stone) + core claim (serif near-black) + brand line + body (sans dark-warm)
-5. **Data slide**: top takeaway + 2-4 metric cards (big number serif brand + small label sans olive)
+4. **Content slide**: eyebrow (readable stone) + core claim (display near-black) + brand line + body (readable dark-warm)
+5. **Data slide**: top takeaway + 2-4 metric cards (big number display brand + small label readable olive)
 6. **Comparison**: two columns with a 0.5pt warm-gray divider
 7. **Quote**: parchment, minimal, centered serif quote + `- Source`
 8. **Closing**: parchment, centered "Thank you / Q&A / Contact"
@@ -175,7 +175,7 @@ from pptx.enum.text import PP_ALIGN
 PARCHMENT = RGBColor(0xf5, 0xf4, 0xed)
 BRAND     = RGBColor(0xc9, 0x64, 0x42)
 SERIF = "Newsreader"
-SANS  = "Inter"
+SANS  = "Newsreader"
 
 prs = Presentation()
 prs.slide_width  = Inches(13.33)

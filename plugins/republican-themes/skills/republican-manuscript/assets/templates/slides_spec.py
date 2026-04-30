@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Shared slide deck schema for PPTX and Slidev renderers."""
+"""Shared slide deck schema for PPTX and Slidev renderers.
+
+`image` is optional for any visual-heavy slide. When omitted, both renderers
+fall back to a solid placeholder panel so the skill can initialize a usable
+template even when the calling model cannot generate images.
+
+For chart-like visuals, prefer `diagram = "architecture" | "flowchart" |
+"quadrant"` plus copy that points the user to `assets/diagrams/*.html`,
+rather than inventing a pseudo-chart screenshot.
+"""
 
 from __future__ import annotations
 
@@ -9,127 +18,131 @@ from typing import Any
 DECK: list[dict[str, Any]] = [
     {
         "kind": "cover",
-        "section": "REPUBLICAN MANUSCRIPT EDITION",
+        "section": "TESLA 2027 MOCK BRIEFING",
         "page": 1,
-        "kicker": "KAMI · SLIDES DEMO",
-        "title": "把 AI 文档\n排成馆藏文稿",
-        "subtitle": "深蓝外框 / 旧纸内页 / 档案题签",
-        "body": "Just tell Claude what you need:\n“帮我生成一份白皮书” / “生成一份项目方案” / “帮我写一份推荐信” / “做一套汇报 slides”",
+        "kicker": "KAMI · REPUBLICAN MANUSCRIPT DEMO",
+        "title": "Tesla 2027\n增长与产能叙事",
+        "subtitle": "Robotaxi / Energy / Optimus / AI Infrastructure",
+        "body": "此 deck 用 republican-manuscript skill 生成。\n全部数据与图片均为 mock，用于验证 PPTX / Slidev 双产物路径。",
         "metrics": [
-            {"value": "05", "label": "demo set", "note": "docs + slides"},
-            {"value": "01", "label": "visual rule", "note": "archive blue"},
+            {"value": "04", "label": "growth bets", "note": "车 / 能源 / 算力 / 机器人"},
+            {"value": "08", "label": "slides", "note": "dual-output deck"},
         ],
-        "meta": "2026.04 · Kami Fork",
+        "meta": "2026.04 · Mock Data · Internal Demo",
     },
     {
         "kind": "principle",
-        "section": "METHOD",
+        "section": "INVESTMENT THESIS",
         "page": 2,
         "number": 1,
-        "title": "生成原理",
-        "lede": "好看的本质不是每次重新设计，而是把内容填进稳定模板。",
+        "title": "核心判断",
+        "lede": "Tesla 的下一阶段估值不再只由整车交付驱动，而是由制造、软件、能源与机器人四条曲线共同决定。",
         "cards": [
-            {"label": "STEP 01", "title": "路由", "body": "先判断语言与文档类型：one-pager、long-doc、letter、slides。"},
-            {"label": "STEP 02", "title": "整理", "body": "把 raw material 拆成事实、数字、判断和行动，而不是直接堆文字。"},
-            {"label": "STEP 03", "title": "填充", "body": "使用固定骨架承载内容，避免 AI 每次自由发挥版式。"},
-            {"label": "STEP 04", "title": "校验", "body": "构建脚本检查页数、字体、占位符与 CSS 约束。"},
+            {"label": "BET 01", "title": "Robotaxi", "body": "把 FSD 资产从一次性卖车收入，转换成持续运营收入。"},
+            {"label": "BET 02", "title": "Energy", "body": "储能业务用更稳定的交付节奏，平衡汽车周期波动。"},
+            {"label": "BET 03", "title": "Factory OS", "body": "上海与得州工厂共享工艺、软件和供应链缓冲带。"},
+            {"label": "BET 04", "title": "Optimus", "body": "机器人先在自家工厂落地，再逐步外溢到物流与服务。"},
         ],
-        "summary": "固定版式 + design token + 字体层级 + 构建校验",
+        "summary": "四条曲线共用电池、算力、软件与工厂资产。",
     },
     {
-        "kind": "visual-language",
-        "section": "DESIGN TOKENS",
+        "kind": "image-focus-factory",
+        "section": "OPERATIONS",
         "page": 3,
         "number": 2,
-        "title": "民国文稿视觉语言",
-        "lede": "不做复古海报，不做重纹理，只把专业文档整理成被认真归档过的样子。",
-        "swatches": [
-            {"name": "Archive Blue", "fill": "#243851", "hex": "#243851", "use": "外框 / 题签 / 强调"},
-            {"name": "Old Paper", "fill": "#EBE5DD", "hex": "#EBE5DD", "use": "正文纸面"},
-            {"name": "Ivory", "fill": "#F3EFEB", "hex": "#F3EFEB", "use": "卡片与浮层"},
-            {"name": "Border", "fill": "#D0C7BB", "hex": "#D0C7BB", "use": "细线和分隔"},
+        "title": "上海与得州进入同屏扩产期",
+        "lede": "Mock 逻辑：一个工厂守住成本，一个工厂承接新平台切换，产能结构比单纯冲量更重要。",
+        "image": "mock-tesla-factory.png",
+        "caption": "Mock visual · 双工厂协同示意",
+        "metrics": [
+            {"value": "5.8M", "label": "年化产能", "note": "两地产线合计"},
+            {"value": "41d", "label": "在制周转", "note": "切换期目标"},
         ],
-        "callout": {
-            "title": "装饰边界",
-            "body": "只允许蓝色题签、细双线内框、档案边框；不加入纹理图片、印章贴图和竖排正文。",
-        },
+        "bullets": [
+            "上海继续承担成熟车型与出口任务，稳定现金流与交付节奏。",
+            "得州优先给新平台、Robotaxi 版本与下一代低成本总装工艺。",
+            "核心不是绝对产能，而是切换效率、良率爬坡与供应链缓冲。 ",
+        ],
+    },
+    {
+        "kind": "image-focus-robotaxi",
+        "section": "AUTONOMY",
+        "page": 4,
+        "number": 3,
+        "title": "Robotaxi 不是一辆车，而是一套调度业务",
+        "lede": "Mock 逻辑：Robotaxi 的关键变量是上路城市、可用时长、调度效率和安全冗余，不只是硬件 BOM。",
+        "image": "mock-tesla-robotaxi.png",
+        "caption": "Mock visual · 城市内 Robotaxi 运营舱",
+        "metrics": [
+            {"value": "12", "label": "pilot cities", "note": "首波试点城市"},
+            {"value": "72%", "label": "utilization", "note": "高峰时段车辆利用"},
+        ],
+        "bullets": [
+            "先把封闭区域和固定路线跑顺，再扩大到开放路网。",
+            "运营系统要同时解决调度、充电、清洁和安全事件闭环。",
+            "软件收入开始与里程、活跃车次和城市密度直接相关。",
+        ],
+    },
+    {
+        "kind": "image-focus-energy",
+        "section": "ENERGY",
+        "page": 5,
+        "number": 4,
+        "title": "储能业务负责把增长波动磨平",
+        "lede": "Mock 逻辑：储能给 Tesla 带来的不是更性感的叙事，而是更可预测的交付节奏与更厚的项目储备。",
+        "image": "mock-tesla-energy.png",
+        "caption": "Mock visual · Megapack 项目交付版图",
+        "metrics": [
+            {"value": "438GWh", "label": "booked pipeline", "note": "在手项目储备"},
+            {"value": "31%", "label": "gross margin", "note": "项目组合口径"},
+        ],
+        "bullets": [
+            "储能订单周期长，但一旦排产稳定，现金流的可见度远高于整车业务。",
+            "电池分配不再只是车与车之间的竞争，而是车与电网项目之间的配置问题。",
+            "投资者会开始用项目完工率，而不只是交车数，来判断季度表现。",
+        ],
+    },
+    {
+        "kind": "image-focus-optimus",
+        "section": "ROBOTICS",
+        "page": 6,
+        "number": 5,
+        "title": "Optimus 先证明工厂价值，再讲外部市场",
+        "lede": "Mock 逻辑：机器人最先成立的场景不是家庭，而是 Tesla 自己的搬运、分拣、巡检和夜班替代。",
+        "image": "mock-tesla-optimus.png",
+        "caption": "Mock visual · Optimus 在厂内搬运与巡检",
+        "metrics": [
+            {"value": "18k", "label": "internal units", "note": "厂内部署节拍"},
+            {"value": "23%", "label": "labor hours", "note": "重复工时替代"},
+        ],
+        "bullets": [
+            "第一阶段看单位替代工时，而不是对外销量。",
+            "机器人能力演进会反过来倒逼工厂物料标准化与工站重构。",
+            "只有先在自家场景跑通，外部客户才会把它视为工业设备而不是演示品。",
+        ],
     },
     {
         "kind": "templates",
-        "section": "TEMPLATES",
-        "page": 4,
-        "number": 3,
-        "title": "现在能生成什么",
-        "lede": "中文 v1 的正式能力聚焦三类高频文档，简历和作品集已保留为补充样例。",
-        "cards": [
-            {"label": "1 PAGE", "title": "One-Pager", "body": "公司介绍、项目方案、执行摘要。重点是 30 秒抓住核心。"},
-            {"label": "MULTI", "title": "Long Doc", "body": "白皮书、长文报告、年度总结。强调章节结构与证据链。"},
-            {"label": "1 PAGE", "title": "Letter", "body": "正式信件、推荐信、推荐函。关系、证据、匹配、推荐。"},
-            {"label": "DEMO", "title": "Resume", "body": "固定坐标版简历样例，适合验证蓝框档案式布局。"},
-            {"label": "DEMO", "title": "Portfolio", "body": "作品集样例，保留更多视觉叙事与项目卡片。"},
-        ],
-    },
-    {
-        "kind": "natural-prompts",
-        "section": "NATURAL PROMPTS",
-        "page": 5,
-        "number": 4,
-        "title": "不用 slash command",
-        "lede": "用户只要说任务，skill 根据意图选择模板。输出是文档，不是聊天里的格式建议。",
-        "prompts": [
-            {"text": "帮我生成一份白皮书", "route": "LONG-DOC"},
-            {"text": "生成一份项目方案", "route": "ONE-PAGER"},
-            {"text": "帮我写一份推荐信", "route": "LETTER"},
-            {"text": "帮我把这些内容排版成好看的 PDF", "route": "INFER"},
-            {"text": "做一套汇报 slides", "route": "SLIDES"},
-        ],
-        "banner": "AUTO\nTRIGGER",
-    },
-    {
-        "kind": "density",
-        "section": "LAYOUT RHYTHM",
-        "page": 6,
-        "number": 5,
-        "title": "排版骨架不变",
-        "lede": "我们换的是时代气质，不是阅读效率。信息密度、留白与页数约束仍然可控。",
-        "metrics": [
-            {"value": "1", "label": "one-pager", "note": "严格单页"},
-            {"value": "1", "label": "letter", "note": "严格单页"},
-            {"value": "3", "label": "demo long-doc", "note": "章节展开"},
-            {"value": "500+", "label": "check rules", "note": "字体 / CSS / 占位符"},
-        ],
-        "bullets": [
-            "旧纸底不是装饰图，而是稳定色块。",
-            "题签和细线负责时代感，正文仍按专业文档阅读。",
-            "京華老宋体用于 serif 气质，功能文字保持清晰。",
-        ],
-    },
-    {
-        "kind": "delivery",
-        "section": "DELIVERY",
+        "section": "CHECKPOINTS",
         "page": 7,
         "number": 6,
-        "title": "交付链路",
-        "lede": "生成不止是写文件，还要让 PDF/PPTX 和预览资产都能被检查。",
-        "steps": [
-            {"label": "01", "title": "HTML / PPTX", "body": "内容进入固定模板"},
-            {"label": "02", "title": "Build", "body": "生成交付文件"},
-            {"label": "03", "title": "Verify", "body": "检查页数、字体、占位符"},
-            {"label": "04", "title": "Preview", "body": "导出 demo 预览"},
-        ],
-        "commands": [
-            ".venv/bin/python scripts/build.py --verify one-pager",
-            ".venv/bin/python scripts/build.py --check",
-            ".venv/bin/python scripts/build.py slides",
+        "title": "未来 18 个月看这五个检查点",
+        "lede": "如果这五个点依次兑现，Tesla 的叙事会从单一汽车股，切换到多业务平台公司。",
+        "cards": [
+            {"label": "Q3", "title": "Factory Switch", "body": "新平台切线期间的良率、库存与现金转换。"},
+            {"label": "Q4", "title": "Robotaxi Pilot", "body": "首批城市能否跑出稳定运营天数与乘客复购。"},
+            {"label": "Q1", "title": "Megapack Throughput", "body": "储能交付是否形成季度级稳定节拍。"},
+            {"label": "Q2", "title": "Optimus Internal Use", "body": "厂内替代工时是否可量化并形成标准方案。"},
+            {"label": "Q2", "title": "AI Cost Curve", "body": "算力投入是否沉淀成更高的软件附加值。"},
         ],
     },
     {
         "kind": "end",
         "section": "END",
         "page": 8,
-        "title": "好看的本质是稳定",
-        "body": "固定版式 · design token · 字体层级 · 构建校验",
-        "meta": "Kami · Republican Manuscript Edition",
+        "title": "先看兑现节奏，再看叙事想象力",
+        "body": "Mock 数据 · Mock 图片 · Manuscript 版式 · PPTX / Slidev 双交付",
+        "meta": "Tesla 2027 Mock Briefing · Generated with Kami",
     },
 ]
 

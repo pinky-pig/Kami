@@ -47,12 +47,23 @@ body { font-family: "KingHwa_OldSong", serif; }
 
 **商业字体不可得时**，fallback 链已内嵌在所有模板里：
 ```css
-font-family: "KingHwa_OldSong",
+/* display 标题：中文用京华，英文回落 Newsreader */
+font-family: "KamiDisplayCn", "Newsreader",
              "Source Han Serif SC", "Noto Serif CJK SC",
              "Songti SC", Georgia, serif;
+
+/* 正文 / UI：中文走 Tsanger，英文走 Newsreader */
+font-family: "TsangerReadableCn", "Newsreader",
+             "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
 ```
 
 **字体 fallback 影响页数**：换字体必须重新跑页数验证。溢出时优先调 `font-size`，再调 margin，最后砍内容。
+
+### 生成图片目录约束
+
+- `assets/images/` 只放共享静态素材，例如 `paper-overlay.png`、logo、固定纹理
+- 任何脚本临时生成的 mock 图、portfolio 主图、slide 演示图，都必须写到 `assets/demos/mock-assets/`
+- 如果 demo 重新生成，先清 `assets/demos/mock-assets/`，不要把旧产物留在 skill 资源目录里
 
 ### 页面规格
 
@@ -133,25 +144,26 @@ TAG_BG      = RGBColor(0xed, 0xd9, 0xce)
 
 | 角色 | 字号 | 字体 |
 |---|---|---|
-| Title | 44pt | Serif 500 |
-| Subtitle | 24pt | Sans 400 |
-| H2 章节 | 32pt | Serif 500 |
-| H3 小标题 | 20pt | Serif 500 |
-| Body | 18pt | Sans 400 |
-| Caption | 14pt | Sans 400 |
-| Footer | 12pt | Sans 400 |
+| Title | 44pt | Display serif 500 |
+| Subtitle | 24pt | Readable body 400 |
+| H2 章节 | 32pt | Display serif 500 |
+| H3 小标题 | 20pt | Display serif 500 |
+| Body | 18pt | Readable body 400 |
+| Caption | 14pt | Readable body 400 |
+| Footer | 12pt | Readable body 400 |
 
 中文字体栈：
-- Serif：`KingHwa_OldSong` -> `Source Han Serif SC` -> `宋体`
-- Sans：`Source Han Sans SC` -> `PingFang SC` -> `微软雅黑`
+- Display serif：`京華老宋体v2.002.ttf` -> `Source Han Serif SC` -> `宋体`
+- Readable body / UI：`TsangerJinKai02-W04` -> `Newsreader` -> `Source Han Serif SC`
+- Mono：`JetBrains Mono`
 
 ### 8 种标准版式
 
 1. **封面页**：Parchment 底，正中大标题 + 品牌色短线 + 副标题/作者/日期
 2. **目录页**：Parchment 底，左对齐 `01　章节标题`（数字 serif 品牌色）
 3. **章节首页**：油墨蓝 `#1B365D` 满屏，居中白色大字--deck 里唯一的彩色满屏
-4. **内容页**：小标题（sans stone）+ 核心论点（serif near-black）+ 品牌色短线 + 正文（sans dark-warm）
-5. **数据页**：顶部 takeaway + 下方 2-4 张 metric 卡（大数字 serif 品牌色 + 小标签 sans olive）
+4. **内容页**：小标题（readable stone）+ 核心论点（display near-black）+ 品牌色短线 + 正文（readable dark-warm）
+5. **数据页**：顶部 takeaway + 下方 2-4 张 metric 卡（大数字 display 品牌色 + 小标签 readable olive）
 6. **对比页**：左右两栏 + 中间 0.5pt 暖灰竖线
 7. **引用页**：Parchment 底极简，居中大号斜体引文 + `- 来源`
 8. **结束页**：Parchment 底，居中"谢谢 / Q&A / 联系方式"
@@ -168,8 +180,14 @@ from pptx.enum.text import PP_ALIGN
 PARCHMENT = RGBColor(0xf5, 0xf4, 0xed)
 BRAND     = RGBColor(0xc9, 0x64, 0x42)
 # ... 其他色见上表
-SERIF = "Source Han Serif SC"
-SANS  = "Source Han Sans SC"
+SERIF = "display"
+SANS  = "body"
+
+def latin_font(role):
+    return {
+        SERIF: "Newsreader",
+        SANS: "Newsreader",
+    }.get(role, "JetBrains Mono")
 
 prs = Presentation()
 prs.slide_width  = Inches(13.33)
@@ -193,7 +211,7 @@ def add_text(slide, text, left, top, width, height,
     tf.margin_top = tf.margin_bottom = 0
     p = tf.paragraphs[0]; p.alignment = align
     run = p.add_run(); run.text = text
-    run.font.name = font; run.font.size = Pt(size)
+    run.font.name = latin_font(font); run.font.size = Pt(size)
     run.font.bold = bold; run.font.italic = italic
     run.font.color.rgb = color
     return tb
@@ -266,10 +284,10 @@ python3 scripts/build.py slides
 
 会先从 `slides_spec.py` 生成 `slidev/slides.md`，再同时生成：
 
-- `assets/examples/slides.pptx`
-- `assets/examples/slides-online/index.html`
-- `assets/examples/slides-online-preview.py`
-- `assets/examples/slides-online-preview.command`
+- `assets/demos/demo-slides.pptx`
+- `assets/demos/slides-online/index.html`
+- `assets/demos/slides-online/slides-online-preview.py`
+- `assets/demos/slides-online/slides-online-preview.command`
 
 第二个目录是 Slidev 静态 bundle，可直接部署到静态站点。后两个文件是本地浏览器预览入口：`file://` 直接打开 `index.html` 在 Chrome 下会触发 ES module / CORS 限制，所以本地检查请走预览脚本或 `pnpm run dev`。
 

@@ -44,6 +44,7 @@ SLIDEV = TEMPLATES / "slidev"
 SLIDEV_RENDER = SLIDEV / "render_from_spec.py"
 DIAGRAMS = ROOT / "assets" / "diagrams"
 EXAMPLES = ROOT / "assets" / "examples"
+DEMOS = ROOT / "assets" / "demos"
 
 # name -> (source, max_pages). max_pages=0 means no hard check.
 HTML_TARGETS: dict[str, tuple[str, int]] = {
@@ -73,6 +74,30 @@ SYNC_TARGETS: set[str] = {
 # Verification uses active templates directly. Keep stale demo HTML out of the
 # default path so old theme structure cannot override the prompt-native theme.
 VERIFY_SOURCES: dict[str, tuple[str, Path]] = {}
+
+
+def slide_pptx_output(name: str) -> Path:
+    return DEMOS / "demo-slides.pptx" if name == "slides" else EXAMPLES / f"{name}.pptx"
+
+
+def slide_online_output(name: str) -> Path:
+    return DEMOS / "slides-online" if name == "slides" else EXAMPLES / f"{name}-online"
+
+
+def cleanup_legacy_slide_outputs(name: str) -> None:
+    if name != "slides":
+        return
+    legacy_paths = [
+        EXAMPLES / "slides.pptx",
+        EXAMPLES / "slides-online",
+        EXAMPLES / "slides-online-preview.py",
+        EXAMPLES / "slides-online-preview.command",
+    ]
+    for path in legacy_paths:
+        if path.is_dir():
+            shutil.rmtree(path)
+        elif path.exists():
+            path.unlink()
 
 
 # ------------------------- build -------------------------
@@ -117,8 +142,8 @@ def build_slides(name: str = "slides") -> bool:
         print(f"✗ {name}: source not found ({src})")
         return False
 
-    EXAMPLES.mkdir(parents=True, exist_ok=True)
-    out = EXAMPLES / f"{name}.pptx"
+    out = slide_pptx_output(name)
+    out.parent.mkdir(parents=True, exist_ok=True)
     python_bin = _python_with_module("pptx")
     if python_bin is None:
         print("✗ missing deps: install python-pptx in the active Python environment")
@@ -132,11 +157,12 @@ def build_slides(name: str = "slides") -> bool:
     if result.returncode != 0:
         print(f"✗ {name}: {result.stderr.strip() or 'script failed'}")
         return False
-    # The script writes output.pptx in cwd; move to examples/ under our name.
+    # The script writes output.pptx in cwd; move it to the target output path.
     generated = src.parent / "output.pptx"
     if generated.exists():
+        cleanup_legacy_slide_outputs(name)
         generated.replace(out)
-        print(f"✓ {name}: generated {out.name}")
+        print(f"✓ {name}: generated {out.relative_to(ROOT)}")
         return True
     print(f"✗ {name}: output.pptx not produced")
     return False
@@ -222,8 +248,8 @@ def _render_slidev_source() -> bool:
     return True
 
 
-def write_slidev_preview_helper(name: str, out_dir: Path) -> Path:
-    helper = EXAMPLES / f"{name}-online-preview.py"
+def write_slidev_preview_helper(out_dir: Path) -> Path:
+    helper = out_dir / "slides-online-preview.py"
     helper.write_text(
         f"""#!/usr/bin/env python3
 from __future__ import annotations
@@ -235,7 +261,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parent / "{out_dir.name}"
+ROOT = Path(__file__).resolve().parent
 
 
 def pick_port(start: int = 4173) -> int:
@@ -272,8 +298,8 @@ if __name__ == "__main__":
     return helper
 
 
-def write_slidev_preview_command(name: str, helper: Path) -> Path:
-    launcher = EXAMPLES / f"{name}-online-preview.command"
+def write_slidev_preview_command(helper: Path) -> Path:
+    launcher = helper.parent / "slides-online-preview.command"
     launcher.write_text(
         f"""#!/bin/zsh
 set -euo pipefail
@@ -300,8 +326,8 @@ def build_slidev(name: str = "slides") -> bool:
     if not _ensure_slidev_deps():
         return False
 
-    EXAMPLES.mkdir(parents=True, exist_ok=True)
-    out_dir = EXAMPLES / f"{name}-online"
+    out_dir = slide_online_output(name)
+    out_dir.parent.mkdir(parents=True, exist_ok=True)
     if out_dir.exists():
         shutil.rmtree(out_dir)
 
@@ -320,8 +346,9 @@ def build_slidev(name: str = "slides") -> bool:
         print(f"✗ {name}: {detail}")
         return False
     if out_dir.exists():
-        helper = write_slidev_preview_helper(name, out_dir)
-        launcher = write_slidev_preview_command(name, helper)
+        cleanup_legacy_slide_outputs(name)
+        helper = write_slidev_preview_helper(out_dir)
+        launcher = write_slidev_preview_command(helper)
         print(f"✓ {name}: generated {out_dir.relative_to(ROOT)}")
         print(f"✓ {name}: preview via {helper.relative_to(ROOT)}")
         print(f"✓ {name}: double-click preview via {launcher.relative_to(ROOT)}")

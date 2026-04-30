@@ -2,6 +2,8 @@
 
 Kami is now organized as a multi-theme skill repository.
 
+See [THEME_PRODUCTION_CONTRACT.md](/Users/wangwenbo/Desktop/demo/kami/THEME_PRODUCTION_CONTRACT.md) for the shared build, output, and verification contract that all theme skills are expected to follow.
+
 ## Structure
 
 ```text

@@ -101,6 +101,38 @@ def prompt_row(prompt: dict, top: float) -> str:
     )
 
 
+def image_src(filename: str) -> str:
+    return f"../../demos/mock-assets/{escape(filename)}"
+
+
+def visual_slot_copy(slide: dict) -> tuple[str, str, str]:
+    diagram = slide.get("diagram")
+    label = slide.get("visual_label")
+    if not label:
+        label = f"DIAGRAM SLOT · {diagram.upper()}" if diagram else "VISUAL SLOT"
+    title = slide.get("visual_title") or ("优先使用现有 diagrams" if diagram else "默认纯色占位")
+    note = slide.get("visual_note")
+    if not note:
+        if diagram:
+            note = f"优先嵌入 assets/diagrams/{diagram}.html 的 SVG；没有图就继续保留纯色占位。"
+        else:
+            note = "若需要图表，优先改用 assets/diagrams；若需要真实图片，再填写 image。"
+    return escape(label), text_to_html(str(title)), text_to_html(str(note))
+
+
+def render_visual_placeholder(slide: dict) -> str:
+    label, title, note = visual_slot_copy(slide)
+    return (
+        '<div class="fixed-box image-focus-visual" style="left:74.88px;top:193.92px;width:585.60px;height:320.64px;">'
+        '<div class="image-focus-placeholder">'
+        f'<div class="placeholder-kicker">{label}</div>'
+        f'<div class="placeholder-title">{title}</div>'
+        f'<div class="placeholder-note">{note}</div>'
+        "</div>"
+        "</div>"
+    )
+
+
 def render_cover(slide: dict) -> str:
     hero = [
         '<div class="cover-page">',
@@ -147,6 +179,25 @@ def render_visual(slide: dict) -> str:
         f"<p>{escape(slide['callout']['body'])}</p>"
         "</div>"
     )
+    parts.append(footer(slide))
+    return '<div class="folio-shell"><div class="folio-sheet">' + "".join(parts) + "</div></div>"
+
+
+def render_image_focus(slide: dict) -> str:
+    parts = [section_header(slide)]
+    if slide.get("image"):
+        parts.append(
+            f'<div class="fixed-box image-focus-visual" style="{box(0.78, 2.02, 6.10, 3.34)}">'
+            f'<img src="{image_src(slide["image"])}" alt="{escape(slide["title"])}" />'
+            f'<div class="image-focus-caption">{escape(slide["caption"])}</div>'
+            "</div>"
+        )
+    else:
+        parts.append(render_visual_placeholder(slide))
+    parts.append(metric_card(slide["metrics"][0], 7.18, 2.10, 2.08))
+    parts.append(metric_card(slide["metrics"][1], 9.44, 2.10, 2.08))
+    bullets = "".join(f"<li>{escape(item)}</li>" for item in slide["bullets"])
+    parts.append(f'<ul class="fixed-box image-focus-bullets" style="{box(7.18, 3.72, 4.34, 1.62)}">{bullets}</ul>')
     parts.append(footer(slide))
     return '<div class="folio-shell"><div class="folio-sheet">' + "".join(parts) + "</div></div>"
 
@@ -213,6 +264,10 @@ def render_end(slide: dict) -> str:
 RENDERERS = {
     "cover": render_cover,
     "principle": render_principle,
+    "image-focus-factory": render_image_focus,
+    "image-focus-robotaxi": render_image_focus,
+    "image-focus-energy": render_image_focus,
+    "image-focus-optimus": render_image_focus,
     "visual-language": render_visual,
     "templates": render_templates,
     "natural-prompts": render_prompts,
